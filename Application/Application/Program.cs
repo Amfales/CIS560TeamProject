@@ -1,16 +1,25 @@
 ﻿using System;
+using System.Net;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using WebSocketSharp.Server;
 
 namespace ServerApplication
 {
-    class Program
+    public class Program
     {
-        static void Main(string[] args)
+        public static void Main(string[] args)
         {
-
+            IPAddress localhost = new IPAddress(new byte[] { 127, 0, 0, 1 });
+            WebSocketServer serv = new WebSocketServer(localhost, 9999);
+            serv.AddWebSocketService<ServerBehavior>("/library");
+            ServerBehavior sb = new ServerBehavior();
+            Console.WriteLine(sb.Id);
+            Console.ReadLine();
         }
+
+        public static void DoNothing() { }
     }
 }
