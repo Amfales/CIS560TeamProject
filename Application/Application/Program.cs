@@ -5,6 +5,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using WebSocketSharp.Server;
+using SharedLibrary;
+using SharedLibrary.Requests;
 
 namespace ServerApplication
 {
@@ -12,6 +14,11 @@ namespace ServerApplication
     {
         public static void Main(string[] args)
         {
+            LoginRequest lr = new LoginRequest("andrew", "fales");
+            IMessage m = lr;
+            IMessage g = MessageConverter.Convert(lr);
+            Console.WriteLine(g.Type);
+            Console.WriteLine(g.Payload);
             IPAddress localhost = new IPAddress(new byte[] { 127, 0, 0, 1 });
             WebSocketServer serv = new WebSocketServer(localhost, 9999);
             serv.AddWebSocketService<ServerBehavior>("/library");
