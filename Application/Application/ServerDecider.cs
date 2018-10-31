@@ -10,17 +10,17 @@ namespace ServerApplication
 {
     public static class ServerDecider
     {
-        public static Task GetDecider(MessageEventArgs e, IWebSocketSession sess)
+        public static Task GetDecider(MessageEventArgs e, SendToFunc func)
         {
-            return new Task(CreateNewUser);
+            return CreateNewUser(func);
         }
 
 
 
 
-        private static void CreateNewUser()
+        private static Task CreateNewUser(SendToFunc f)
         {
-
+            return f("");
         }
     }
 }

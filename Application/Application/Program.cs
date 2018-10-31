@@ -16,9 +16,6 @@ namespace ServerApplication
         {
             LoginRequest lr = new LoginRequest("andrew", "fales");
             IMessage m = lr;
-            IMessage g = MessageConverter.Convert(lr);
-            Console.WriteLine(g.Type);
-            Console.WriteLine(g.Payload);
             IPAddress localhost = new IPAddress(new byte[] { 127, 0, 0, 1 });
             WebSocketServer serv = new WebSocketServer(localhost, 9999);
             serv.AddWebSocketService<ServerBehavior>("/library");
