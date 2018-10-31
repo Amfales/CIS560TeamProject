@@ -115,3 +115,6 @@ CREATE TABLE Book.CheckOut
 		REFERENCES Proj."User"(UserID)
 );
 GO
+
+INSERT Proj.UserCategory(PermissionLevel)
+Values (N'Admin'),(N'Patron');
