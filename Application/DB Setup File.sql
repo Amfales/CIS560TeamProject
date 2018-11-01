@@ -135,3 +135,6 @@ GO
 
 INSERT Proj.UserCategory(PermissionLevel)
 Values (N'Admin'),(N'Patron');
+
+INSERT Book.BookQuality("Description")
+VALUES (N'New'),(N'Used');

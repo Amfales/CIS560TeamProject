@@ -21,36 +21,6 @@ AS
 	SET @UserID = SCOPE_IDENTITY();
 GO
 
---Create Admin user procedure
-CREATE OR ALTER PROCEDURE Proj.AddAdmin
-	--Input parameters
-	@FirstName NVARCHAR(128),
-	@LastName NVARCHAR(128),
-	@Email NVARCHAR(128),
-	@HashedPassword NVARCHAR(128),
-
-	--Output parameters
-	@UserID INT OUTPUT
-AS
-	EXEC Proj.AddUser @FirstName,@LastName,@Email,@HashedPassword, N'Admin',@UserID OUTPUT;
-	
-GO
-
---Create Patron user procedure
-CREATE OR ALTER PROCEDURE Proj.AddAdmin
-	--Input parameters
-	@FirstName NVARCHAR(128),
-	@LastName NVARCHAR(128),
-	@Email NVARCHAR(128),
-	@HashedPassword NVARCHAR(128),
-
-	--Output parameters
-	@UserID INT OUTPUT
-AS
-	EXEC Proj.AddUser @FirstName,@LastName,@Email,@HashedPassword, N'Patron',@UserID OUTPUT;
-	
-GO
-
 --Create Genre procedure
 CREATE OR ALTER PROCEDURE Book.AddGenre
 	--Input parameters
@@ -97,6 +67,21 @@ CREATE OR ALTER PROCEDURE Book.CheckOutBook
 	@CheckOutID INT OUTPUT,
 	@DueDate DATETIMEOFFSET OUTPUT
 AS
+	DECLARE @Check INT;
+
+	SET @Check = 
+	(
+		SELECT CO.CheckOutID
+		FROM Book.CheckOut CO
+		WHERE CO.BookID=@BookID AND CO.ReturnDate IS NULL
+	);
+
+	IF @Check IS NOT NULL
+	BEGIN
+		DECLARE @Message NVARCHAR(256) = N'Book already checked out!';
+		THROW 50000, @Message, 1;
+	END;
+
 	SET @DueDate = DATEADD(WEEK,2,SYSDATETIMEOFFSET());
 
 	INSERT Book.CheckOut(BookID,UserID,CheckOutDate,DueDate)
@@ -119,8 +104,14 @@ AS
 	SET @CheckOutID = 
 	(	SELECT CO.CheckOutID
 		FROM Book.CheckOut CO
-		WHERE BookID=@BookID AND UserID=@UserID AND ReturnDate=NULL
+		WHERE BookID=@BookID AND UserID=@UserID AND ReturnDate IS NULL
 	);
+
+	IF @CheckOutID IS NULL
+	BEGIN
+		DECLARE @Message NVARCHAR(256) = N'Book not checked out!';
+		THROW 50000, @Message, 1;
+	END;
 
 	UPDATE Book.CheckOut
 		SET DueDate=@NewDueDate
@@ -139,8 +130,14 @@ AS
 	SET @CheckOutID = 
 	(	SELECT CO.CheckOutID
 		FROM Book.CheckOut CO
-		WHERE BookID=@BookID AND UserID=@UserID AND ReturnDate=NULL
+		WHERE BookID=@BookID AND UserID=@UserID AND ReturnDate IS NULL
 	);
+
+	IF @CheckOutID IS NULL
+	BEGIN
+		DECLARE @Message NVARCHAR(256) = N'Book not checked out!';
+		THROW 50000, @Message, 1;
+	END;
 
 	UPDATE Book.CheckOut
 		SET ReturnDate=SYSDATETIMEOFFSET()
@@ -198,4 +195,118 @@ AS
 			INNER JOIN Proj.UserCategory UC ON UC.UserCategoryID=U.UserCategoryID
 		WHERE U.UserID=@UserID
 	);
+GO
+
+CREATE OR ALTER PROCEDURE Book.AddBookWithInfoID
+	--input parameters
+	@BookInfoID INT,
+	@QualityDescription NVARCHAR(32),
+
+	--output parameter
+	@BookID INT OUTPUT
+AS
+	DECLARE @QualityID INT;
+
+	SET @QualityID = 
+	(
+		SELECT BQ.QualityID
+		FROM Book.BookQuality BQ
+		WHERE BQ."Description"=@QualityDescription
+	);
+
+	INSERT Book.Book(BookInfoID,QualityID)
+	VALUES(@BookInfoID,@QualityID);
+	
+	SET @BookID = SCOPE_IDENTITY();
+GO
+
+CREATE OR ALTER PROCEDURE Book.AddBookInfo
+	--input params
+	@Title NVARCHAR(128),
+	@AuthorFirstName NVARCHAR(128),
+	@AuthorLastName NVARCHAR(128),
+	@PublisherName NVARCHAR(128),
+	@GenreDescriptor NVARCHAR(64),
+	@ISBN NVARCHAR(32),
+	@CopyrightYear SMALLINT,
+	
+	--output params
+	@BookInfoID INT OUTPUT
+AS
+	DECLARE @PublisherID INT,
+			@AuthorID INT,
+			@GenreID INT;
+
+	SET @PublisherID =
+	(
+		SELECT P.PublisherID
+		FROM Book.Publisher P
+		WHERE P.PublisherName=@PublisherName
+	);
+
+	IF @PublisherID IS NULL
+	BEGIN
+		EXEC Book.AddPublisher @PublisherName, @PublisherID OUTPUT;
+	END;
+
+	SET @AuthorID = 
+	(
+		SELECT A.AuthorID
+		FROM Book.Author A
+		WHERE A.FirstName=@AuthorFirstName AND A.LastName=@AuthorLastName
+	);
+
+	IF @AuthorID IS NULL
+	BEGIN
+		EXEC Book.AddAuthor @AuthorFirstName, @AuthorLastName, @AuthorID OUTPUT;
+	END;
+
+	INSERT Book.BookInfo(Title,AuthorID,PublisherID,ISBN,CopyrightYear)
+	VALUES (@Title,@AuthorID,@PublisherID,@ISBN, @CopyrightYear);
+
+	SET @BookInfoID=SCOPE_IDENTITY();
+
+	SET @GenreID = 
+	(
+		SELECT G.GenreID
+		FROM Book.Genre G
+		WHERE G.Descriptor=@GenreDescriptor
+	);
+
+	IF @GenreID IS NULL
+	BEGIN
+		EXEC Book.AddGenre @GenreDescriptor, @GenreID OUTPUT;
+	END;
+
+	EXEC Book.AddBookGenre @GenreID, @BookInfoID;
+GO
+
+CREATE OR ALTER PROCEDURE Book.AddBookWithoutInfoID
+	--input params
+	@Title NVARCHAR(128),
+	@AuthorFirstName NVARCHAR(128),
+	@AuthorLastName NVARCHAR(128),
+	@PublisherName NVARCHAR(128),
+	@GenreDescriptor NVARCHAR(64),
+	@ISBN NVARCHAR(32),
+	@CopyrightYear SMALLINT,
+	
+	--output params
+	@BookID INT OUTPUT
+AS
+	DECLARE @BookInfoID INT;
+
+	SET @BookInfoID = 
+	(
+		SELECT BI.BookInfoID
+		FROM Book.BookInfo BI
+		WHERE BI.ISBN=@ISBN
+	);
+
+	IF @BookInfoID IS NULL
+	BEGIN
+		EXEC Book.AddBookInfo @Title,@AuthorFirstName,@AuthorLastName,@PublisherName,@GenreDescriptor,@ISBN,@CopyrightYear, @BookInfoID OUTPUT;
+	END;
+
+	EXEC Book.AddBookWithInfoID @BookInfoID, N'New', @BookID OUTPUT;
 GO

@@ -60,3 +60,45 @@ EXEC Proj.LoginUser N'gwillford@ksu.edu', N'apadfoij',@UserID OUTPUT,@FirstNAME 
 
 SELECT @UserID AS ReturnedID, @FirstNAME AS ReturnedFName, @PermissionLevel AS ReturnedPermissionLevel;
 GO
+
+--Test for Book.AddBookWithoutInfoID
+SELECT * FROM Book.BookInfo;
+SELECT * FROM Book.Book;
+SELECT * FROM Book.BookGenre;
+SELECT * FROM Book.Genre;
+SELECT * FROM Book.Author;
+SELECT * FROM Book.Publisher;
+
+DECLARE @BookID INT;
+
+EXEC Book.AddBookWithoutInfoID N'Test book 3: even testiest', N'First', N'Last', N'Buttz Book Co.', N'Fantasy',N'ISBN-3',2012, @BookID OUTPUT;
+
+SELECT @BookID;
+GO
+
+--Test for Book.Checkout
+SELECT * FROM Book.CheckOut;
+SELECT * FROM Proj."User";
+SELECT * FROM Book.Book;
+
+DECLARE @CheckoutID INT,
+		@BookID INT = 1,
+		@UserID INT = 1,
+		@DueDate DATETIMEOFFSET;
+
+EXEC Book.CheckOutBook @BookID, @UserID, @CheckoutID OUTPUT, @DueDate OUTPUT;
+
+SELECT @CheckoutID AS NewCheckOutID, @DueDate AS DueDate;
+GO
+
+--Test Book.CheckInBook
+SELECT * FROM Book.CheckOut;
+
+DECLARE @BookID INT = 1,
+		@UserID INT = 1,
+		@CheckOutID INT;
+
+EXEC Book.CheckInBook @BookID, @UserID, @CheckOutID OUTPUT;
+
+SELECT @CheckOutID;
+
