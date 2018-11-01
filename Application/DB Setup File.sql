@@ -1,18 +1,22 @@
 -- Project Database Setup Script
-DROP TABLE IF EXISTS Book.BookGenre, Book.Genre, Book.BookInfo, Book.Publisher,Book.BookQuality, Book.CheckOut, Book.Book, Proj.UserCategory, Proj."User"
+DROP TABLE IF EXISTS Book.BookGenre, Book.Genre, Book.CheckOut, Book.Book, Proj."User"
+GO
+DROP TABLE IF EXISTS Book.BookInfo, Book.Publisher, Book.BookQuality,Proj.UserCategory
+GO
+DROP TABLE IF EXISTS Book.Author
 GO
 
-DROP SCHEMA IF EXISTS Proj;
-GO
+--DROP SCHEMA IF EXISTS Proj;
+--GO
 
-DROP SCHEMA IF EXISTS Book;
-GO
+--DROP SCHEMA IF EXISTS Book;
+--GO
 
-CREATE SCHEMA Proj;
-GO
+--CREATE SCHEMA Proj;
+--GO
 
-CREATE SCHEMA Book;
-GO
+--CREATE SCHEMA Book;
+--GO
 
 CREATE TABLE Book.Publisher
 (
@@ -22,16 +26,29 @@ CREATE TABLE Book.Publisher
 	CONSTRAINT UK_Book_Publisher_PublisherName UNIQUE(PublisherName)
 );
 
+CREATE TABLE Book.Author
+(
+	AuthorID INT PRIMARY KEY IDENTITY(1,1),
+	FirstName NVARCHAR(128) NOT NULL,
+	LastName NVARCHAR(128) NOT NULL,
+
+	CONSTRAINT UK_Book_Author_FirstName_LastName UNIQUE(FirstName,LastName)
+);
+
+
 CREATE TABLE Book.BookInfo
 (
 	BookInfoID INT PRIMARY KEY IDENTITY(1,1),
+	AuthorID INT NOT NULL,
+	Title NVARCHAR(128) NOT NULL,
 	PublisherID INT NOT NULL,
 	ISBN NVARCHAR(32) NOT NULL,
 	CopyrightYear SMALLINT NOT NULL,
 
 	CONSTRAINT FK_Book_BookInfo_PublisherID FOREIGN KEY(PublisherID)
 		REFERENCES Book.Publisher(PublisherID),
-	
+	CONSTRAINT FK_Book_BookInfo_AuthorID FOREIGN KEY(AuthorID)
+		REFERENCES Book.Author(AuthorID),
 	CONSTRAINT UK_Book_BookInfo_ISBN UNIQUE(ISBN)
 );
 
