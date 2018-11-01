@@ -32,7 +32,7 @@ namespace ServerApplication
             return new ServerBehavior(ServerDecide);
         }
         
-        private Task ServerDecide(MessageEventArgs e, SendToFunc func)
+        private Task ServerDecide(MessageEventArgs e, SendMessage func)
         {
             return ServerDecider.GetDecider(e, func);
         }

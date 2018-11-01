@@ -5,12 +5,13 @@ using System.Text;
 using System.Threading.Tasks;
 using WebSocketSharp;
 using WebSocketSharp.Server;
+using SharedLibrary.Responses;
 
 namespace ServerApplication
 {
     public static class ServerDecider
     {
-        public static Task GetDecider(MessageEventArgs e, SendToFunc func)
+        public static Task GetDecider(MessageEventArgs e, SendMessage func)
         {
             return CreateNewUser(func);
         }
@@ -18,9 +19,9 @@ namespace ServerApplication
 
 
 
-        private static Task CreateNewUser(SendToFunc f)
+        private static Task CreateNewUser(SendMessage f)
         {
-            return f("");
+            return f(new LoginResponse());
         }
     }
 }
