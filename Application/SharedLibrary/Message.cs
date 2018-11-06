@@ -37,20 +37,4 @@ namespace SharedLibrary
         MessageType Type { get; }
         object Payload { get; }
     }
-    
-
-    public enum MessageType
-    {
-        LoginRequest,
-        LoginResponse,
-        CreateNewUserRequest,
-        CreateNewUserResponse
-    }
-
-    public enum UserType
-    {
-        None,
-        Standard,
-        Employees
-    }
 }

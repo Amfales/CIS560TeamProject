@@ -12,35 +12,37 @@ using Newtonsoft.Json;
 namespace ServerApplication
 {
     public delegate Task<bool> SendToFunc(string data);
-    public delegate Task SendMessage(IMessage m);
+    public delegate void SendMessage(IMessage m);
+    public delegate void HandleMessage(MessageEventArgs e, SendMessage s);
     public class ServerBehavior: WebSocketBehavior
     {
-        private Func<MessageEventArgs, SendMessage, Task> _decider;
+        private HandleMessage _decider;
+        
 
         public ServerBehavior()
         {
             throw new ArgumentException();
         }
-        public ServerBehavior(Func<MessageEventArgs, SendMessage, Task> decide)
+        public ServerBehavior(HandleMessage decide)
         {
             _decider = decide;
         }
         
 
-        protected override Task OnMessage(MessageEventArgs e)
+        protected override void OnMessage(MessageEventArgs e)
         {
-            return _decider(e, SendMessage);
+            _decider(e, SendMessage);
         }
 
-        private Task<bool> WrappedSendTo(string data)
+        private void WrappedSendTo(string data)
         {
-            return this.Sessions.SendTo(this.Id, data);
+            this.Sessions.SendTo(data, this.ID);
         }
 
-        private Task SendMessage(IMessage m)
+        private void SendMessage(IMessage m)
         {
             string data = JsonConvert.SerializeObject(m);
-            return WrappedSendTo(data);
+            WrappedSendTo(data);
         }
        
     }

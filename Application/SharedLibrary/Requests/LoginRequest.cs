@@ -13,11 +13,11 @@ namespace SharedLibrary.Requests
         {
             Payload = new Login(u, p);
         }
-        public LoginRequest(Login l) : base(l) { }
+        public LoginRequest(Message<Login> m)
+        {
+            Payload = new Login(m.Payload.UserName, m.Payload.HashPassword);
+        }
         public static new MessageType Type => MessageType.LoginRequest;
-
-
-        
     }
 
     public class Login
