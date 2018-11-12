@@ -310,3 +310,59 @@ AS
 
 	EXEC Book.AddBookWithInfoID @BookInfoID, N'New', @BookID OUTPUT;
 GO
+
+CREATE OR ALTER PROCEDURE Book.SearchForTitle
+	@Title NVARCHAR(128)
+AS
+	SELECT B.BookID, BI.Title, A.FirstName, A.LastName, P.PublisherName, G.Descriptor, BI.ISBN, BI.Copyrightyear,
+			COALESCE((
+						SELECT CO.BookID
+						FROM Book.CheckOut CO
+						WHERE CO.BookID=B.BookID AND ReturnDate IS NULL
+					),0) --returns non-zero value if book checked out, 
+		FROM Book.Book B
+			INNER JOIN Book.BookInfo BI ON B.BookInfoID=BI.BookInfoID
+			INNER JOIN Book.Author A ON A.AuthorID=BI.AuthorID
+			INNER JOIN Book.Publisher P ON P.PublisherID=BI.PublisherID
+			INNER JOIN Book.BookGenre BG ON BG.BookInfoID=BI.BookInfoID
+			INNER JOIN Book.Genre G ON G.GenreID=BG.GenreID
+		WHERE BI.Title=@Title OR BI.Title LIKE @Title
+GO
+
+
+CREATE OR ALTER PROCEDURE Book.SearchForAuthor
+	@FirstName NVARCHAR(128),
+	@LastName NVARCHAR(128)
+AS
+	SELECT B.BookID, BI.Title, A.FirstName, A.LastName, P.PublisherName, G.Descriptor, BI.ISBN, BI.Copyrightyear,
+			COALESCE((
+						SELECT CO.BookID
+						FROM Book.CheckOut CO
+						WHERE CO.BookID=B.BookID AND ReturnDate IS NULL
+					),0) --returns non-zero value if book checked out, 
+		FROM Book.Book B
+			INNER JOIN Book.BookInfo BI ON B.BookInfoID=BI.BookInfoID
+			INNER JOIN Book.Author A ON A.AuthorID=BI.AuthorID
+			INNER JOIN Book.Publisher P ON P.PublisherID=BI.PublisherID
+			INNER JOIN Book.BookGenre BG ON BG.BookInfoID=BI.BookInfoID
+			INNER JOIN Book.Genre G ON G.GenreID=BG.GenreID
+		WHERE A.LastName LIKE @LastName OR A.LastName=@LastName
+GO
+
+CREATE OR ALTER PROCEDURE Book.SearchForISBN
+	@ISBN NVARCHAR(32)
+AS
+	SELECT B.BookID, BI.Title, A.FirstName, A.LastName, P.PublisherName, G.Descriptor, BI.ISBN, BI.Copyrightyear,
+			COALESCE((
+						SELECT CO.BookID
+						FROM Book.CheckOut CO
+						WHERE CO.BookID=B.BookID AND ReturnDate IS NULL
+					),0) --returns non-zero value if book checked out, 
+		FROM Book.Book B
+			INNER JOIN Book.BookInfo BI ON B.BookInfoID=BI.BookInfoID
+			INNER JOIN Book.Author A ON A.AuthorID=BI.AuthorID
+			INNER JOIN Book.Publisher P ON P.PublisherID=BI.PublisherID
+			INNER JOIN Book.BookGenre BG ON BG.BookInfoID=BI.BookInfoID
+			INNER JOIN Book.Genre G ON G.GenreID=BG.GenreID
+		WHERE BI.ISBN LIKE @ISBN OR BI.ISBN=@ISBN 
+GO

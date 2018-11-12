@@ -102,3 +102,20 @@ EXEC Book.CheckInBook @BookID, @UserID, @CheckOutID OUTPUT;
 
 SELECT @CheckOutID;
 
+SELECT * FROM Book.Book B INNER JOIN Book.BookInfo BI ON BI.BookInfoID=B.BookInfoID
+
+--Test Book.SearchForTitle
+EXEC Book.SearchForTitle N'Test book 3: even testiest';
+EXEC Book.SearchForTitle N'Test b%';
+EXEC Book.SearchForTitle N'buttz';
+
+--Test Book.SearchForAuthor
+EXEC Book.SearchForAuthor N't', N'Last';
+EXEC Book.SearchForAuthor N't', N'La%';
+EXEC Book.SearchForAuthor N't', N'Tootz';
+
+--Test Book.SearchForISBN
+EXEC Book.SearchForISBN N'ISBN-3';
+EXEC Book.SearchForISBN N'ISBN-3%';
+EXEC Book.SearchForISBN N'ISBN-%';
+EXEC Book.SearchForISBN N'ISBN-2';
