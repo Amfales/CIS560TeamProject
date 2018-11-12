@@ -319,7 +319,7 @@ AS
 						SELECT CO.BookID
 						FROM Book.CheckOut CO
 						WHERE CO.BookID=B.BookID AND ReturnDate IS NULL
-					),0) --returns non-zero value if book checked out, 
+					),0) AS CheckedOut--returns non-zero value if book checked out, 
 		FROM Book.Book B
 			INNER JOIN Book.BookInfo BI ON B.BookInfoID=BI.BookInfoID
 			INNER JOIN Book.Author A ON A.AuthorID=BI.AuthorID
@@ -327,6 +327,7 @@ AS
 			INNER JOIN Book.BookGenre BG ON BG.BookInfoID=BI.BookInfoID
 			INNER JOIN Book.Genre G ON G.GenreID=BG.GenreID
 		WHERE BI.Title=@Title OR BI.Title LIKE @Title
+		ORDER BY BI.Title;
 GO
 
 
@@ -339,7 +340,7 @@ AS
 						SELECT CO.BookID
 						FROM Book.CheckOut CO
 						WHERE CO.BookID=B.BookID AND ReturnDate IS NULL
-					),0) --returns non-zero value if book checked out, 
+					),0) AS CheckedOut--returns non-zero value if book checked out, 
 		FROM Book.Book B
 			INNER JOIN Book.BookInfo BI ON B.BookInfoID=BI.BookInfoID
 			INNER JOIN Book.Author A ON A.AuthorID=BI.AuthorID
@@ -347,6 +348,7 @@ AS
 			INNER JOIN Book.BookGenre BG ON BG.BookInfoID=BI.BookInfoID
 			INNER JOIN Book.Genre G ON G.GenreID=BG.GenreID
 		WHERE A.LastName LIKE @LastName OR A.LastName=@LastName
+		ORDER BY BI.Title;
 GO
 
 CREATE OR ALTER PROCEDURE Book.SearchForISBN
@@ -357,7 +359,7 @@ AS
 						SELECT CO.BookID
 						FROM Book.CheckOut CO
 						WHERE CO.BookID=B.BookID AND ReturnDate IS NULL
-					),0) --returns non-zero value if book checked out, 
+					),0) AS CheckedOut--returns non-zero value if book checked out, 
 		FROM Book.Book B
 			INNER JOIN Book.BookInfo BI ON B.BookInfoID=BI.BookInfoID
 			INNER JOIN Book.Author A ON A.AuthorID=BI.AuthorID
@@ -365,4 +367,24 @@ AS
 			INNER JOIN Book.BookGenre BG ON BG.BookInfoID=BI.BookInfoID
 			INNER JOIN Book.Genre G ON G.GenreID=BG.GenreID
 		WHERE BI.ISBN LIKE @ISBN OR BI.ISBN=@ISBN 
+		ORDER BY BI.Title;
+GO
+
+CREATE OR ALTER PROCEDURE Book.SearchByGenre
+	@GenreDescriptor  NVARCHAR(64)
+AS
+	SELECT B.BookID, BI.Title, A.FirstName, A.LastName, P.PublisherName, G.Descriptor, BI.ISBN, BI.Copyrightyear,
+			COALESCE((
+						SELECT CO.BookID
+						FROM Book.CheckOut CO
+						WHERE CO.BookID=B.BookID AND ReturnDate IS NULL
+					),0) AS CheckedOut --returns non-zero value if book checked out, 
+		FROM Book.Book B
+			INNER JOIN Book.BookInfo BI ON B.BookInfoID=BI.BookInfoID
+			INNER JOIN Book.Author A ON A.AuthorID=BI.AuthorID
+			INNER JOIN Book.Publisher P ON P.PublisherID=BI.PublisherID
+			INNER JOIN Book.BookGenre BG ON BG.BookInfoID=BI.BookInfoID
+			INNER JOIN Book.Genre G ON G.GenreID=BG.GenreID
+		WHERE G.Descriptor=@GenreDescriptor OR G.Descriptor LIKE @GenreDescriptor
+		ORDER BY BI.Title;
 GO

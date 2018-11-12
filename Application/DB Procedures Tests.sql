@@ -107,15 +107,20 @@ SELECT * FROM Book.Book B INNER JOIN Book.BookInfo BI ON BI.BookInfoID=B.BookInf
 --Test Book.SearchForTitle
 EXEC Book.SearchForTitle N'Test book 3: even testiest';
 EXEC Book.SearchForTitle N'Test b%';
-EXEC Book.SearchForTitle N'buttz';
+EXEC Book.SearchForTitle N'wrong';
 
 --Test Book.SearchForAuthor
 EXEC Book.SearchForAuthor N't', N'Last';
 EXEC Book.SearchForAuthor N't', N'La%';
-EXEC Book.SearchForAuthor N't', N'Tootz';
+EXEC Book.SearchForAuthor N't', N'wrong';
 
 --Test Book.SearchForISBN
 EXEC Book.SearchForISBN N'ISBN-3';
 EXEC Book.SearchForISBN N'ISBN-3%';
 EXEC Book.SearchForISBN N'ISBN-%';
 EXEC Book.SearchForISBN N'ISBN-2';
+
+--Test Book.SearchByGenre
+EXEC Book.SearchByGenre N'Fantasy';
+EXEC Book.SearchByGenre N'Fan%';
+EXEC Book.SearchByGenre N'wrong';
