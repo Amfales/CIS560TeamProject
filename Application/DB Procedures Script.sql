@@ -59,7 +59,7 @@ AS
 GO
 
 CREATE OR ALTER PROCEDURE Book.CheckOutBook
-	--Inpute parameters
+	--Input parameters
 	@BookID INT,
 	@UserID INT,
 
@@ -91,7 +91,7 @@ AS
 GO
 
 CREATE OR ALTER PROCEDURE Book.RenewBook
-	--Inpute parameters
+	--Input parameters
 	@BookID INT,
 	@UserID INT,
 
@@ -120,7 +120,7 @@ AS
 GO
 
 CREATE OR ALTER PROCEDURE Book.CheckInBook
-	--Inpute parameters
+	--Input parameters
 	@BookID INT,
 	@UserID INT,
 
@@ -387,4 +387,63 @@ AS
 			INNER JOIN Book.Genre G ON G.GenreID=BG.GenreID
 		WHERE G.Descriptor=@GenreDescriptor OR G.Descriptor LIKE @GenreDescriptor
 		ORDER BY BI.Title;
+GO
+
+CREATE OR ALTER PROCEDURE Book.DeleteBookWithID
+	--input params
+	@BookID INT
+AS
+	DECLARE @Check INT;
+
+	SET @Check=(
+			SELECT B.BookID
+			FROM Book.Book B
+			WHERE B.BookID=@BookID		
+		);
+	IF @Check IS NULL
+	BEGIN
+		DECLARE @Message NVARCHAR(256) = N'BookInfo not in Database!';
+		THROW 50000, @Message, 1;
+	END;
+
+	DELETE Book.Book
+	WHERE @BookID=BookID
+GO
+
+CREATE OR ALTER PROCEDURE Book.UpdateBookQuality
+	--Input parameters
+	@BookID INT,
+	@NewDescriptor NVARCHAR(32)
+
+AS
+	DECLARE @Check INT;
+
+	SET @Check=(
+			SELECT B.BookID
+			FROM Book.Book B
+			WHERE B.BookID=@BookID		
+		);
+
+	IF @Check IS NULL
+	BEGIN
+		DECLARE @Message NVARCHAR(256) = N'Invalid BookID!';
+		THROW 50000, @Message, 1;
+	END;
+	
+	DECLARE @QualityID INT;
+
+	SET @QualityID = (
+			SELECT BQ.QualityID
+			FROM Book.BookQuality BQ
+			WHERE BQ."Description"=@NewDescriptor
+		);
+	IF @QualityID IS NULL
+	BEGIN
+		SET @Message = N'Invalid Quality Description!';
+		THROW 50000, @Message, 1;
+	END;
+
+	UPDATE Book.Book
+		SET QualityID=@QualityID
+	WHERE BookID=@BookID;
 GO

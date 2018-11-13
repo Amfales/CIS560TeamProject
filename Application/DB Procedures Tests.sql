@@ -124,3 +124,21 @@ EXEC Book.SearchForISBN N'ISBN-2';
 EXEC Book.SearchByGenre N'Fantasy';
 EXEC Book.SearchByGenre N'Fan%';
 EXEC Book.SearchByGenre N'wrong';
+
+
+--Test Book.DeleteBookWithID
+SELECT * From Book.BookInfo
+SELECT * FROM Book.Book
+EXEC Book.DeleteBookWithID 1;
+
+--Test Book.UpdateBookQuality
+SELECT * FROM Book.Book
+
+EXEC Book.UpdateBookQuality 1, N'Used';
+SELECT * FROM Book.Book INNER JOIN Book.BookQuality BQ ON BQ.QualityID=BOok.QualityID
+EXEC Book.UpdateBookQuality 2, N'Used';
+SELECT * FROM Book.Book
+EXEC Book.UpdateBookQuality 1, N'Ud';
+SELECT * FROM Book.Book
+EXEC Book.UpdateBookQuality 1, N'New';
+SELECT * FROM Book.Book INNER JOIN Book.BookQuality BQ ON BQ.QualityID=BOok.QualityID
