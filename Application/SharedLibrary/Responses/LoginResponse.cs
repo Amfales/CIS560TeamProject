@@ -14,7 +14,6 @@ namespace SharedLibrary.Responses
     public class LoginResponseData
     {
         public bool UserLoggedIn { get; }
-        public int 
 
         public LoginResponseData(bool log) { UserLoggedIn = log; }
     }

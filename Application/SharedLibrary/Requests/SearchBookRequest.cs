@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SharedLibrary.Requests
 {
-    class SearchBookRequest : Message<SearchInfo>
+    public class SearchBookRequest : Message<SearchInfo>
     {
         public SearchBookRequest() : this("","","","",true) { }
         public SearchBookRequest(string n, string a, string i, string g, bool b)

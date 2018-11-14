@@ -30,6 +30,10 @@ namespace ServerApplication
                 case MessageType.LoginRequest:
                     HandleLoginRequest(send, new LoginRequest(Message<Login>.UpgradeMessage(m)));
                     break;
+                case MessageType.SearchBookRequest:
+                    HandleSearchBookRequest(send, new SearchBookRequest(Message<SearchInfo>.UpgradeMessage(m)));
+                    break;
+
                 default:
                     break;
             }
@@ -37,10 +41,16 @@ namespace ServerApplication
 
         private void HandleLoginRequest(SendMessage send, LoginRequest m)
         {
-            if (_loggedIn[m.Payload.UserName])
+            if (_loggedIn[m.Payload.Email])
             {
 
             }
+        }
+
+        private void HandleSearchBookRequest(SendMessage send, SearchBookRequest m)
+        {
+            //TODO This is annoying to do.
+            //SQL Stuff
         }
 
 
