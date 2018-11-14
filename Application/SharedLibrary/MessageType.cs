@@ -11,6 +11,10 @@ namespace SharedLibrary
         LoginRequest,
         LoginResponse,
 
+        SearchBookRequest,
+        SearchBookInfoResponse,
+        SearchBookResponse,
+
         CreateNewUserRequest,
         CreateNewUserResponse,
 

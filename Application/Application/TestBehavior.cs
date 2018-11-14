@@ -22,9 +22,8 @@ namespace ServerApplication
 
         protected override void OnMessage(MessageEventArgs e)
         {
-            this.OnMessage(e);
             string text = e.Data;
-            _f(text);
+            //_f(text);
             Send("Server was sent: " + text);
         }
     }

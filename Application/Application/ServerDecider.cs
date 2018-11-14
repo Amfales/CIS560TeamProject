@@ -16,29 +16,26 @@ namespace ServerApplication
     {
         private Dictionary<string, bool> _loggedIn = new Dictionary<string, bool>();
         private Dictionary<string, UserType> _userPermissions = new Dictionary<string, UserType>();
-        private const string _lowConnection = "";
-        private const string _userConnection = "";
-        private const string _libraryConnection = "";
-        private const string _adminConnection = "";
+        private const string _connection = "";
 
 
 
 
-        public void GetDecider(MessageEventArgs e, SendMessage func)
+        public void GetDecision(MessageEventArgs e, SendMessage send)
         {
             string data = e.Data;
             IMessage m = Newtonsoft.Json.JsonConvert.DeserializeObject<IMessage>(data);
             switch (m.Type)
             {
                 case MessageType.LoginRequest:
-                    HandleNewUserRequest(func, new LoginRequest(Message<Login>.UpgradeMessage(m)));
+                    HandleLoginRequest(send, new LoginRequest(Message<Login>.UpgradeMessage(m)));
                     break;
                 default:
                     break;
             }
         }
 
-        private void HandleNewUserRequest(SendMessage f, LoginRequest m)
+        private void HandleLoginRequest(SendMessage send, LoginRequest m)
         {
             if (_loggedIn[m.Payload.UserName])
             {
@@ -61,10 +58,5 @@ namespace ServerApplication
         {
             send(new LoginResponse());
         }
-
-
-
-
-        private void DoNothing() { }
     }
 }

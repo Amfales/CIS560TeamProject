@@ -8,9 +8,7 @@ namespace SharedLibrary
 {
     public enum UserType
     {
-        None,
         Standard,
-        Employees,
         Admin
     }
 }

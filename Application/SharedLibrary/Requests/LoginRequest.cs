@@ -9,25 +9,25 @@ namespace SharedLibrary.Requests
     public class LoginRequest : Message<Login>
     {
         public LoginRequest() : this("", "") { }
-        public LoginRequest(string u, string p) : base()
+        public LoginRequest(string e, string p) : base()
         {
-            Payload = new Login(u, p);
+            Payload = new Login(e, p);
         }
         public LoginRequest(Message<Login> m)
         {
-            Payload = new Login(m.Payload.UserName, m.Payload.HashPassword);
+            Payload = new Login(m.Payload.Email, m.Payload.HashPassword);
         }
         public static new MessageType Type => MessageType.LoginRequest;
     }
 
     public class Login
     {
-        public Login(string un, string hp)
+        public Login(string email, string hp)
         {
-            UserName = un;
+            Email = email;
             HashPassword = hp;
         }
-        public string UserName { get; }
+        public string Email { get; }
         public string HashPassword { get; }
     }
 }

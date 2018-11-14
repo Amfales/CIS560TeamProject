@@ -34,13 +34,17 @@ namespace ServerApplication
         
         private void ServerDecide(MessageEventArgs e, SendMessage func)
         {
-            _servDecider.GetDecider(e, func);
+            _servDecider.GetDecision(e, func);
         }
 
-
-        private void SendMessage(SendToFunc sendFunc, IMessage m)
+        public void Start()
         {
-            sendFunc(JsonConvert.SerializeObject(m));
+            _serv.Start();
+        }
+
+        public void Stop()
+        {
+            _serv.Stop();
         }
 
     }

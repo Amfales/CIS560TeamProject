@@ -11,7 +11,7 @@ using Newtonsoft.Json;
 
 namespace ServerApplication
 {
-    public delegate Task<bool> SendToFunc(string data);
+    //public delegate Task<bool> SendToFunc(string data);
     public delegate void SendMessage(IMessage m);
     public delegate void HandleMessage(MessageEventArgs e, SendMessage s);
     public class ServerBehavior: WebSocketBehavior

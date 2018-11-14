@@ -19,37 +19,51 @@ namespace ServerApplication
             
             IPAddress localhost = new IPAddress(new byte[] { 127, 0, 0, 1 });
             WebSocketServer serv = new WebSocketServer(9999);
+            WebServer server = new WebServer(12345);
             serv.AddWebSocketService<TestBehavior>("/test", () => (new TestBehavior(Console.WriteLine)));
             WebSocket ws = new WebSocket("ws://localhost:9999/test");
             //WebSocket ws = new WebSocket("ws://localhost:9999/", onMessage: DoPrint, onError: DoError);
+            serv.Start();
+            /*
+            LoginRequest lr = new LoginRequest("username", "password");
+            IMessage m = lr;
+            Login l = m.Payload as Login;
+            LoginRequest t = new LoginRequest(Message<Login>.UpgradeMessage(m));
+            if (l != null)
+            {
+                Console.WriteLine("UserName: " + l.UserName);
+            }
+            else
+            {
+                Console.WriteLine("l is null");
+            }*/
+            
 
             ws.OnMessage += (sender, e) => { Console.WriteLine(e.Data); };
 
             DoThings(ws);
-            //DoThings("ws://echo.websocket.org");
-            //DoThings("ws://localhost:9999/", ws);
-            while (Console.ReadLine() == "")
+            string msg = "";
+            while ((msg = Console.ReadLine()) != "")
             {
-
+                ws.Send(msg);
             }
             ws.Send("end");
+            serv.Stop();
             while (true)
             {
                 Console.ReadLine();
             }
             
         }
-
-        private static void Ws_OnMessage(object sender, MessageEventArgs e)
-        {
-            throw new NotImplementedException();
-        }
+        
 
         public static void DoThings(WebSocket w)
         {
             //w = new WebSocket(address, onMessage: DoPrint, onError: DoError);
             
             w.Connect();
+            //w.
+            Console.WriteLine("Did connect.");
             w.Send("This is a message");
         }
     }
