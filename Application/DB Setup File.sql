@@ -21,9 +21,9 @@ GO
 CREATE TABLE Book.Publisher
 (
 	PublisherID INT PRIMARY KEY IDENTITY(1,1),
-	PublisherName NVARCHAR(128) NOT NULL ,
+	"Name" NVARCHAR(128) NOT NULL ,
 	
-	CONSTRAINT UK_Book_Publisher_PublisherName UNIQUE(PublisherName)
+	CONSTRAINT UK_Book_Publisher_PublisherName UNIQUE("Name")
 );
 
 CREATE TABLE Book.Author
@@ -87,6 +87,7 @@ CREATE TABLE Book.Book
 	BookID INT NOT NULL PRIMARY KEY IDENTITY(1,1),
 	BookInfoID INT NOT NULL,
 	QualityID INT NOT NULL,
+	Removed BIT NOT NULL DEFAULT(0),
 
 	CONSTRAINT FK_Book_Book_BookInfoID FOREIGN KEY(BookInfoID)
 		REFERENCES Book.BookInfo(BookInfoID),
@@ -108,7 +109,7 @@ CREATE TABLE Proj."User"
 	FirstName NVARCHAR(128) NOT NULL,
 	LastName NVARCHAR(128) NOT NULL,
 	Email NVARCHAR(128) NOT NULL,
-	HashedPassword NVARCHAR(128) NOT NULL,
+	HashedPassword NVARCHAR(64) NOT NULL,
 
 
 	CONSTRAINT FK_Proj_User_UserCategoryID FOREIGN KEY(UserCategoryID)
@@ -132,6 +133,8 @@ CREATE TABLE Book.CheckOut
 		REFERENCES Proj."User"(UserID)
 );
 GO
+
+
 
 INSERT Proj.UserCategory(PermissionLevel)
 Values (N'Admin'),(N'Patron');

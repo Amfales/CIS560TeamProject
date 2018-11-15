@@ -43,22 +43,21 @@ SELECT @AuthorID AS NewAuthorID;
 --Test Proj.LoginUser
 SELECT * FROM Proj."User";
 
-DECLARE @UserID INT,
-		@FirstNAME NVARCHAR(128),
+DECLARE @FirstNAME NVARCHAR(128),
 		@PermissionLevel NVARCHAR(32);
 
-EXEC Proj.LoginUser N'gwillford@ksu.edu', N'apoij',@UserID OUTPUT,@FirstNAME OUTPUT,@PermissionLevel OUTPUT;
+EXEC Proj.LoginUser N'gwillford@ksu.edu', N'apoij',@FirstNAME OUTPUT,@PermissionLevel OUTPUT;
 
-SELECT @UserID AS ReturnedID, @FirstNAME AS ReturnedFName, @PermissionLevel AS ReturnedPermissionLevel;
+SELECT  @FirstNAME AS ReturnedFName, @PermissionLevel AS ReturnedPermissionLevel;
 
-EXEC Proj.LoginUser N'gwilsdrd@ksu.edu', N'apoij',@UserID OUTPUT,@FirstNAME OUTPUT,@PermissionLevel OUTPUT;
+EXEC Proj.LoginUser N'gwilsdrd@ksu.edu', N'apoij',@FirstNAME OUTPUT,@PermissionLevel OUTPUT;
 
-SELECT @UserID AS ReturnedID, @FirstNAME AS ReturnedFName, @PermissionLevel AS ReturnedPermissionLevel;
+SELECT @FirstNAME AS ReturnedFName, @PermissionLevel AS ReturnedPermissionLevel;
 
 
-EXEC Proj.LoginUser N'gwillford@ksu.edu', N'apadfoij',@UserID OUTPUT,@FirstNAME OUTPUT,@PermissionLevel OUTPUT;
+EXEC Proj.LoginUser N'gwillford@ksu.edu', N'apadfoij',@FirstNAME OUTPUT,@PermissionLevel OUTPUT;
 
-SELECT @UserID AS ReturnedID, @FirstNAME AS ReturnedFName, @PermissionLevel AS ReturnedPermissionLevel;
+SELECT @FirstNAME AS ReturnedFName, @PermissionLevel AS ReturnedPermissionLevel;
 GO
 
 --Test for Book.AddBookWithoutInfoID
@@ -82,11 +81,9 @@ SELECT * FROM Proj."User";
 SELECT * FROM Book.Book;
 
 DECLARE @CheckoutID INT,
-		@BookID INT = 1,
-		@UserID INT = 1,
 		@DueDate DATETIMEOFFSET;
 
-EXEC Book.CheckOutBook @BookID, @UserID, @CheckoutID OUTPUT, @DueDate OUTPUT;
+EXEC Book.CheckOutBook 4, N'gwillford@ksu.edu', @CheckoutID OUTPUT, @DueDate OUTPUT;
 
 SELECT @CheckoutID AS NewCheckOutID, @DueDate AS DueDate;
 GO
@@ -94,11 +91,9 @@ GO
 --Test Book.CheckInBook
 SELECT * FROM Book.CheckOut;
 
-DECLARE @BookID INT = 1,
-		@UserID INT = 1,
-		@CheckOutID INT;
+DECLARE @CheckOutID INT;
 
-EXEC Book.CheckInBook @BookID, @UserID, @CheckOutID OUTPUT;
+EXEC Book.CheckInBook 3,  @CheckOutID OUTPUT;
 
 SELECT @CheckOutID;
 
@@ -129,7 +124,6 @@ EXEC Book.SearchByGenre N'wrong';
 --Test Book.DeleteBookWithID
 SELECT * From Book.BookInfo
 SELECT * FROM Book.Book
-EXEC Book.DeleteBookWithID 1;
 
 --Test Book.UpdateBookQuality
 SELECT * FROM Book.Book
@@ -138,7 +132,56 @@ EXEC Book.UpdateBookQuality 1, N'Used';
 SELECT * FROM Book.Book INNER JOIN Book.BookQuality BQ ON BQ.QualityID=BOok.QualityID
 EXEC Book.UpdateBookQuality 2, N'Used';
 SELECT * FROM Book.Book
-EXEC Book.UpdateBookQuality 1, N'Ud';
+EXEC Book.UpdateBookQuality 2, N'Ud';
 SELECT * FROM Book.Book
-EXEC Book.UpdateBookQuality 1, N'New';
+EXEC Book.UpdateBookQuality 4, N'New';
 SELECT * FROM Book.Book INNER JOIN Book.BookQuality BQ ON BQ.QualityID=BOok.QualityID
+
+
+--test Book.SearchWithAll
+EXEC Book.SearchWithAll N'Test book 3: even testiest', N't', N'La%', N'ISBN-3',N'Fantasy';
+EXEC Book.SearchWithAll N'Test book 3: even testiest', N'%', N'%', N'ISBN-3',N'%';
+EXEC Book.SearchWithAll N'Test book 3: even testiest', N'%', N'Rob', N'ISBN-3',N'%';
+EXEC Book.SearchWithAll N'%', N'%', N'La%', N'%',N'Fantasy';
+
+
+--test Book.GetBookInfoIDForBook
+DECLARE @BookInfoID INT;
+EXEC Book.GetBookInfoIDForBook 2, @BookInfoID OUTPUT;
+SELECT @BookInfoID AS BookInfoID;
+EXEC Book.GetBookInfoIDForBook -1, @BookInfoID OUTPUT;
+SELECT @BookInfoID AS BookInfoID;
+
+--test Book.GetAllBookInfoForBook
+EXEC Book.GetAllBookInfoForBook 3;
+EXEC Book.GetAllBookInfoForBook -1;
+
+--test Proj.ChangePassword
+SELECT * FROM Proj."User";
+EXEC Proj.ChangePassword N'gwillford@ksu.edu', N'new pass';
+SELECT * FROM Proj."User";
+EXEC Proj.ChangePassword N'gwillford@ksu.edu', N'newest pass';
+EXEC Proj.ChangePassword N'gwillfrd@ksu.edu', N'newest pass';
+
+--test Book.RemoveBookWithID
+SELECT * FROM Book.Book;
+EXEC Book.RemoveBookWithID 1;
+SELECT * FROM Book.Book;
+EXEC Book.SearchWithAll N'Test book 3: even testiest', N't', N'La%', N'ISBN-3',N'Fantasy';
+EXEC Book.SearchForTitle N'Test book 3: even testiest';
+EXEC Book.SearchForAuthor N't', N'Last';
+EXEC Book.SearchForISBN N'ISBN-3';
+EXEC Book.SearchByGenre N'Fantasy';
+EXEC Book.RemoveBookWithID 2;
+
+--test Book.GetUserCheckedOutBooks
+EXEC Book.GetUserCheckedOutBooks N'gwillford@ksu.edu';
+
+--test Book.GetUserCheckedOutHistory
+EXEC Book.GetUserCheckedOutHistory N'gwillford@ksu.edu';
+
+EXEC Book.GetUserOverdueBooks N'gwillford@ksu.edu';
+INSERT Book.CheckOut(BookID, UserID, CheckOutDate, DueDate)
+VALUES(5,1,SYSDATETIMEOFFSET(), '2017-11-29 12:25:28.2037170 -06:00');
+
+SELECT * FROM Book.CheckOut

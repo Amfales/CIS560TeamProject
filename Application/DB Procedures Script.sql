@@ -7,7 +7,7 @@ CREATE OR ALTER PROCEDURE Proj.AddUser
 	@FirstName NVARCHAR(128),
 	@LastName NVARCHAR(128),
 	@Email NVARCHAR(128),
-	@HashedPassword NVARCHAR(128),
+	@HashedPassword NVARCHAR(64),
 	@PermissionLevel NVARCHAR(32),
 
 	--Output parameters
@@ -43,7 +43,7 @@ CREATE OR ALTER PROCEDURE Book.AddPublisher
 	--Output parameters
 	@PublisherID INT OUTPUT
 AS
-	INSERT Book.Publisher(PublisherName)
+	INSERT Book.Publisher("Name")
 	VALUES(@PublisherName);
 
 	SET @PublisherID=SCOPE_IDENTITY();
@@ -61,15 +61,26 @@ GO
 CREATE OR ALTER PROCEDURE Book.CheckOutBook
 	--Input parameters
 	@BookID INT,
-	@UserID INT,
+	@Email NVARCHAR(128),
 
 	--Output parameters
 	@CheckOutID INT OUTPUT,
 	@DueDate DATETIMEOFFSET OUTPUT
 AS
-	DECLARE @Check INT;
+	DECLARE @CheckValid BIT = 
+	(
+		SELECT B.Removed
+		FROM Book.Book B
+		WHERE B.BookID=@BookID
+	);
 
-	SET @Check = 
+	IF @CheckValid IS NULL OR @CheckValid=1
+	BEGIN
+		DECLARE @Message NVARCHAR(256) = N'Invalid BookID!';
+		THROW 50000, @Message, 1;
+	END;
+
+	DECLARE @Check INT = 
 	(
 		SELECT CO.CheckOutID
 		FROM Book.CheckOut CO
@@ -78,9 +89,12 @@ AS
 
 	IF @Check IS NOT NULL
 	BEGIN
-		DECLARE @Message NVARCHAR(256) = N'Book already checked out!';
+		SET @Message = N'Book already checked out!';
 		THROW 50000, @Message, 1;
 	END;
+
+	DECLARE @UserID INT;
+	EXEC Proj.GetIDFromEmail @Email, @UserID OUTPUT;
 
 	SET @DueDate = DATEADD(WEEK,2,SYSDATETIMEOFFSET());
 
@@ -93,12 +107,16 @@ GO
 CREATE OR ALTER PROCEDURE Book.RenewBook
 	--Input parameters
 	@BookID INT,
-	@UserID INT,
+	@Email NVARCHAR(128),
 
 	--Output parameters
 	@CheckOutID INT OUTPUT,
 	@NewDueDate DATETIMEOFFSET OUTPUT
 AS
+
+	DECLARE @UserID INT;
+	EXEC Proj.GetIDFromEmail @Email, @UserID OUTPUT;
+
 	SET @NewDueDate = DATEADD(WEEK,1,SYSDATETIMEOFFSET());
 
 	SET @CheckOutID = 
@@ -122,7 +140,6 @@ GO
 CREATE OR ALTER PROCEDURE Book.CheckInBook
 	--Input parameters
 	@BookID INT,
-	@UserID INT,
 
 	--Output parameters
 	@CheckOutID INT OUTPUT
@@ -130,7 +147,7 @@ AS
 	SET @CheckOutID = 
 	(	SELECT CO.CheckOutID
 		FROM Book.CheckOut CO
-		WHERE BookID=@BookID AND UserID=@UserID AND ReturnDate IS NULL
+		WHERE BookID=@BookID AND /*UserID=@UserID AND*/ ReturnDate IS NULL
 	);
 
 	IF @CheckOutID IS NULL
@@ -161,13 +178,14 @@ GO
 CREATE OR ALTER PROCEDURE Proj.LoginUser
 	--input parameters
 	@Email NVARCHAR(128),
-	@HashedPassword NVARCHAR(128),
+	@HashedPassword NVARCHAR(64),
 
 	--output parameters
-	@UserID INT OUTPUT,
 	@FirstNAME NVARCHAR(128) OUTPUT,
 	@PermissionLevel NVARCHAR(32) OUTPUT
 AS
+	DECLARE @UserID INT;
+
 	SET @UserID = 
 	COALESCE((
 		SELECT U.UserID
@@ -241,7 +259,7 @@ AS
 	(
 		SELECT P.PublisherID
 		FROM Book.Publisher P
-		WHERE P.PublisherName=@PublisherName
+		WHERE P."Name"=@PublisherName
 	);
 
 	IF @PublisherID IS NULL
@@ -311,10 +329,14 @@ AS
 	EXEC Book.AddBookWithInfoID @BookInfoID, N'New', @BookID OUTPUT;
 GO
 
-CREATE OR ALTER PROCEDURE Book.SearchForTitle
-	@Title NVARCHAR(128)
+CREATE OR ALTER PROCEDURE Book.SearchWithAll
+	@Title NVARCHAR(128),
+	@FirstName NVARCHAR(128),
+	@LastName NVARCHAR(128),
+	@ISBN NVARCHAR(32),
+	@GenreDescriptor  NVARCHAR(64)
 AS
-	SELECT B.BookID, BI.Title, A.FirstName, A.LastName, P.PublisherName, G.Descriptor, BI.ISBN, BI.Copyrightyear,
+	SELECT B.BookID, BI.Title, A.FirstName AS AuthorFirstName, A.LastName AS AuthorLastName, BI.ISBN, BI.Copyrightyear, P."Name" AS PublisherName, G.Descriptor AS Genre, 
 			COALESCE((
 						SELECT CO.BookID
 						FROM Book.CheckOut CO
@@ -326,7 +348,26 @@ AS
 			INNER JOIN Book.Publisher P ON P.PublisherID=BI.PublisherID
 			INNER JOIN Book.BookGenre BG ON BG.BookInfoID=BI.BookInfoID
 			INNER JOIN Book.Genre G ON G.GenreID=BG.GenreID
-		WHERE BI.Title=@Title OR BI.Title LIKE @Title
+		WHERE (BI.Title=@Title OR BI.Title LIKE @Title) AND (A.LastName LIKE @LastName OR A.LastName=@LastName) AND(BI.ISBN LIKE @ISBN OR BI.ISBN=@ISBN) AND (G.Descriptor=@GenreDescriptor OR G.Descriptor LIKE @GenreDescriptor) AND (B.Removed = 0)
+		ORDER BY BI.Title;
+GO
+
+CREATE OR ALTER PROCEDURE Book.SearchForTitle
+	@Title NVARCHAR(128)
+AS
+	SELECT B.BookID, BI.Title, A.FirstName AS AuthorFirstName, A.LastName AS AuthorLastName, P."Name" AS PublisherName, G.Descriptor AS Genre, BI.ISBN, BI.Copyrightyear,
+			COALESCE((
+						SELECT CO.BookID
+						FROM Book.CheckOut CO
+						WHERE CO.BookID=B.BookID AND ReturnDate IS NULL
+					),0) AS CheckedOut--returns non-zero value if book checked out, 
+		FROM Book.Book B
+			INNER JOIN Book.BookInfo BI ON B.BookInfoID=BI.BookInfoID
+			INNER JOIN Book.Author A ON A.AuthorID=BI.AuthorID
+			INNER JOIN Book.Publisher P ON P.PublisherID=BI.PublisherID
+			INNER JOIN Book.BookGenre BG ON BG.BookInfoID=BI.BookInfoID
+			INNER JOIN Book.Genre G ON G.GenreID=BG.GenreID
+		WHERE (BI.Title=@Title OR BI.Title LIKE @Title) AND (B.Removed = 0)
 		ORDER BY BI.Title;
 GO
 
@@ -335,7 +376,7 @@ CREATE OR ALTER PROCEDURE Book.SearchForAuthor
 	@FirstName NVARCHAR(128),
 	@LastName NVARCHAR(128)
 AS
-	SELECT B.BookID, BI.Title, A.FirstName, A.LastName, P.PublisherName, G.Descriptor, BI.ISBN, BI.Copyrightyear,
+	SELECT B.BookID, BI.Title, A.FirstName AS AuthorFirstName, A.LastName AS AuthorLastName, P."Name" AS PublisherName, G.Descriptor AS Genre, BI.ISBN, BI.Copyrightyear,
 			COALESCE((
 						SELECT CO.BookID
 						FROM Book.CheckOut CO
@@ -347,14 +388,14 @@ AS
 			INNER JOIN Book.Publisher P ON P.PublisherID=BI.PublisherID
 			INNER JOIN Book.BookGenre BG ON BG.BookInfoID=BI.BookInfoID
 			INNER JOIN Book.Genre G ON G.GenreID=BG.GenreID
-		WHERE A.LastName LIKE @LastName OR A.LastName=@LastName
+		WHERE (A.LastName LIKE @LastName OR A.LastName=@LastName) AND (B.Removed = 0)
 		ORDER BY BI.Title;
 GO
 
 CREATE OR ALTER PROCEDURE Book.SearchForISBN
 	@ISBN NVARCHAR(32)
 AS
-	SELECT B.BookID, BI.Title, A.FirstName, A.LastName, P.PublisherName, G.Descriptor, BI.ISBN, BI.Copyrightyear,
+	SELECT B.BookID, BI.Title, A.FirstName AS AuthorFirstName, A.LastName AS AuthorLastName, P."Name" AS PublisherName, G.Descriptor AS Genre, BI.ISBN, BI.Copyrightyear,
 			COALESCE((
 						SELECT CO.BookID
 						FROM Book.CheckOut CO
@@ -366,14 +407,14 @@ AS
 			INNER JOIN Book.Publisher P ON P.PublisherID=BI.PublisherID
 			INNER JOIN Book.BookGenre BG ON BG.BookInfoID=BI.BookInfoID
 			INNER JOIN Book.Genre G ON G.GenreID=BG.GenreID
-		WHERE BI.ISBN LIKE @ISBN OR BI.ISBN=@ISBN 
+		WHERE (BI.ISBN LIKE @ISBN OR BI.ISBN=@ISBN) AND (B.Removed = 0)
 		ORDER BY BI.Title;
 GO
 
 CREATE OR ALTER PROCEDURE Book.SearchByGenre
 	@GenreDescriptor  NVARCHAR(64)
 AS
-	SELECT B.BookID, BI.Title, A.FirstName, A.LastName, P.PublisherName, G.Descriptor, BI.ISBN, BI.Copyrightyear,
+	SELECT B.BookID, BI.Title, A.FirstName AS AuthorFirstName, A.LastName AS AuthorLastName, P."Name" AS PublisherName, G.Descriptor AS Genre, BI.ISBN, BI.Copyrightyear,
 			COALESCE((
 						SELECT CO.BookID
 						FROM Book.CheckOut CO
@@ -385,11 +426,11 @@ AS
 			INNER JOIN Book.Publisher P ON P.PublisherID=BI.PublisherID
 			INNER JOIN Book.BookGenre BG ON BG.BookInfoID=BI.BookInfoID
 			INNER JOIN Book.Genre G ON G.GenreID=BG.GenreID
-		WHERE G.Descriptor=@GenreDescriptor OR G.Descriptor LIKE @GenreDescriptor
+		WHERE (G.Descriptor=@GenreDescriptor OR G.Descriptor LIKE @GenreDescriptor) AND (B.Removed = 0)
 		ORDER BY BI.Title;
 GO
 
-CREATE OR ALTER PROCEDURE Book.DeleteBookWithID
+CREATE OR ALTER PROCEDURE Book.RemoveBookWithID
 	--input params
 	@BookID INT
 AS
@@ -402,12 +443,13 @@ AS
 		);
 	IF @Check IS NULL
 	BEGIN
-		DECLARE @Message NVARCHAR(256) = N'BookInfo not in Database!';
+		DECLARE @Message NVARCHAR(256) = N'BookID not in Database!';
 		THROW 50000, @Message, 1;
 	END;
 
-	DELETE Book.Book
-	WHERE @BookID=BookID
+	UPDATE Book.Book
+	SET Removed=1
+	WHERE BookID=@BookID;
 GO
 
 CREATE OR ALTER PROCEDURE Book.UpdateBookQuality
@@ -447,3 +489,130 @@ AS
 		SET QualityID=@QualityID
 	WHERE BookID=@BookID;
 GO
+
+CREATE OR ALTER PROCEDURE Book.GetBookInfoIDForBook
+	@BookID INT,
+
+	@BookInfoID INT OUTPUT
+AS
+	SET @BookInfoID = 
+	(
+		SELECT B.BookInfoID
+		FROM Book.Book B
+		WHERE B.BookID=@BookID
+	);
+
+	IF @BookInfoID IS NULL
+	BEGIN
+		DECLARE @Message NVARCHAR(256) = N'Invalid BookID!';
+		THROW 50000, @Message, 1;
+	END;
+GO
+
+CREATE OR ALTER PROCEDURE Book.GetAllBookInfoForBook
+	@BookID INT
+AS
+	DECLARE @BookInfoID INT = 
+	(
+		SELECT B.BookInfoID
+		FROM Book.Book B
+		WHERE B.BookID=@BookID
+	);
+
+	IF @BookInfoID IS NULL
+	BEGIN
+		DECLARE @Message NVARCHAR(256) = N'Invalid BookID!';
+		THROW 50000, @Message, 1;
+	END;
+
+	SELECT BI.BookInfoID, BI.Title, A.FirstName AS AuthorFirstName, A.LastName AS AuthorLastName, BI.ISBN, BI.CopyrightYear, P."Name" AS PublisherName,  G.Descriptor AS Genre
+	FROM Book.BookInfo BI
+			INNER JOIN Book.Author A ON A.AuthorID=BI.AuthorID
+			INNER JOIN Book.Publisher P ON P.PublisherID=BI.PublisherID
+			INNER JOIN Book.BookGenre BG ON BG.BookInfoID=BI.BookInfoID
+			INNER JOIN Book.Genre G ON G.GenreID=BG.GenreID
+	WHERE BI.BookInfoID=@BookInfoID
+GO
+
+CREATE OR ALTER PROCEDURE Proj.ChangePassword
+	@Email NVARCHAR(128),
+	@NewHashedPassword NVARCHAR(64)
+AS
+	DECLARE @UserID INT;
+	EXEC Proj.GetIDFromEmail @Email, @UserID OUTPUT;
+
+	UPDATE Proj."User"
+	SET HashedPassword=@NewHashedPassword
+	WHERE UserID=@UserID
+GO
+
+CREATE OR ALTER PROCEDURE Book.GetUserCheckedOutBooks
+	@Email NVARCHAR(128)
+AS
+	DECLARE @UserID INT;
+	EXEC Proj.GetIDFromEmail @Email, @UserID OUTPUT;
+	
+	SELECT CO.BookID,BI.Title, A.FirstName AS AuthorFirstName, A.LastName AS AuthorLastName, BI.ISBN, BI.CopyrightYear, CO.CheckOutDate,CO.DueDate
+	FROM Book.CheckOut CO
+		INNER JOIN Book.Book B ON CO.BookID=B.BookID
+		INNER JOIN Book.BookInfo BI ON B.BookInfoID=BI.BookInfoID
+		INNER JOIN Book.Author A ON A.AuthorID=BI.AuthorID
+	WHERE CO.UserID=@UserID AND CO.ReturnDate IS NULL
+	ORDER BY CO.CheckOutDate ASC
+GO
+
+CREATE OR ALTER PROCEDURE Book.GetUserCheckedOutHistory
+	@Email NVARCHAR(128)
+AS
+	DECLARE @UserID INT;
+	EXEC Proj.GetIDFromEmail @Email, @UserID OUTPUT;
+	
+	SELECT CO.BookID,BI.Title, A.FirstName AS AuthorFirstName, A.LastName AS AuthorLastName, BI.ISBN, BI.CopyrightYear, CO.CheckOutDate,CO.DueDate, CO.ReturnDate AS DateReturned
+	FROM Book.CheckOut CO
+		INNER JOIN Book.Book B ON CO.BookID=B.BookID
+		INNER JOIN Book.BookInfo BI ON B.BookInfoID=BI.BookInfoID
+		INNER JOIN Book.Author A ON A.AuthorID=BI.AuthorID
+	WHERE CO.UserID=@UserID
+	ORDER BY CO.CheckOutDate ASC
+GO
+
+CREATE OR ALTER PROCEDURE Book.GetUserOverdueBooks
+	@Email NVARCHAR(128)
+AS
+	DECLARE @UserID INT;
+	EXEC Proj.GetIDFromEmail @Email, @UserID OUTPUT;
+	
+	SELECT CO.BookID,BI.Title, A.FirstName AS AuthorFirstName, A.LastName AS AuthorLastName, BI.ISBN, BI.CopyrightYear, CO.CheckOutDate,CO.DueDate
+	FROM Book.CheckOut CO
+		INNER JOIN Book.Book B ON CO.BookID=B.BookID
+		INNER JOIN Book.BookInfo BI ON B.BookInfoID=BI.BookInfoID
+		INNER JOIN Book.Author A ON A.AuthorID=BI.AuthorID
+	WHERE CO.UserID=@UserID AND CO.ReturnDate IS NULL AND CO.DueDate<SYSDATETIMEOFFSET()
+	ORDER BY CO.CheckOutDate ASC
+GO
+
+CREATE OR ALTER PROCEDURE Proj.GetIDFromEmail
+	@Email NVARCHAR(128),
+	@UserID INT OUTPUT
+AS
+	SET @UserID = 
+	(
+		SELECT U.UserID
+		FROM Proj."User" U
+		WHERE U.Email=@Email
+	);
+
+	IF @UserID IS NULL
+	BEGIN
+		DECLARE @Message NVARCHAR(256)= N'Invalid Email!';
+		THROW 50000, @Message, 1;
+	END;
+GO
+
+--TO DO:
+--Add query for get bookinfo using bookid
+--places where userid is passed in should be replaced with email
+--Change password request using just email and new password
+--trigger for any changes?
+--add procedure to return all books checked out to a certain user, given their email.
+--add removed col for book, probably just a bit
