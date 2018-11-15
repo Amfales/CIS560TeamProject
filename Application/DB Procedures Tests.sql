@@ -83,17 +83,22 @@ SELECT * FROM Book.Book;
 DECLARE @CheckoutID INT,
 		@DueDate DATETIMEOFFSET;
 
-EXEC Book.CheckOutBook 4, N'gwillford@ksu.edu', @CheckoutID OUTPUT, @DueDate OUTPUT;
+EXEC Book.CheckOutBook 1, N'gwillford@ksu.edu', @CheckoutID OUTPUT, @DueDate OUTPUT;
 
 SELECT @CheckoutID AS NewCheckOutID, @DueDate AS DueDate;
 GO
+--Test for Book.RenewBook
+DECLARE @CheckoutID INT,
+		@DueDate DATETIMEOFFSET;
+
+EXEC Book.RenewBook 1, N'gwillford@ksu.edu', @CheckoutID OUTPUT, @DueDate OUTPUT;
 
 --Test Book.CheckInBook
 SELECT * FROM Book.CheckOut;
 
 DECLARE @CheckOutID INT;
 
-EXEC Book.CheckInBook 3,  @CheckOutID OUTPUT;
+EXEC Book.CheckInBook 1,  @CheckOutID OUTPUT;
 
 SELECT @CheckOutID;
 
@@ -182,6 +187,6 @@ EXEC Book.GetUserCheckedOutHistory N'gwillford@ksu.edu';
 
 EXEC Book.GetUserOverdueBooks N'gwillford@ksu.edu';
 INSERT Book.CheckOut(BookID, UserID, CheckOutDate, DueDate)
-VALUES(5,1,SYSDATETIMEOFFSET(), '2017-11-29 12:25:28.2037170 -06:00');
+VALUES(1,1,SYSDATETIME(), '2017-11-29 12:25:28.2037170');
 
 SELECT * FROM Book.CheckOut

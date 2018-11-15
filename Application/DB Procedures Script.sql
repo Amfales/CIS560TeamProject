@@ -65,7 +65,7 @@ CREATE OR ALTER PROCEDURE Book.CheckOutBook
 
 	--Output parameters
 	@CheckOutID INT OUTPUT,
-	@DueDate DATETIMEOFFSET OUTPUT
+	@DueDate DATETIME2 OUTPUT
 AS
 	DECLARE @CheckValid BIT = 
 	(
@@ -96,10 +96,10 @@ AS
 	DECLARE @UserID INT;
 	EXEC Proj.GetIDFromEmail @Email, @UserID OUTPUT;
 
-	SET @DueDate = DATEADD(WEEK,2,SYSDATETIMEOFFSET());
+	SET @DueDate = DATEADD(WEEK,2,SYSDATETIME());
 
 	INSERT Book.CheckOut(BookID,UserID,CheckOutDate,DueDate)
-	VALUES(@BookID, @UserID, SYSDATETIMEOFFSET(),@DueDate);
+	VALUES(@BookID, @UserID, SYSDATETIME(),@DueDate);
 
 	SET @CheckOutID = SCOPE_IDENTITY();
 GO
@@ -111,13 +111,13 @@ CREATE OR ALTER PROCEDURE Book.RenewBook
 
 	--Output parameters
 	@CheckOutID INT OUTPUT,
-	@NewDueDate DATETIMEOFFSET OUTPUT
+	@NewDueDate DATETIME2 OUTPUT
 AS
 
 	DECLARE @UserID INT;
 	EXEC Proj.GetIDFromEmail @Email, @UserID OUTPUT;
 
-	SET @NewDueDate = DATEADD(WEEK,1,SYSDATETIMEOFFSET());
+	SET @NewDueDate = DATEADD(WEEK,1,SYSDATETIME());
 
 	SET @CheckOutID = 
 	(	SELECT CO.CheckOutID
@@ -157,7 +157,7 @@ AS
 	END;
 
 	UPDATE Book.CheckOut
-		SET ReturnDate=SYSDATETIMEOFFSET()
+		SET ReturnDate=SYSDATETIME()
 	WHERE CheckOutID=@CheckOutID;
 GO
 
@@ -587,7 +587,7 @@ AS
 		INNER JOIN Book.Book B ON CO.BookID=B.BookID
 		INNER JOIN Book.BookInfo BI ON B.BookInfoID=BI.BookInfoID
 		INNER JOIN Book.Author A ON A.AuthorID=BI.AuthorID
-	WHERE CO.UserID=@UserID AND CO.ReturnDate IS NULL AND CO.DueDate<SYSDATETIMEOFFSET()
+	WHERE CO.UserID=@UserID AND CO.ReturnDate IS NULL AND CO.DueDate<SYSDATETIME()
 	ORDER BY CO.CheckOutDate ASC
 GO
 
