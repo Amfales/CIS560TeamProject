@@ -11,6 +11,7 @@ using Newtonsoft.Json;
 
 namespace ServerApplication
 {
+    public delegate void LogFunction(string data);
     public class WebServer
     {
         private WebSocketServer _serv;
@@ -22,7 +23,7 @@ namespace ServerApplication
         public WebServer(IPAddress add, int port)
         {
             _serv = new WebSocketServer(add, port);
-            _servDecider = new ServerDecider();
+            _servDecider = new ServerDecider(Console.WriteLine);
             _serv.AddWebSocketService<ServerBehavior>("/library", InitializeService);
         }
         public WebServer(int port) : this(localHost, port) { }
@@ -32,9 +33,9 @@ namespace ServerApplication
             return new ServerBehavior(ServerDecide);
         }
         
-        private void ServerDecide(MessageEventArgs e, SendMessage func)
+        private void ServerDecide(MessageEventArgs e, SendMessage send)
         {
-            _servDecider.GetDecision(e, func);
+            _servDecider.GetDecision(e, send);
         }
 
         public void Start()

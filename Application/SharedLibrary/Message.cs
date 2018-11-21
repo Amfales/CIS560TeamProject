@@ -27,8 +27,7 @@ namespace SharedLibrary
             {
                 return null;
             }
-            Message<PType> n = new Message<PType>(m.Payload as PType);
-            return n;
+            return new Message<PType>(m.Payload as PType);
         }
     }
 

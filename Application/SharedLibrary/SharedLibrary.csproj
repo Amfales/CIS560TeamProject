@@ -40,6 +40,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Author.cs" />
+    <Compile Include="Book.cs" />
+    <Compile Include="BookInfo.cs" />
     <Compile Include="ErrorMessage.cs" />
     <Compile Include="Message.cs" />
     <Compile Include="MessageType.cs" />
@@ -47,6 +50,7 @@
     <Compile Include="Requests\LoginRequest.cs" />
     <Compile Include="Requests\SearchBookRequest.cs" />
     <Compile Include="Responses\LoginResponse.cs" />
+    <Compile Include="Responses\SearchBookInfoResponse.cs" />
     <Compile Include="UserType.cs" />
   </ItemGroup>
   <ItemGroup />

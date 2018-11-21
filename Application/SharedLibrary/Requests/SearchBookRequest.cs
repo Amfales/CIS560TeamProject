@@ -8,8 +8,8 @@ namespace SharedLibrary.Requests
 {
     public class SearchBookRequest : Message<SearchInfo>
     {
-        public SearchBookRequest() : this("","","","",true) { }
-        public SearchBookRequest(string n, string a, string i, string g, bool b)
+        public SearchBookRequest() : this("",new Author(),"","",true) { }
+        public SearchBookRequest(string n, Author a, string i, string g, bool b)
         {
             Payload = new SearchInfo(n, a, i, g, b);
         }
@@ -27,12 +27,12 @@ namespace SharedLibrary.Requests
     public class SearchInfo
     {
         public string Name { get; }
-        public string Author { get; }
+        public Author Author { get; }
         public string ISBN { get; }
         public string Genre { get; }
         public bool BookInfoOnly { get; }
 
-        public SearchInfo(string n, string a, string i, string g, bool b)
+        public SearchInfo(string n, Author a, string i, string g, bool b)
         {
             Name = n;
             Author = a;
