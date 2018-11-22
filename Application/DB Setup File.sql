@@ -134,8 +134,6 @@ CREATE TABLE Book.CheckOut
 );
 GO
 
-
-
 INSERT Proj.UserCategory(PermissionLevel)
 Values (N'Admin'),(N'Patron');
 
