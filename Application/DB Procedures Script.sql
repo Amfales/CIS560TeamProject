@@ -334,7 +334,9 @@ CREATE OR ALTER PROCEDURE Book.SearchWithAll
 	@FirstName NVARCHAR(128),
 	@LastName NVARCHAR(128),
 	@ISBN NVARCHAR(32),
-	@GenreDescriptor  NVARCHAR(64)
+	@GenreDescriptor  NVARCHAR(64),
+	@SearchPage INT = 1,
+	@RowsPerPage INT = 25
 AS
 	SELECT B.BookID, BI.Title, A.FirstName AS AuthorFirstName, A.LastName AS AuthorLastName, BI.ISBN, BI.Copyrightyear, P."Name" AS PublisherName, G.Descriptor AS Genre, 
 			COALESCE((
@@ -349,11 +351,14 @@ AS
 			INNER JOIN Book.BookGenre BG ON BG.BookInfoID=BI.BookInfoID
 			INNER JOIN Book.Genre G ON G.GenreID=BG.GenreID
 		WHERE (BI.Title=@Title OR BI.Title LIKE @Title) AND (A.LastName LIKE @LastName OR A.LastName=@LastName) AND(BI.ISBN LIKE @ISBN OR BI.ISBN=@ISBN) AND (G.Descriptor=@GenreDescriptor OR G.Descriptor LIKE @GenreDescriptor) AND (B.Removed = 0)
-		ORDER BY BI.Title;
+		ORDER BY BI.Title
+		OFFSET ((@SearchPage-1)*@RowsPerPage) ROWS FETCH NEXT @RowsPerPage ROWS ONLY;
 GO
 
 CREATE OR ALTER PROCEDURE Book.SearchForTitle
-	@Title NVARCHAR(128)
+	@Title NVARCHAR(128),
+	@SearchPage INT = 1,
+	@RowsPerPage INT = 25
 AS
 	SELECT B.BookID, BI.Title, A.FirstName AS AuthorFirstName, A.LastName AS AuthorLastName, P."Name" AS PublisherName, G.Descriptor AS Genre, BI.ISBN, BI.Copyrightyear,
 			COALESCE((
@@ -368,13 +373,16 @@ AS
 			INNER JOIN Book.BookGenre BG ON BG.BookInfoID=BI.BookInfoID
 			INNER JOIN Book.Genre G ON G.GenreID=BG.GenreID
 		WHERE (BI.Title=@Title OR BI.Title LIKE @Title) AND (B.Removed = 0)
-		ORDER BY BI.Title;
+		ORDER BY BI.Title
+		OFFSET ((@SearchPage-1)*@RowsPerPage) ROWS FETCH NEXT @RowsPerPage ROWS ONLY;
 GO
 
 
 CREATE OR ALTER PROCEDURE Book.SearchForAuthor
 	@FirstName NVARCHAR(128),
-	@LastName NVARCHAR(128)
+	@LastName NVARCHAR(128),
+	@SearchPage INT = 1,
+	@RowsPerPage INT = 25
 AS
 	SELECT B.BookID, BI.Title, A.FirstName AS AuthorFirstName, A.LastName AS AuthorLastName, P."Name" AS PublisherName, G.Descriptor AS Genre, BI.ISBN, BI.Copyrightyear,
 			COALESCE((
@@ -389,11 +397,14 @@ AS
 			INNER JOIN Book.BookGenre BG ON BG.BookInfoID=BI.BookInfoID
 			INNER JOIN Book.Genre G ON G.GenreID=BG.GenreID
 		WHERE (A.LastName LIKE @LastName OR A.LastName=@LastName) AND (B.Removed = 0)
-		ORDER BY BI.Title;
+		ORDER BY BI.Title
+		OFFSET ((@SearchPage-1)*@RowsPerPage) ROWS FETCH NEXT @RowsPerPage ROWS ONLY;
 GO
 
 CREATE OR ALTER PROCEDURE Book.SearchForISBN
-	@ISBN NVARCHAR(32)
+	@ISBN NVARCHAR(32),
+	@SearchPage INT = 1,
+	@RowsPerPage INT = 25
 AS
 	SELECT B.BookID, BI.Title, A.FirstName AS AuthorFirstName, A.LastName AS AuthorLastName, P."Name" AS PublisherName, G.Descriptor AS Genre, BI.ISBN, BI.Copyrightyear,
 			COALESCE((
@@ -408,11 +419,14 @@ AS
 			INNER JOIN Book.BookGenre BG ON BG.BookInfoID=BI.BookInfoID
 			INNER JOIN Book.Genre G ON G.GenreID=BG.GenreID
 		WHERE (BI.ISBN LIKE @ISBN OR BI.ISBN=@ISBN) AND (B.Removed = 0)
-		ORDER BY BI.Title;
+		ORDER BY BI.Title
+		OFFSET ((@SearchPage-1)*@RowsPerPage) ROWS FETCH NEXT @RowsPerPage ROWS ONLY;
 GO
 
 CREATE OR ALTER PROCEDURE Book.SearchByGenre
-	@GenreDescriptor  NVARCHAR(64)
+	@GenreDescriptor  NVARCHAR(64),
+	@SearchPage INT = 1,
+	@RowsPerPage INT = 25
 AS
 	SELECT B.BookID, BI.Title, A.FirstName AS AuthorFirstName, A.LastName AS AuthorLastName, P."Name" AS PublisherName, G.Descriptor AS Genre, BI.ISBN, BI.Copyrightyear,
 			COALESCE((
@@ -427,7 +441,8 @@ AS
 			INNER JOIN Book.BookGenre BG ON BG.BookInfoID=BI.BookInfoID
 			INNER JOIN Book.Genre G ON G.GenreID=BG.GenreID
 		WHERE (G.Descriptor=@GenreDescriptor OR G.Descriptor LIKE @GenreDescriptor) AND (B.Removed = 0)
-		ORDER BY BI.Title;
+		ORDER BY BI.Title
+		OFFSET ((@SearchPage-1)*@RowsPerPage) ROWS FETCH NEXT @RowsPerPage ROWS ONLY;
 GO
 
 CREATE OR ALTER PROCEDURE Book.RemoveBookWithID
@@ -609,10 +624,48 @@ AS
 	END;
 GO
 
+CREATE OR ALTER PROCEDURE Book.GetAllOverdueBooks
+
+AS
+	
+	SELECT CO.BookID, CO.UserID, U.Email, BI.Title, A.FirstName AS AuthorFirstName, A.LastName AS AuthorLastName, BI.ISBN, BI.CopyrightYear, CO.CheckOutDate,CO.DueDate
+	FROM Book.CheckOut CO
+		INNER JOIN Proj."User" U ON U.UserID=CO.UserID
+		INNER JOIN Book.Book B ON CO.BookID=B.BookID
+		INNER JOIN Book.BookInfo BI ON B.BookInfoID=BI.BookInfoID
+		INNER JOIN Book.Author A ON A.AuthorID=BI.AuthorID
+	WHERE CO.ReturnDate IS NULL AND CO.DueDate<SYSDATETIME()
+	ORDER BY CO.CheckOutDate ASC
+GO
+
+CREATE OR ALTER PROCEDURE Book.GetBooksByPopularity
+	@SearchPage INT = 1,
+	@RowsPerPage INT = 25
+AS
+	SELECT B.BookID, BI.Title, A.FirstName AS AuthorFirstName, A.LastName AS AuthorLastName, BI.ISBN, BI.Copyrightyear, P."Name" AS PublisherName, G.Descriptor AS Genre, 
+			COALESCE((
+						SELECT CO.BookID
+						FROM Book.CheckOut CO
+						WHERE CO.BookID=B.BookID AND ReturnDate IS NULL
+					),0) AS CheckedOut--returns non-zero value if book checked out, 
+		FROM (Book.Book B
+			INNER JOIN Book.BookInfo BI ON B.BookInfoID=BI.BookInfoID
+			INNER JOIN Book.Author A ON A.AuthorID=BI.AuthorID
+			INNER JOIN Book.Publisher P ON P.PublisherID=BI.PublisherID
+			INNER JOIN Book.BookGenre BG ON BG.BookInfoID=BI.BookInfoID
+			INNER JOIN Book.Genre G ON G.GenreID=BG.GenreID)
+			LEFT JOIN (
+				SELECT CO.BookID, COUNT(DISTINCT CO.CheckOutID) AS Popularity
+				FROM Book.CheckOut CO
+				GROUP BY CO.BookID
+			) DT ON DT.BookID = B.BookID
+		ORDER BY DT.Popularity, BI.Title
+		OFFSET ((@SearchPage-1)*@RowsPerPage) ROWS FETCH NEXT @RowsPerPage ROWS ONLY;
+GO
 --TO DO:
 --Add query for get bookinfo using bookid
 --places where userid is passed in should be replaced with email
 --Change password request using just email and new password
 --trigger for any changes?
 --add procedure to return all books checked out to a certain user, given their email.
---add removed col for book, probably just a bit
+--add removed col for book, probably just a bit DONE
