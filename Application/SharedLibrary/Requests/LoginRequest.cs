@@ -22,12 +22,13 @@ namespace SharedLibrary.Requests
 
     public class Login
     {
+        public string Email { get; }
+        public string HashPassword { get; }
         public Login(string email, string hp)
         {
             Email = email;
             HashPassword = hp;
         }
-        public string Email { get; }
-        public string HashPassword { get; }
+        
     }
 }

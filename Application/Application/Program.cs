@@ -8,6 +8,7 @@ using WebSocketSharp.Server;
 using WebSocketSharp;
 using SharedLibrary;
 using SharedLibrary.Requests;
+using SharedLibrary.Responses;
 using System.Windows.Forms;
 
 namespace ServerApplication
@@ -24,6 +25,7 @@ namespace ServerApplication
             WebSocket ws = new WebSocket("ws://localhost:9999/test");
             //WebSocket ws = new WebSocket("ws://localhost:9999/", onMessage: DoPrint, onError: DoError);
             serv.Start();
+            SortedSet<BookInfo> s = new SortedSet<BookInfo>();
             /*
             LoginRequest lr = new LoginRequest("username", "password");
             IMessage m = lr;
