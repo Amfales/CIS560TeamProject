@@ -18,6 +18,11 @@ namespace SharedLibrary
         CreateNewUserRequest,
         CreateNewUserResponse,
 
+        GetBookRequest,
+        GetBookResponse,
+
+        CheckoutRequest,
+        CheckoutResponse,
 
 
         Error

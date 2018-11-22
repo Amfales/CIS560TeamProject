@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace SharedLibrary
 {
     public class Message<PType> : IMessage
-        where PType : class
+        //where PType : class
     {
         public static MessageType Type { get; }
         public PType Payload { get; protected set; }
@@ -27,7 +27,7 @@ namespace SharedLibrary
             {
                 return null;
             }
-            return new Message<PType>(m.Payload as PType);
+            return new Message<PType>((PType)(m.Payload));
         }
     }
 

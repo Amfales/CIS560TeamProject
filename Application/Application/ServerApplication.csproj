@@ -52,10 +52,13 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Decider\ServerDecider.Checkout.cs" />
+    <Compile Include="Decider\ServerDecider.GetBook.cs" />
+    <Compile Include="Decider\ServerDecider.SearchBook.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ServerBehavior.cs" />
-    <Compile Include="ServerDecider.cs" />
+    <Compile Include="Decider\ServerDecider.cs" />
     <Compile Include="TestBehavior.cs" />
     <Compile Include="WebServer.cs" />
   </ItemGroup>
