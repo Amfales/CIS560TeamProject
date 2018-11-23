@@ -144,9 +144,9 @@ SELECT * FROM Book.Book INNER JOIN Book.BookQuality BQ ON BQ.QualityID=BOok.Qual
 
 
 --test Book.SearchWithAll
-EXEC Book.SearchWithAll N'Test book 3: even testiest', N't', N'La%', N'ISBN-3',N'Fantasy';
+EXEC Book.SearchWithAll N'Test book 3: even testiest', N't', N'La%', N'ISBN-3',N'Fantasy',1,1;
 EXEC Book.SearchWithAll N'Test book 3: even testiest', N'%', N'%', N'ISBN-3',N'%';
-EXEC Book.SearchWithAll N'Test book 3: even testiest', N'%', N'Rob', N'ISBN-3',N'%';
+EXEC Book.SearchWithAll N'Test book 3: even testiest', N'%', N'Rob', N'ISBN-3',N'%',1,24;
 EXEC Book.SearchWithAll N'%', N'%', N'La%', N'%',N'Fantasy';
 
 
@@ -190,3 +190,8 @@ INSERT Book.CheckOut(BookID, UserID, CheckOutDate, DueDate)
 VALUES(1,1,SYSDATETIME(), '2017-11-29 12:25:28.2037170');
 
 SELECT * FROM Book.CheckOut
+
+--Test get books by popularity
+select * from Book.CheckOut;
+
+EXEC Book.GetBooksByPopularity;

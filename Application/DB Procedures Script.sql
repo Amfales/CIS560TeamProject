@@ -659,7 +659,7 @@ AS
 				FROM Book.CheckOut CO
 				GROUP BY CO.BookID
 			) DT ON DT.BookID = B.BookID
-		ORDER BY DT.Popularity, BI.Title
+		ORDER BY DT.Popularity DESC, BI.Title
 		OFFSET ((@SearchPage-1)*@RowsPerPage) ROWS FETCH NEXT @RowsPerPage ROWS ONLY;
 GO
 --TO DO:
