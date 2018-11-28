@@ -11,7 +11,8 @@ EXEC Proj.AddUser N'Grant', N'Willford', N'gwillford@ksu.edu', N'apoij', N'Admin
 SELECT * FROM Proj."User";
 SELECT @NewUser AS NewUserID;
 
-EXEC Proj.AddUser N'Grant', N'Willford', N'gwillford.edu', N'apoij', N'Admin', @NewUser OUTPUT;
+DECLARE @NewUser INT;
+EXEC Proj.AddUser N'Kurt', N'Walther', N'cooldude@hotmail.com', N'adfds', N'Patron', @NewUser OUTPUT;
 SELECT * FROM Proj."User";
 SELECT @NewUser AS NewUserID;
 
@@ -88,6 +89,8 @@ EXEC Book.CheckOutBook 1, N'gwillford@ksu.edu', @CheckoutID OUTPUT, @DueDate OUT
 SELECT @CheckoutID AS NewCheckOutID, @DueDate AS DueDate;
 GO
 --Test for Book.RenewBook
+select * from Book.CheckOut;
+
 DECLARE @CheckoutID INT,
 		@DueDate DATETIMEOFFSET;
 
@@ -144,12 +147,17 @@ SELECT * FROM Book.Book INNER JOIN Book.BookQuality BQ ON BQ.QualityID=BOok.Qual
 
 
 --test Book.SearchWithAll
-EXEC Book.SearchWithAll N'Test book 3: even testiest', N't', N'La%', N'ISBN-3',N'Fantasy',1,1;
-EXEC Book.SearchWithAll N'Test book 3: even testiest', N'%', N'%', N'ISBN-3',N'%';
-EXEC Book.SearchWithAll N'Test book 3: even testiest', N'%', N'Rob', N'ISBN-3',N'%',1,24;
-EXEC Book.SearchWithAll N'%', N'%', N'La%', N'%',N'Fantasy';
+EXEC Book.SearchBookWithAll N'%book%', N't', N'La%', N'ISBN-3',N'Fantasy',1,1;
+EXEC Book.SearchBookWithAll N'%book%', N'%', N'%', N'ISBN-3',N'%';
+EXEC Book.SearchBookWithAll N'Test book 3: even testiest', N'%', N'Rob', N'ISBN-3',N'%',1,24;
+EXEC Book.SearchBookWithAll N'%', N'%', N'La%', N'%',N'Fantasy';
+EXEC Book.SearchBookWithAll;
 
+EXEC Book.SearchBookInfoWithAll;
 
+EXEC Book.GetAllBookIDOfBookInfo 1;
+
+select * From BOok.BookInfo
 --test Book.GetBookInfoIDForBook
 DECLARE @BookInfoID INT;
 EXEC Book.GetBookInfoIDForBook 2, @BookInfoID OUTPUT;
@@ -193,5 +201,10 @@ SELECT * FROM Book.CheckOut
 
 --Test get books by popularity
 select * from Book.CheckOut;
+select * from Book.Book;
 
 EXEC Book.GetBooksByPopularity;
+
+EXEC Proj.AllUsersNumTimesCheckedOut;
+
+EXEC Book.GetAllBookInfosWithCheckOutCount;
