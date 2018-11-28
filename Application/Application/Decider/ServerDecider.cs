@@ -41,6 +41,15 @@ namespace ServerApplication.Decider
                 case MessageType.SearchBookRequest:
                     DecideSearchBookRequest(send, new SearchBookRequest(Message<SearchInfo>.UpgradeMessage(m)));
                     break;
+                case MessageType.CheckoutRequest:
+                    HandleCheckoutRequest(send, new CheckoutRequest(Message<Checkout>.UpgradeMessage(m)));
+                    break;
+                case MessageType.ViewCheckedoutRequest:
+                    HandleViewCheckedoutRequest(send, new ViewCheckedoutRequest(Message<User>.UpgradeMessage(m)));
+                    break;
+                case MessageType.RenewalRequest:
+                    HandleRenewalRequest(send, new RenewalRequest(Message<Renewal>.UpgradeMessage(m)));
+                    break;
                 default:
                     break;
             }

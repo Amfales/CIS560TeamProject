@@ -24,6 +24,12 @@ namespace SharedLibrary
         CheckoutRequest,
         CheckoutResponse,
 
+        ViewCheckedoutRequest,
+        ViewCheckedoutResponse,
+
+        RenewalRequest,
+        RenewalResponse,
+
 
         Error
     }
