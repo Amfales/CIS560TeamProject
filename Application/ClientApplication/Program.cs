@@ -16,7 +16,10 @@ namespace ClientApplication
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Form1());
+
+            FormController formController = new FormController();
+
+            Application.Run();
         }
     }
 }
