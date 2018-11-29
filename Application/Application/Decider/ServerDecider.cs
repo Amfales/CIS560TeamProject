@@ -24,6 +24,7 @@ namespace ServerApplication.Decider
         private Dictionary<string, UserType> _userPermissions = new Dictionary<string, UserType>();
         private string _connection =
             "server=tcp:" + Dns.GetHostEntry("fullmilkpig.ddns.net").AddressList[0].ToString() + "\\LIBRARYKIOSK, 1733;" +
+            "Database=librarykiosk;" +
             "User id=NHelgeson;" +
             "Password=buttz560";
         private LogFunction _logger;
