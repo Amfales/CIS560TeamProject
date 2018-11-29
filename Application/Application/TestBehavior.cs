@@ -5,8 +5,12 @@ using System.Text;
 using System.Threading.Tasks;
 using WebSocketSharp;
 using WebSocketSharp.Server;
-using SharedLibrary;
 using Newtonsoft.Json;
+
+using SharedLibrary;
+using SharedLibrary.Requests;
+using SharedLibrary.Responses;
+
 
 
 namespace ServerApplication
@@ -23,8 +27,8 @@ namespace ServerApplication
         protected override void OnMessage(MessageEventArgs e)
         {
             string text = e.Data;
-            //_f(text);
-            Send("Server was sent: " + text);
+            LoginRequest l = JsonConvert.DeserializeObject<LoginRequest>(text);
+            Send( JsonConvert.SerializeObject(new LoginResponse(true, 0, "this is their first name")));
         }
     }
 }

@@ -28,6 +28,7 @@ namespace ServerApplication
             //serv.Start();
 
             server.Start();
+            
             ws.OnMessage += (sender, e) => { Console.WriteLine(e.Data); };
             ws.Connect();
 
@@ -38,7 +39,7 @@ namespace ServerApplication
             ws.Send(Newtonsoft.Json.JsonConvert.SerializeObject(
                 new LoginRequest("nehelgeson@ksu.edu", "31415926712345")
                 , c));
-
+                
 
             while (true)
             {
