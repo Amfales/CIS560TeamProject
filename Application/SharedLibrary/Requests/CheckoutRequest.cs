@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 
 namespace SharedLibrary.Requests
 {
     public class CheckoutRequest : Message<Checkout>
     {
+        [JsonConstructor]
         public CheckoutRequest(string e, List<int> l)
         {
             Payload = new Checkout(e, l);

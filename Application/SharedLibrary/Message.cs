@@ -10,7 +10,7 @@ namespace SharedLibrary
         //where PType : class
     {
         public static new MessageType Type { get; }
-        public new PType Payload { get; protected set; }
+        public new PType Payload { get; set; }
 
         public Message(PType p)
         {
@@ -31,7 +31,7 @@ namespace SharedLibrary
 
     public class IMessage
     {
-        public MessageType Type { get; }
-        public object Payload { get; }
+        public MessageType Type { get; set; }
+        public object Payload { get; private set; }
     }
 }

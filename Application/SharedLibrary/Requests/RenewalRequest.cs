@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 
 namespace SharedLibrary.Requests
 {
     public class RenewalRequest : Message<Renewal>
     {
+        [JsonConstructor]
         public RenewalRequest(string e, List<int> ids)
         {
             Payload = new Renewal(e, ids);

@@ -10,6 +10,7 @@ using SharedLibrary;
 using SharedLibrary.Requests;
 using SharedLibrary.Responses;
 using System.Windows.Forms;
+using Newtonsoft.Json;
 
 namespace ServerApplication
 {
@@ -29,9 +30,14 @@ namespace ServerApplication
             server.Start();
             ws.OnMessage += (sender, e) => { Console.WriteLine(e.Data); };
             ws.Connect();
+
+            JsonConverter[] c = new JsonConverter[1];
+            c[0] = new Newtonsoft.Json.Converters.StringEnumConverter();
+
+
             ws.Send(Newtonsoft.Json.JsonConvert.SerializeObject(
                 new LoginRequest("nehelgeson@ksu.edu", "31415926712345")
-                ));
+                , c));
 
 
             while (true)

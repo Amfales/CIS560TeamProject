@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 
 namespace SharedLibrary.Requests
 {
     public class AddBookRequest : Message<AddBook>
     {
+        [JsonConstructor]
         public AddBookRequest(string e, Book b)
         {
             Payload = new AddBook(e, b);

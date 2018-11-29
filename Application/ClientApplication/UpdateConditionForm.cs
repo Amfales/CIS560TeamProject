@@ -44,7 +44,8 @@ namespace ClientApplication
 
             try
             {
-                success = handleUpdateCondition(Convert.ToInt32(uxBookIDBox.Text), uxConditionBox.Text);
+                //success = handleUpdateCondition(Convert.ToInt32(uxBookIDBox.Text), uxConditionBox.Text);
+                success = true;
             }
             catch
             {

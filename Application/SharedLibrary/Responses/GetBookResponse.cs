@@ -4,11 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using SharedLibrary;
+using Newtonsoft.Json;
 
 namespace SharedLibrary.Responses
 {
     public class GetBookResponse : Message<Book>
     {
+        [JsonConstructor]
         public GetBookResponse(Book b)
         {
             Payload = b;
