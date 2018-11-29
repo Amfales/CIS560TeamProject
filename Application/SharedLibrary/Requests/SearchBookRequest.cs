@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 
 namespace SharedLibrary.Requests
 {
     public class SearchBookRequest : Message<SearchInfo>
     {
         public SearchBookRequest() : this("",new Author(),"","",true) { }
+        [JsonConstructor]
         public SearchBookRequest(string n, Author a, string i, string g, bool b)
         {
             Payload = new SearchInfo(n, a, i, g, b);

@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 
 namespace SharedLibrary.Responses
 {
     public class CheckoutResponse : Message<Checkout>
     {
+        [JsonConstructor]
         public CheckoutResponse(bool succ, List<DueDateAssociation> date)
         {
             Payload = new Checkout(succ, date);

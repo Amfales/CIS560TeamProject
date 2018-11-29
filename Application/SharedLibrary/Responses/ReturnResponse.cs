@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 
 namespace SharedLibrary.Responses
 {
     public class ReturnResponse : Message<bool>
     {
+        [JsonConstructor]
         public ReturnResponse(bool succ)
         {
             Payload = succ;

@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 
 namespace SharedLibrary.Requests
 {
     public class RetireBookRequest : Message<Retire>
     {
+        [JsonConstructor]
         public RetireBookRequest(int b, string e)
         {
             Payload = new Retire(b, e);

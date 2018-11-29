@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 
 namespace SharedLibrary.Requests
 {
     public class ResetPasswordRequest : Message<Reset>
     {
+        [JsonConstructor]
         public ResetPasswordRequest(string re, string rp, string ue)
         {
             Payload = new Reset(re, rp, ue);

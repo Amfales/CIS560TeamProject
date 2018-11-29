@@ -4,11 +4,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 
 namespace SharedLibrary.Responses
 {
     public class ViewCheckedoutResponse : Message<CheckedoutBooks>
     {
+        [JsonConstructor]
         public ViewCheckedoutResponse(List<CheckedoutBook> l)
         {
             Payload = new CheckedoutBooks(l);

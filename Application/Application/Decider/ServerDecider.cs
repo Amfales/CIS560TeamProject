@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 using System.Data.SqlClient;
 using System.Net;
 
+using Newtonsoft.Json;
+
 using WebSocketSharp;
 using WebSocketSharp.Server;
 
@@ -36,12 +38,14 @@ namespace ServerApplication.Decider
 
         public void GetDecision(MessageEventArgs e, SendMessage send)
         {
+            JsonConverter[] c = new JsonConverter[1];
+            c[0] = new Newtonsoft.Json.Converters.StringEnumConverter();
             string data = e.Data;
-            IMessage m = Newtonsoft.Json.JsonConvert.DeserializeObject<IMessage>(data);
+            IMessage m = Newtonsoft.Json.JsonConvert.DeserializeObject<IMessage>(data, c);
             switch (m.Type)
             {
                 case MessageType.LoginRequest:
-                    HandleLoginRequest(send, Newtonsoft.Json.JsonConvert.DeserializeObject<LoginRequest>(data));
+                    HandleLoginRequest(send, Newtonsoft.Json.JsonConvert.DeserializeObject<LoginRequest>(data, c));
                     break;
                 case MessageType.SearchBookRequest:
                     DecideSearchBookRequest(send, Newtonsoft.Json.JsonConvert.DeserializeObject<SearchBookRequest>(data));

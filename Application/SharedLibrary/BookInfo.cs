@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 
 namespace SharedLibrary
 {
@@ -15,6 +16,7 @@ namespace SharedLibrary
         public string Publisher { get; }
         public int CopyrightYear { get; }
 
+        [JsonConstructor]
         public BookInfo(string n, Author a, string i, string g, string p, int c)
         {
             Name = n;
