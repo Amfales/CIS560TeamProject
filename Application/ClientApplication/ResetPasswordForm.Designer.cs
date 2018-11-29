@@ -40,7 +40,7 @@
             // 
             this.uxPasswordLabel.AutoSize = true;
             this.uxPasswordLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.uxPasswordLabel.Location = new System.Drawing.Point(21, 50);
+            this.uxPasswordLabel.Location = new System.Drawing.Point(16, 50);
             this.uxPasswordLabel.Name = "uxPasswordLabel";
             this.uxPasswordLabel.Size = new System.Drawing.Size(81, 13);
             this.uxPasswordLabel.TabIndex = 8;
@@ -50,7 +50,7 @@
             // 
             this.uxEmailLabel.AutoSize = true;
             this.uxEmailLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.uxEmailLabel.Location = new System.Drawing.Point(26, 19);
+            this.uxEmailLabel.Location = new System.Drawing.Point(21, 19);
             this.uxEmailLabel.Name = "uxEmailLabel";
             this.uxEmailLabel.Size = new System.Drawing.Size(76, 13);
             this.uxEmailLabel.TabIndex = 7;
@@ -58,7 +58,7 @@
             // 
             // uxPasswordTextbox
             // 
-            this.uxPasswordTextbox.Location = new System.Drawing.Point(105, 47);
+            this.uxPasswordTextbox.Location = new System.Drawing.Point(100, 47);
             this.uxPasswordTextbox.Name = "uxPasswordTextbox";
             this.uxPasswordTextbox.PasswordChar = '•';
             this.uxPasswordTextbox.Size = new System.Drawing.Size(204, 20);
@@ -66,14 +66,14 @@
             // 
             // uxEmailTextbox
             // 
-            this.uxEmailTextbox.Location = new System.Drawing.Point(105, 16);
+            this.uxEmailTextbox.Location = new System.Drawing.Point(100, 16);
             this.uxEmailTextbox.Name = "uxEmailTextbox";
             this.uxEmailTextbox.Size = new System.Drawing.Size(204, 20);
             this.uxEmailTextbox.TabIndex = 5;
             // 
             // uxUpdateButton
             // 
-            this.uxUpdateButton.Location = new System.Drawing.Point(104, 78);
+            this.uxUpdateButton.Location = new System.Drawing.Point(99, 78);
             this.uxUpdateButton.Name = "uxUpdateButton";
             this.uxUpdateButton.Size = new System.Drawing.Size(205, 34);
             this.uxUpdateButton.TabIndex = 18;
@@ -83,7 +83,7 @@
             // 
             // uxReturnButton
             // 
-            this.uxReturnButton.Location = new System.Drawing.Point(24, 78);
+            this.uxReturnButton.Location = new System.Drawing.Point(19, 78);
             this.uxReturnButton.Name = "uxReturnButton";
             this.uxReturnButton.Size = new System.Drawing.Size(74, 34);
             this.uxReturnButton.TabIndex = 17;
