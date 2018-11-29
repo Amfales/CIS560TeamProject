@@ -4,6 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using SharedLibrary;
+using SharedLibrary.Requests;
+using SharedLibrary.Responses;
 
 namespace ClientApplication
 {
@@ -14,10 +17,10 @@ namespace ClientApplication
     public delegate void ReturnToMenu(Form f);
     public delegate void CheckOutButton(Form f);
     public delegate List<string> GenreRequest();
-    public delegate Object AddToBookList(int BookID);
-    public delegate List<Object> SearchBooks(string title, string authorFirst, string authorLast, string genre, string isbn);
-    public delegate Object CheckOut(List<int> BookIDs);
-    public delegate bool Return(List<int> BookIDs);
+    public delegate void AddToBookList(int BookID, string source);
+    public delegate void SearchBooks(string title, string authorFirst, string authorLast, string genre, string isbn);
+    public delegate void CheckOut(List<int> BookIDs);
+    public delegate void Return(List<int> BookIDs);
     public delegate void RenewBooksButton(Form f);
     public delegate void ReturnBooksButton(Form f);
     public delegate void UpdateConditionButton(Form f);
@@ -25,8 +28,8 @@ namespace ClientApplication
     public delegate void ResetPasswordButton(Form f);
     public delegate void AddBookButton(Form f);
     public delegate void CreateAccountButton(Form f);
-    public delegate Object RenewBooks(List<int> BookIDs);
-    public delegate bool UpdateCondition(int BookID, string condition);
+    public delegate void RenewBooks(List<int> BookIDs);
+    public delegate void UpdateCondition(int BookID, string condition);
     public delegate bool RetireBook(int BookID);
     public delegate bool ResetPassword(string email, string password);
     public delegate bool AddBook(string title, string authorFirst, string authorLast, string publisher, string genre, string isbn, int copyright);
@@ -49,7 +52,9 @@ namespace ClientApplication
         ResetPasswordForm resetPassword;
         AddBookForm addBook;
         CreateAccountForm createAccount;
+        ServerConnection connection;
 
+        string getBookSource;
         string userEmail;
         PermissionLevel userPermissionLevel;
 
@@ -68,7 +73,39 @@ namespace ClientApplication
             addBook = new AddBookForm(HandleFormClose, HandleReturnToMenu, HandleGenreRequest, HandleAddBook);
             createAccount = new CreateAccountForm(HandleFormClose, HandleReturnToMenu, HandleCreateAccount);
 
+            connection = new ServerConnection("Todo");
+
             login.Show();
+        }
+
+        void OnReceive(IMessage m)
+        {
+            switch (m.Type)
+            {
+                case MessageType.LoginResponse:
+                    HandleLoginResponse(new LoginResponse(Message<LoginResponseData>.UpgradeMessage(m)));
+                    break;
+
+                case MessageType.SearchBookInfoResponse:
+                    HandleSearchBooksResponse(new SearchBookInfoResponse(Message<CompositeBookInfo>.UpgradeMessage(m)));
+                    break;
+
+                case MessageType.GetBookResponse:
+                    HandleAddToBookListResponse(new GetBookResponse(Message<Book>.UpgradeMessage(m)));
+                    break;
+
+                case MessageType.CheckoutResponse:
+                    HandleCheckOutResponse(new CheckoutResponse(Message<SharedLibrary.Responses.Checkout>.UpgradeMessage(m)));
+                    break;
+
+                case MessageType.ReturnResponse:
+                    HandleReturnResponse(new ReturnResponse(Message<bool>.UpgradeMessage(m)));
+                    break;
+
+                case MessageType.RenewalResponse:
+                    HandleRenewBooksResponse(new RenewalResponse(Message<RenewalResponseData>.UpgradeMessage(m)));
+                    break;
+            }
         }
 
         /// <summary>
@@ -104,8 +141,19 @@ namespace ClientApplication
             userEmail = email;
             userPermissionLevel = PermissionLevel.Invalid;
 
-            string firstName = "Test";
-            int loginResponse = 1;
+            connection.Send(new LoginRequest(email, password));
+        }
+
+        void HandleLoginResponse(LoginResponse response)
+        {
+            if (!response.Payload.UserLoggedIn)
+            {
+                MessageBox.Show(login, "Invalid username or password");
+                return;
+            }
+
+            string firstName = response.Payload.FirstName;
+            int loginResponse = response.Payload.PermissionLevel;
 
             switch (loginResponse)
             {
@@ -132,8 +180,8 @@ namespace ClientApplication
                     // If the user is a patron, show the patron main menu form
                     case PermissionLevel.Patron:
                         // Clear and hide the login form
-                        f.Hide();
-                        foreach (Control control in f.Controls)
+                        login.Hide();
+                        foreach (Control control in login.Controls)
                         {
                             if (control is TextBox)
                             {
@@ -145,12 +193,12 @@ namespace ClientApplication
                         patronMainMenu.Show();
                         patronMainMenu.Controls.Find("uxWelcomeLabel", false)[0].Text = "Welcome, " + firstName;
                         break;
-                    
+
                     // If the user is an employee, show the employee main menu form
                     case PermissionLevel.Admin:
                         // Clear and hide the login form
-                        f.Hide();
-                        foreach (Control control in f.Controls)
+                        login.Hide();
+                        foreach (Control control in login.Controls)
                         {
                             if (control is TextBox)
                             {
@@ -162,12 +210,12 @@ namespace ClientApplication
                         adminMainMenu.Show();
                         adminMainMenu.Controls.Find("uxWelcomeLabel", false)[0].Text = "Welcome, " + firstName;
                         break;
-                }   
+                }
             }
             else // If the user inputs invalid credentials
             {
                 // Alert the user
-                MessageBox.Show(f, "Invalid username or password");
+                MessageBox.Show(login, "Invalid username or password");
             }
         }
 
@@ -329,9 +377,14 @@ namespace ClientApplication
         /// <param name="genre"></param>
         /// <param name="isbn"></param>
         /// <returns></returns>
-        List<Object> HandleSearchBooks(string title, string authorFirst, string authorLast, string genre, string isbn)
+        void HandleSearchBooks(string title, string authorFirst, string authorLast, string genre, string isbn)
         {
-            return new List<Object>();
+            connection.Send(new SearchBookRequest(title, new Author(authorFirst, authorLast), isbn, genre, true));
+        }
+
+        void HandleSearchBooksResponse(SearchBookInfoResponse response)
+        {
+            viewBooks.ParseResults(new List<BookInfo>(response.Payload));
         }
 
         /// <summary>
@@ -339,16 +392,16 @@ namespace ClientApplication
         /// </summary>
         /// <param name="BookID"></param>
         /// <returns></returns>
-        Object HandleAddToBookList(int BookID)
+        void HandleAddToBookList(int BookID, string source)
         {
-            if (true)
-            {
-                return new Object();
-            }
-            else
-            {
-                return null;
-            }
+            getBookSource = source;
+            connection.Send(new GetBookRequest(BookID));
+        }
+
+        void HandleAddToBookListResponse(GetBookResponse response)
+        {
+            if (getBookSource == "return") { returnBooks.HandleAddToBookListResponse(response.Payload); }
+            if (getBookSource == "checkout") { checkOut.HandleAddToCartResponse(response.Payload); }
         }
 
         /// <summary>
@@ -356,9 +409,14 @@ namespace ClientApplication
         /// </summary>
         /// <param name="BookIDs"></param>
         /// <returns></returns>
-        Object HandleCheckOut(List<int> BookIDs)
+        void HandleCheckOut(List<int> BookIDs)
         {
-            return new object();
+            connection.Send(new CheckoutRequest(userEmail, BookIDs));
+        }
+
+        void HandleCheckOutResponse(CheckoutResponse response)
+        {
+            checkOut.HandleCheckOutResponse(response.Payload.Success, response.Payload.DueDate[0].DueDate);
         }
 
         /// <summary>
@@ -366,9 +424,14 @@ namespace ClientApplication
         /// </summary>
         /// <param name="BookIDs"></param>
         /// <returns></returns>
-        bool HandleReturn(List<int> BookIDs)
+        void HandleReturn(List<int> BookIDs)
         {
-            return true;
+            connection.Send(new ReturnRequest(BookIDs));
+        }
+
+        void HandleReturnResponse(ReturnResponse response)
+        {
+            returnBooks.HandleReturnBooksResponse(response.Payload);
         }
 
         /// <summary>
@@ -381,10 +444,19 @@ namespace ClientApplication
 
             List<Object> checkedOutBooks = new List<Object>();
             // Request list of checked out books with email
+            connection.Send(new ViewCheckedoutRequest(userEmail));
+        }
+
+        void HandleViewCheckedOutResponse(ViewCheckedoutResponse response)
+        {
             ListView bookList = (ListView)renewBooks.Controls.Find("uxBookList", false)[0];
             bookList.Items.Clear();
-            bookList.Items.Add(new ListViewItem(new string[] { "123", "title", "author", "01/02/2009" }));
-            bookList.Items.Add(new ListViewItem(new string[] { "345", "title", "author", "01/02/2003" }));
+
+            List<CheckedoutBook> books = new List<CheckedoutBook>(response.Payload);
+            foreach (CheckedoutBook book in books)
+            {
+                bookList.Items.Add(new ListViewItem(new string[] { book.BookID.ToString(), book.Name, book.Author.FirstName + " " + book.Author.LastName, book.DueDate.ToShortDateString()}));
+            }
 
             renewBooks.Show();
         }
@@ -394,9 +466,14 @@ namespace ClientApplication
         /// </summary>
         /// <param name="BookIDs"></param>
         /// <returns></returns>
-        Object HandleRenewBooks(List<int> BookIDs)
+        void HandleRenewBooks(List<int> BookIDs)
         {
-            return new object();
+            connection.Send(new RenewalRequest(userEmail, BookIDs));
+        }
+
+        void HandleRenewBooksResponse(RenewalResponse response)
+        {
+            renewBooks.HandleRenewBooksResponse(response.Payload.Success, response.Payload.DueDates);
         }
 
         /// <summary>
@@ -405,9 +482,14 @@ namespace ClientApplication
         /// <param name="bookID"></param>
         /// <param name="condition"></param>
         /// <returns></returns>
-        bool HandleUpdateCondition(int bookID, string condition)
+        void HandleUpdateCondition(int bookID, string condition)
         {
-            return true;
+            connection.Send(new UpdateBookConditionRequest(bookID, condition, userEmail));
+        }
+
+        void HandleUpdateConditionResponse(UpdateBookConditionResponse response)
+        {
+
         }
 
         /// <summary>

@@ -7,6 +7,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using SharedLibrary;
+using SharedLibrary.Responses;
 
 namespace ClientApplication
 {
@@ -47,25 +49,32 @@ namespace ClientApplication
                         }
                     }
 
-                    Object response = handleRenewBooks(bookIDs);
-                    DateTime returnDate = new DateTime();
-                    bool success = true;
-
-                    if (success)
-                    {
-                        MessageBox.Show("Renewal successful! The new due date for your books is " + returnDate.ToShortDateString() + ".");
-                        bookIDs.Clear();
-                        handleReturnToMenu(this);
-                    }
-                    else
-                    {
-                        MessageBox.Show("Renewal unsuccessful. Contact a librarian for assistance.");
-                    }
+                    handleRenewBooks(bookIDs);
                 }
             }
             else
             {
                 MessageBox.Show("No books are selected for renewal.");
+            }
+        }
+
+        public void HandleRenewBooksResponse(bool success, List<DueDateAssociation> returnDates)
+        {
+            if (success)
+            {
+                StringBuilder sb = new StringBuilder();
+                sb.Append("Renewal successful! The new due date for your books is: ");
+                foreach (DueDateAssociation date in returnDates)
+                {
+                    sb.Append("\n" + date.BookID + ": " + date.DueDate.ToShortDateString());
+                }
+
+                MessageBox.Show(sb.ToString());
+                handleReturnToMenu(this);
+            }
+            else
+            {
+                MessageBox.Show("Renewal unsuccessful. Contact a librarian for assistance.");
             }
         }
 

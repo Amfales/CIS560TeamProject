@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using SharedLibrary;
 
 namespace ClientApplication
 {
@@ -35,16 +36,18 @@ namespace ClientApplication
 
         private void uxAddButton_Click_1(object sender, EventArgs e)
         {
-            Object book = null;
             try
             {
-                book = handleAddToBookList(Convert.ToInt32(uxBookIDBox.Text));
+                handleAddToBookList(Convert.ToInt32(uxBookIDBox.Text), "return");
             }
             catch { }
+        }
 
+        public void HandleAddToBookListResponse(Book book)
+        {
             if (book != null)
             {
-                uxBookList.Items.Add(new ListViewItem(new string[] { uxBookIDBox.Text, "title", "author" }));
+                uxBookList.Items.Add(new ListViewItem(new string[] { book.BookID.ToString(), book.Name, book.Author.FirstName + " " + book.Author.LastName }));
                 uxBookIDBox.Text = "";
             }
             else
@@ -66,19 +69,21 @@ namespace ClientApplication
                         bookIDs.Add(Convert.ToInt32(item.SubItems[0].Text));
                     }
 
-                    bool success = handleReturn(bookIDs);
-
-                    if (success)
-                    {
-                        MessageBox.Show("Return Successful!");
-                        bookIDs.Clear();
-                        handleReturnToMenu(this);
-                    }
-                    else
-                    {
-                        MessageBox.Show("Return unsuccessful. Contact a system administrator for assistance.");
-                    }
+                    handleReturn(bookIDs);
                 }
+            }
+        }
+
+        public void HandleReturnBooksResponse(bool success)
+        {
+            if (success)
+            {
+                MessageBox.Show("Return Successful!");
+                handleReturnToMenu(this);
+            }
+            else
+            {
+                MessageBox.Show("Return unsuccessful. Contact a system administrator for assistance.");
             }
         }
 

@@ -22,6 +22,7 @@ namespace ServerApplication.Decider
             }
             int paySize = m.Payload.IDs.Count;
             DateTime dt;
+            List<DueDateAssociation> l;
             using (SqlConnection conn = new SqlConnection(_connection))
             {
                 conn.Open();
@@ -33,10 +34,10 @@ namespace ServerApplication.Decider
                 try
                 {
                     InitializeCheckoutCommand(ref comm, m);
-                    GrabCheckoutInfo(comm, m, paySize, out dt);
+                    GrabCheckoutInfo(comm, m, paySize, out l);
 
                     _logger("Successfully checked out " + paySize + " books to " + m.Payload.Email + ".");
-                    send(new CheckoutResponse(true));
+                    send(new CheckoutResponse(true, l));
                 }
                 catch (Exception ex)
                 {
@@ -60,8 +61,9 @@ namespace ServerApplication.Decider
             c.Parameters["@BookID"].Value = m.Payload.IDs[ind];
         }
 
-        private void GrabCheckoutInfo(SqlCommand c, CheckoutRequest m, int paySize, out DateTime returnDate)
+        private void GrabCheckoutInfo(SqlCommand c, CheckoutRequest m, int paySize, out List<DueDateAssociation> l)
         {
+            l = new List<DueDateAssociation>();
             int currInd = 0;
             while (currInd < paySize - 1)
             {
@@ -70,8 +72,12 @@ namespace ServerApplication.Decider
                 currInd++;
             }
             c.ExecuteNonQuery(); //On the last one, grab the return date.
-            returnDate = DateTime.Parse(
+            DateTime returnDate = DateTime.Parse(
                 c.Parameters["@DueDate"].Value.ToString()); //?????????????????
+            for(int i = 0; i < paySize; i++)
+            {
+                l.Add(new DueDateAssociation(m.Payload.IDs[i], returnDate));
+            }
         }
     }
 }

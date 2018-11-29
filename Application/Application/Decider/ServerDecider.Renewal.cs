@@ -31,7 +31,7 @@ namespace ServerApplication.Decider
                     GrabRenewal(comm, m, ref l);
 
                     _logger("Successfully renewed " + l.Count + " checked out books for user " + m.Payload.Email);
-                    send(new RenewalResponse(l));
+                    send(new RenewalResponse(true, l));
                 }
                 catch (Exception ex)
                 {

@@ -6,15 +6,32 @@ using System.Threading.Tasks;
 
 namespace SharedLibrary.Responses
 {
-    public class CheckoutResponse : Message<bool>
+    public class CheckoutResponse : Message<Checkout>
     {
-        public CheckoutResponse(bool succ)
+        public CheckoutResponse(bool succ, List<DueDateAssociation> date)
         {
-            Payload = succ;
+            Payload = new Checkout(succ, date);
         }
 
-        public CheckoutResponse() : this(false) { }
+        public CheckoutResponse(Message<Checkout> m)
+        {
+            Payload = new Checkout(m.Payload.Success, m.Payload.DueDate);
+        }
+
+        public CheckoutResponse() : this(false, null) { }
 
         public static new MessageType Type => MessageType.CheckoutResponse;
+    }
+
+    public class Checkout
+    {
+        public bool Success { get; }
+        public List<DueDateAssociation> DueDate { get; }
+
+        public Checkout(bool succ, List<DueDateAssociation> date)
+        {
+            Success = succ;
+            DueDate = date;
+        }
     }
 }

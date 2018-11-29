@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using SharedLibrary;
 
 namespace ClientApplication
 {
@@ -40,18 +41,21 @@ namespace ClientApplication
 
         private void uxAddButton_Click(object sender, EventArgs e)
         {
-            Object book = null;
             try
             {
-                book = handleAddToCart(Convert.ToInt32(uxBookIDBox.Text));
+                handleAddToCart(Convert.ToInt32(uxBookIDBox.Text), "checkout");
             }
             catch { }
+        }
 
+        public void HandleAddToCartResponse(Book book)
+        {
             if (book != null)
             {
-                uxBookList.Items.Add(new ListViewItem(new string[] { uxBookIDBox.Text, "title", "author" }));
+                uxBookList.Items.Add(new ListViewItem(new string[] { book.BookID.ToString(), book.Name, book.Author.FirstName + " " + book.Author.LastName }));
                 uxBookIDBox.Text = "";
-            } else
+            }
+            else
             {
                 MessageBox.Show("Invalid Book ID");
             }
@@ -70,21 +74,25 @@ namespace ClientApplication
                         bookIDs.Add(Convert.ToInt32(item.SubItems[0].Text));
                     }
 
-                    Object response = handleCheckOut(bookIDs);
-                    DateTime returnDate = new DateTime();
-                    bool success = true;
-
-                    if (success)
-                    {
-                        MessageBox.Show("Check out successful! The due date for your books is " + returnDate.ToShortDateString() + ".");
-                        bookIDs.Clear();
-                        handleReturnToMenu(this);
-                    }
-                    else
-                    {
-                        MessageBox.Show("Check out unsuccessful. Contact a librarian for assistance.");
-                    }
+                    handleCheckOut(bookIDs);
                 }
+                else
+                {
+                    MessageBox.Show("No books in shopping cart.");
+                }
+            }
+        }
+
+        public void HandleCheckOutResponse(bool success, DateTime date)
+        {
+            if (success)
+            {
+                MessageBox.Show("Check out successful! The due date for your books is " + date.ToShortDateString() + ".");
+                handleReturnToMenu(this);
+            }
+            else
+            {
+                MessageBox.Show("Check out unsuccessful. Contact a librarian for assistance.");
             }
         }
 
