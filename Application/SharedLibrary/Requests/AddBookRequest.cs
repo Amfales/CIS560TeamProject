@@ -10,7 +10,7 @@ namespace SharedLibrary.Requests
     public class AddBookRequest : Message<AddBook>
     {
         [JsonConstructor]
-        public AddBookRequest(string e, Book b)
+        public AddBookRequest(string e, BookInfo b)
         {
             Payload = new AddBook(e, b);
         }
