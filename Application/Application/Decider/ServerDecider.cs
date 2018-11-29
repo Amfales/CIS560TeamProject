@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Data.SqlClient;
+using System.Net;
 
 using WebSocketSharp;
 using WebSocketSharp.Server;
@@ -16,9 +17,10 @@ namespace ServerApplication.Decider
 {
     public partial class ServerDecider
     {
+        
         private Dictionary<string, bool> _loggedIn = new Dictionary<string, bool>();
         private Dictionary<string, UserType> _userPermissions = new Dictionary<string, UserType>();
-        private const string _connection = "";
+        private string _connection = "server=tcp:" + Dns.GetHostEntry("fullmilkpig.ddns.net").AddressList[0].ToString() + "\\LIBRARYKIOSK, 1433";
         private LogFunction _logger;
 
         public ServerDecider(LogFunction l)
@@ -64,10 +66,11 @@ namespace ServerApplication.Decider
 
         }
 
-
+        /*
         private void CreateNewUser(SendMessage send)
         {
             send(new LoginResponse());
         }
+        */
     }
 }
