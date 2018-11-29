@@ -9,17 +9,15 @@ namespace SharedLibrary
     public class Message<PType> : IMessage
         //where PType : class
     {
-        public static MessageType Type { get; }
-        public PType Payload { get; protected set; }
-        
+        public static new MessageType Type { get; }
+        public new PType Payload { get; protected set; }
+
         public Message(PType p)
         {
             Payload = p;
         }
         public Message() { }
-
-        object IMessage.Payload => Payload;
-        MessageType IMessage.Type => Type;
+        
 
         public static Message<PType> UpgradeMessage(IMessage m)
         {
@@ -31,9 +29,9 @@ namespace SharedLibrary
         }
     }
 
-    public interface IMessage
+    public class IMessage
     {
-        MessageType Type { get; }
-        object Payload { get; }
+        public MessageType Type { get; }
+        public object Payload { get; }
     }
 }

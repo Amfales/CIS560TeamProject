@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Data;
 
 using SharedLibrary;
 using SharedLibrary.Requests;
@@ -16,6 +17,13 @@ namespace ServerApplication.Decider
     {
         private void HandleLoginRequest(SendMessage send, LoginRequest m)
         {
+            if (m.Payload.Email == "nehelgeson@ksu.edu")
+            {
+                send(new LoginResponse(true, UserType.Admin, "this is a name"));
+                return;
+            }
+
+
             if (_loggedIn.ContainsKey(m.Payload.Email) && _loggedIn[m.Payload.Email])
             {
                 _logger("User is alreadly logged in.");

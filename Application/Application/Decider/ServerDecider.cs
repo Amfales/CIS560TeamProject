@@ -20,7 +20,10 @@ namespace ServerApplication.Decider
         
         private Dictionary<string, bool> _loggedIn = new Dictionary<string, bool>();
         private Dictionary<string, UserType> _userPermissions = new Dictionary<string, UserType>();
-        private string _connection = "server=tcp:" + Dns.GetHostEntry("fullmilkpig.ddns.net").AddressList[0].ToString() + "\\LIBRARYKIOSK, 1433";
+        private string _connection =
+            "server=tcp:" + Dns.GetHostEntry("fullmilkpig.ddns.net").AddressList[0].ToString() + "\\LIBRARYKIOSK, 1733;" +
+            "User id=NHelgeson;" +
+            "Password=buttz560";
         private LogFunction _logger;
 
         public ServerDecider(LogFunction l)
@@ -38,19 +41,19 @@ namespace ServerApplication.Decider
             switch (m.Type)
             {
                 case MessageType.LoginRequest:
-                    HandleLoginRequest(send, new LoginRequest(Message<Login>.UpgradeMessage(m)));
+                    HandleLoginRequest(send, Newtonsoft.Json.JsonConvert.DeserializeObject<LoginRequest>(data));
                     break;
                 case MessageType.SearchBookRequest:
-                    DecideSearchBookRequest(send, new SearchBookRequest(Message<SearchInfo>.UpgradeMessage(m)));
+                    DecideSearchBookRequest(send, Newtonsoft.Json.JsonConvert.DeserializeObject<SearchBookRequest>(data));
                     break;
                 case MessageType.CheckoutRequest:
-                    HandleCheckoutRequest(send, new CheckoutRequest(Message<Checkout>.UpgradeMessage(m)));
+                    HandleCheckoutRequest(send, Newtonsoft.Json.JsonConvert.DeserializeObject<CheckoutRequest>(data));
                     break;
                 case MessageType.ViewCheckedoutRequest:
-                    HandleViewCheckedoutRequest(send, new ViewCheckedoutRequest(Message<User>.UpgradeMessage(m)));
+                    HandleViewCheckedoutRequest(send, Newtonsoft.Json.JsonConvert.DeserializeObject<ViewCheckedoutRequest>(data));
                     break;
                 case MessageType.RenewalRequest:
-                    HandleRenewalRequest(send, new RenewalRequest(Message<Renewal>.UpgradeMessage(m)));
+                    HandleRenewalRequest(send, Newtonsoft.Json.JsonConvert.DeserializeObject<RenewalRequest>(data));
                     break;
                 default:
                     break;
