@@ -30,6 +30,21 @@ namespace SharedLibrary
         RenewalRequest,
         RenewalResponse,
 
+        ReturnRequest,
+        ReturnResponse,
+
+        ResetPasswordRequest,
+        ResetPasswordResponse,
+
+        AddBookRequest,
+        AddBookResponse,
+
+        RetireBookRequest,
+        RetireBookResponse,
+
+        UpdateBookConditionRequest,
+        UpdateBookConditionResponse,
+
 
         Error
     }

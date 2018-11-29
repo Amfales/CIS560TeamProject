@@ -55,12 +55,13 @@ namespace ServerApplication.Decider
             }
         }
 
-        private void HandleLoginRequest(SendMessage send, LoginRequest m)
+        private bool IsAdmin(string adminEmail)
         {
-            if (_loggedIn[m.Payload.Email])
-            {
+            return _loggedIn.ContainsKey(adminEmail) &&
+                   _loggedIn[adminEmail] &&
+                   _userPermissions.ContainsKey(adminEmail) &&
+                   _userPermissions[adminEmail] == UserType.Admin;
 
-            }
         }
 
 

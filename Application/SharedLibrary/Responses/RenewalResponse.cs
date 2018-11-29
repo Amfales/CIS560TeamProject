@@ -6,24 +6,32 @@ using System.Threading.Tasks;
 
 namespace SharedLibrary.Responses
 {
-    public class RenewalResponse : Message<CheckedoutBooks>
+    public class RenewalResponse : Message<List<DueDateAssociation>>
     {
-        public RenewalResponse(List<CheckedoutBook> l)
+        public RenewalResponse(List<DueDateAssociation> l)
         {
-            Payload = new CheckedoutBooks(l);
+            Payload = l;
         }
-        public RenewalResponse() : this(new List<CheckedoutBook>()) { }
-        public RenewalResponse(Message<CheckedoutBooks> m)
+        public RenewalResponse() : this(new List<DueDateAssociation>()) { }
+        public RenewalResponse(Message<List<DueDateAssociation>> m)
         {
-            Payload = new CheckedoutBooks(new List<CheckedoutBook>(m.Payload));
+            Payload = new List<DueDateAssociation>(m.Payload);
         }
 
 
         public static new MessageType Type => MessageType.RenewalResponse;
     }
 
-    // CheckedoutBooks class is inside of ViewCheckedoutResponse.cs
-
+    public class DueDateAssociation
+    {
+        public int BookID { get; }
+        public DateTime DueDate { get; }
+        public DueDateAssociation(int id, DateTime d)
+        {
+            BookID = id;
+            DueDate = d;
+        }
+    }
 
 
 
