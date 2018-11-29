@@ -73,7 +73,7 @@ namespace ClientApplication
             addBook = new AddBookForm(HandleFormClose, HandleReturnToMenu, HandleGenreRequest, HandleAddBook);
             createAccount = new CreateAccountForm(HandleFormClose, HandleReturnToMenu, HandleCreateAccount);
 
-            connection = new ServerConnection("ws://192.168.0.12:12345/library");
+            connection = new ServerConnection("ws://192.168.0.12:8001/library");
             connection.onReceive = OnReceive;
 
             login.Show();
