@@ -24,6 +24,27 @@ namespace SharedLibrary
         CheckoutRequest,
         CheckoutResponse,
 
+        ViewCheckedoutRequest,
+        ViewCheckedoutResponse,
+
+        RenewalRequest,
+        RenewalResponse,
+
+        ReturnRequest,
+        ReturnResponse,
+
+        ResetPasswordRequest,
+        ResetPasswordResponse,
+
+        AddBookRequest,
+        AddBookResponse,
+
+        RetireBookRequest,
+        RetireBookResponse,
+
+        UpdateBookConditionRequest,
+        UpdateBookConditionResponse,
+
 
         Error
     }

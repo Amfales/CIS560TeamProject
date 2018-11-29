@@ -15,6 +15,11 @@ namespace SharedLibrary.Requests
 
         public CheckoutRequest() : this("", new List<int>()) { }
 
+        public CheckoutRequest(Message<Checkout> m)
+        {
+            Payload = new Checkout(m.Payload.Email, m.Payload.IDs);
+        }
+
         public static new MessageType Type => MessageType.CheckoutRequest;
     }
 

@@ -9,7 +9,7 @@ namespace SharedLibrary.Requests
     public class LoginRequest : Message<Login>
     {
         public LoginRequest() : this("", "") { }
-        public LoginRequest(string e, string p) : base()
+        public LoginRequest(string e, string p)
         {
             Payload = new Login(e, p);
         }
