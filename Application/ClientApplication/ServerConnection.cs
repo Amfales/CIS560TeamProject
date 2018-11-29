@@ -16,12 +16,13 @@ namespace ClientApplication
     {
         private WebSocket connection;
         public messageReceive onReceive;
-        public delegate void messageReceive(IMessage m);
+        public delegate void messageReceive(string data);
 
         public ServerConnection(string url)
         {
             connection = new WebSocket(url);
-            connection.OnMessage += (s, e) => { onReceive(JsonConvert.DeserializeObject<IMessage>(e.Data)); };
+            connection.OnMessage += (s, e) => { onReceive(e.Data); };
+            connection.Connect();
         }
 
         public void Send(IMessage m)

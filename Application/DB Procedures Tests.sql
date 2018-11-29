@@ -6,7 +6,7 @@ SELECT * FROM Proj."User";
 
 DECLARE @NewUser INT;
 
-EXEC Proj.AddUser N'Grant', N'Willford', N'gwillford@ksu.edu', N'apoij', N'Admin', @NewUser OUTPUT;
+EXEC Proj.AddUser N'Grant', N'Willford', N'gwillford@ksu.edu', N'buttz', N'Admin', @NewUser OUTPUT;
 
 SELECT * FROM Proj."User";
 SELECT @NewUser AS NewUserID;
@@ -36,7 +36,7 @@ SELECT * FROM Book.Author;
 
 DECLARE @AuthorID INT;
 
-EXEC Book.AddAuthor N'Friedrich', N'Dürrenmatt', @AuthorID OUTPUT;
+EXEC Book.AddAuthor N'Friedrich', N'Dï¿½rrenmatt', @AuthorID OUTPUT;
 
 SELECT * FROM Book.Author;
 SELECT @AuthorID AS NewAuthorID;
@@ -147,10 +147,10 @@ SELECT * FROM Book.Book INNER JOIN Book.BookQuality BQ ON BQ.QualityID=BOok.Qual
 
 
 --test Book.SearchWithAll
-EXEC Book.SearchBookWithAll N'%book%', N't', N'La%', N'ISBN-3',N'Fantasy',1,1;
-EXEC Book.SearchBookWithAll N'%book%', N'%', N'%', N'ISBN-3',N'%';
+EXEC Book.SearchBookWithAll N'%Hobbit%', N'%', N'%', N'%',N'%',1,1;
+EXEC Book.SearchBookWithAll N'%%', N'%', N'Tolkien', N'%',N'%';
 EXEC Book.SearchBookWithAll N'Test book 3: even testiest', N'%', N'Rob', N'ISBN-3',N'%',1,24;
-EXEC Book.SearchBookWithAll N'%', N'%', N'La%', N'%',N'Fantasy';
+EXEC Book.SearchBookWithAll N'%', N'%', N'%', N'%',N'%';
 EXEC Book.SearchBookWithAll;
 
 EXEC Book.SearchBookInfoWithAll;
@@ -202,6 +202,8 @@ SELECT * FROM Book.CheckOut
 --Test get books by popularity
 select * from Book.CheckOut;
 select * from Book.Book;
+select * from Book.Author;
+
 
 EXEC Book.GetBooksByPopularity;
 

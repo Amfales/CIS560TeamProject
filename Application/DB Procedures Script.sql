@@ -777,6 +777,9 @@ AS
 		OFFSET ((@SearchPage-1)*@RowsPerPage) ROWS FETCH NEXT @RowsPerPage ROWS ONLY;
 GO
 
+--Report type query
+--This procedure gets all users paired with the number of times they've checked a book out.
+--It also gives them a ranking based on how many times they've checked something out.
 CREATE OR ALTER PROCEDURE Proj.AllUsersNumTimesCheckedOut
 
 AS

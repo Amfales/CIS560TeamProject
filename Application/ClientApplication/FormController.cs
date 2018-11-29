@@ -73,54 +73,56 @@ namespace ClientApplication
             addBook = new AddBookForm(HandleFormClose, HandleReturnToMenu, HandleGenreRequest, HandleAddBook);
             createAccount = new CreateAccountForm(HandleFormClose, HandleReturnToMenu, HandleCreateAccount);
 
-            connection = new ServerConnection("Todo");
+            connection = new ServerConnection("ws://192.168.0.12:8001/library");
             connection.onReceive = OnReceive;
 
             login.Show();
         }
 
-        void OnReceive(IMessage m)
+        void OnReceive(string data)
         {
+            IMessage m = Newtonsoft.Json.JsonConvert.DeserializeObject<IMessage>(data);
+
             switch (m.Type)
             {
                 case MessageType.LoginResponse:
-                    HandleLoginResponse(new LoginResponse(Message<LoginResponseData>.UpgradeMessage(m)));
+                    HandleLoginResponse(Newtonsoft.Json.JsonConvert.DeserializeObject<LoginResponse>(data));
                     break;
 
                 case MessageType.SearchBookInfoResponse:
-                    HandleSearchBooksResponse(new SearchBookInfoResponse(Message<CompositeBookInfo>.UpgradeMessage(m)));
+                    HandleSearchBooksResponse(Newtonsoft.Json.JsonConvert.DeserializeObject<SearchBookInfoResponse>(data));
                     break;
 
                 case MessageType.GetBookResponse:
-                    HandleAddToBookListResponse(new GetBookResponse(Message<Book>.UpgradeMessage(m)));
+                    HandleAddToBookListResponse(Newtonsoft.Json.JsonConvert.DeserializeObject<GetBookResponse>(data));
                     break;
 
                 case MessageType.CheckoutResponse:
-                    HandleCheckOutResponse(new CheckoutResponse(Message<SharedLibrary.Responses.Checkout>.UpgradeMessage(m)));
+                    HandleCheckOutResponse(Newtonsoft.Json.JsonConvert.DeserializeObject<SharedLibrary.Responses.CheckoutResponse>(data));
                     break;
 
                 case MessageType.ReturnResponse:
-                    HandleReturnResponse(new ReturnResponse(Message<bool>.UpgradeMessage(m)));
+                    HandleReturnResponse(Newtonsoft.Json.JsonConvert.DeserializeObject<ReturnResponse>(data));
                     break;
 
                 case MessageType.RenewalResponse:
-                    HandleRenewBooksResponse(new RenewalResponse(Message<RenewalResponseData>.UpgradeMessage(m)));
+                    HandleRenewBooksResponse(Newtonsoft.Json.JsonConvert.DeserializeObject<RenewalResponse>(data));
                     break;
 
                 case MessageType.UpdateBookConditionResponse:
-                    HandleUpdateConditionResponse(new UpdateBookConditionResponse(Message<bool>.UpgradeMessage(m)));
+                    HandleUpdateConditionResponse(Newtonsoft.Json.JsonConvert.DeserializeObject<UpdateBookConditionResponse>(data));
                     break;
 
                 case MessageType.RetireBookResponse:
-                    HandleRetireBookResponse(new RetireBookResponse(Message<bool>.UpgradeMessage(m)));
+                    HandleRetireBookResponse(Newtonsoft.Json.JsonConvert.DeserializeObject<RetireBookResponse>(data));
                     break;
 
                 case MessageType.ResetPasswordResponse:
-                    HandleResetPasswordResponse(new ResetPasswordResponse(Message<bool>.UpgradeMessage(m)));
+                    HandleResetPasswordResponse(Newtonsoft.Json.JsonConvert.DeserializeObject<ResetPasswordResponse>(data));
                     break;
 
                 case MessageType.AddBookResponse:
-                    HandleAddBookResponse(new AddBookResponse(Message<bool>.UpgradeMessage(m)));
+                    HandleAddBookResponse(Newtonsoft.Json.JsonConvert.DeserializeObject<AddBookResponse>(data));
                     break;
             }
         }
