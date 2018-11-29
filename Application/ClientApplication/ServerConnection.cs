@@ -28,7 +28,5 @@ namespace ClientApplication
         {
             connection.Send(JsonConvert.SerializeObject(m));
         }
-
-
     }
 }

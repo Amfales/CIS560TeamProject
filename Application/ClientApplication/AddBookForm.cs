@@ -78,8 +78,11 @@ namespace ClientApplication
                 return;
             }
 
-            bool success = handleAdd(title, authorFirst, authorLast, publisher, genre, isbn, copyright);
+            handleAdd(title, authorFirst, authorLast, publisher, genre, isbn, copyright);
+        }
 
+        public void HandleAddBookResponse(bool success)
+        {
             if (success)
             {
                 MessageBox.Show("Book successfully added to library.");

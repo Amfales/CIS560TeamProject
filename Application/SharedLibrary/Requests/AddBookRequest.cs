@@ -14,7 +14,7 @@ namespace SharedLibrary.Requests
         {
             Payload = new AddBook(e, b);
         }
-        public AddBookRequest() : this("", new Book()) { }
+        public AddBookRequest() : this("", new BookInfo()) { }
         public AddBookRequest(Message<AddBook> m)
         {
             Payload = new AddBook(m.Payload.Email, m.Payload.Book);
@@ -25,9 +25,9 @@ namespace SharedLibrary.Requests
     public class AddBook
     {
         public string Email { get; }
-        public Book Book { get; }
+        public BookInfo Book { get; }
         
-        public AddBook(string e, Book b)
+        public AddBook(string e, BookInfo b)
         {
             Email = e;
             Book = b;
