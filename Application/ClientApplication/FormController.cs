@@ -24,11 +24,13 @@ namespace ClientApplication
     public delegate void RetireBookButton(Form f);
     public delegate void ResetPasswordButton(Form f);
     public delegate void AddBookButton(Form f);
+    public delegate void CreateAccountButton(Form f);
     public delegate Object RenewBooks(List<int> BookIDs);
     public delegate bool UpdateCondition(int BookID, string condition);
     public delegate bool RetireBook(int BookID);
     public delegate bool ResetPassword(string email, string password);
     public delegate bool AddBook(string title, string authorFirst, string authorLast, string publisher, string genre, string isbn, int copyright);
+    public delegate bool CreateAccount(string email, string firstName, string lastName, string password, string userType);
 
     // enum for the different possible user permission levels
     enum PermissionLevel {Invalid, Patron, Admin}
@@ -46,6 +48,7 @@ namespace ClientApplication
         RetireBookForm retireBook;
         ResetPasswordForm resetPassword;
         AddBookForm addBook;
+        CreateAccountForm createAccount;
 
         string userEmail;
         PermissionLevel userPermissionLevel;
@@ -57,12 +60,13 @@ namespace ClientApplication
             viewBooks = new ViewBookForm(HandleFormClose, HandleReturnToMenu, HandleGenreRequest, HandleSearchBooks);
             checkOut = new CheckOutForm(HandleFormClose, HandleReturnToMenu, HandleAddToBookList, HandleCheckOut);
             renewBooks = new RenewBooksForm(HandleFormClose, HandleReturnToMenu, HandleRenewBooks);
-            adminMainMenu = new AdminMainMenuForm(HandleFormClose, HandleLogOutButton, HandleViewBooksButton, HandleCheckOutButton, HandleRenewBooksButton, HandleReturnBooksButton, HandleUpdateConditionButton, HandleRetireBookButton, HandleResetPasswordButton, HandleAddBookButton);
+            adminMainMenu = new AdminMainMenuForm(HandleFormClose, HandleLogOutButton, HandleViewBooksButton, HandleCheckOutButton, HandleRenewBooksButton, HandleReturnBooksButton, HandleUpdateConditionButton, HandleRetireBookButton, HandleResetPasswordButton, HandleAddBookButton, HandleCreateAccountButton);
             returnBooks = new ReturnBooksForm(HandleFormClose, HandleReturnToMenu, HandleAddToBookList, HandleReturn);
             updateCondition = new UpdateConditionForm(HandleFormClose, HandleReturnToMenu, HandleUpdateCondition);
             retireBook = new RetireBookForm(HandleFormClose, HandleReturnToMenu, HandleRetireBook);
             resetPassword = new ResetPasswordForm(HandleFormClose, HandleReturnToMenu, HandleResetPassword);
             addBook = new AddBookForm(HandleFormClose, HandleReturnToMenu, HandleGenreRequest, HandleAddBook);
+            createAccount = new CreateAccountForm(HandleFormClose, HandleReturnToMenu, HandleCreateAccount);
 
             login.Show();
         }
@@ -197,7 +201,10 @@ namespace ClientApplication
             {
                 if (control is TextBox)
                 {
-                    ((TextBox)control).Text = null;
+                    ((TextBox)control).Text = "";
+
+                    if (control.Name == "uxAuthorFirstBox") { ((TextBox)control).Text = "First"; }
+                    if (control.Name == "uxAuthorLastBox") { ((TextBox)control).Text = "Last"; }
                 }
             }
             ListView bookList = (ListView)viewBooks.Controls.Find("uxBookList", false)[0];
@@ -276,6 +283,16 @@ namespace ClientApplication
         {
             f.Hide();
             addBook.Show();
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="f"></param>
+        void HandleCreateAccountButton(Form f)
+        {
+            f.Hide();
+            createAccount.Show();
         }
 
         /// <summary>
@@ -420,6 +437,20 @@ namespace ClientApplication
         /// <param name="todoArgs"></param>
         /// <returns></returns>
         bool HandleAddBook(string title, string authorFirst, string authorLast, string publisher, string genre, string isbn, int copyright)
+        {
+            return true;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="email"></param>
+        /// <param name="firstName"></param>
+        /// <param name="lastName"></param>
+        /// <param name="password"></param>
+        /// <param name="userType"></param>
+        /// <returns></returns>
+        bool HandleCreateAccount(string email, string firstName, string lastName, string password, string userType)
         {
             return true;
         }

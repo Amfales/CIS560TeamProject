@@ -22,8 +22,9 @@ namespace ClientApplication
         RetireBookButton handleRetireBook;
         ResetPasswordButton handleResetPassword;
         AddBookButton handleAddBook;
+        CreateAccountButton handleCreateAccount;
 
-        public AdminMainMenuForm(FormClose hClose, LogoutButton hLogout, ViewBooksButton hViewBooks, CheckOutButton hCheckOut, RenewBooksButton hRenewBooks, ReturnBooksButton hReturnBooks, UpdateConditionButton hUpdate, RetireBookButton hRetire, ResetPasswordButton hReset, AddBookButton hAdd)
+        public AdminMainMenuForm(FormClose hClose, LogoutButton hLogout, ViewBooksButton hViewBooks, CheckOutButton hCheckOut, RenewBooksButton hRenewBooks, ReturnBooksButton hReturnBooks, UpdateConditionButton hUpdate, RetireBookButton hRetire, ResetPasswordButton hReset, AddBookButton hAdd, CreateAccountButton hCreate)
         {
             handleClose = hClose;
             handleLogOut = hLogout;
@@ -35,6 +36,7 @@ namespace ClientApplication
             handleRetireBook = hRetire;
             handleResetPassword = hReset;
             handleAddBook = hAdd;
+            handleCreateAccount = hCreate;
 
             InitializeComponent();
             BackColor = Color.SteelBlue;
@@ -90,6 +92,11 @@ namespace ClientApplication
         private void uxReturnBooksButton_Click(object sender, EventArgs e)
         {
             handleReturnBooks(this);
+        }
+
+        private void uxCreatePatronButton_Click(object sender, EventArgs e)
+        {
+            handleCreateAccount(this);
         }
     }
 }

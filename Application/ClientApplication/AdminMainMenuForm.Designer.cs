@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             this.uxButtonPanel = new System.Windows.Forms.Panel();
+            this.uxReturnBooksButton = new System.Windows.Forms.Button();
             this.uxUpdateBookButton = new System.Windows.Forms.Button();
             this.uxRetireBookButton = new System.Windows.Forms.Button();
             this.uxAddBookButton = new System.Windows.Forms.Button();
@@ -38,12 +39,13 @@
             this.uxViewBooksButton = new System.Windows.Forms.Button();
             this.uxWelcomeLabel = new System.Windows.Forms.Label();
             this.uxLogOutButton = new System.Windows.Forms.Button();
-            this.uxReturnBooksButton = new System.Windows.Forms.Button();
+            this.uxCreatePatronButton = new System.Windows.Forms.Button();
             this.uxButtonPanel.SuspendLayout();
             this.SuspendLayout();
             // 
             // uxButtonPanel
             // 
+            this.uxButtonPanel.Controls.Add(this.uxCreatePatronButton);
             this.uxButtonPanel.Controls.Add(this.uxReturnBooksButton);
             this.uxButtonPanel.Controls.Add(this.uxUpdateBookButton);
             this.uxButtonPanel.Controls.Add(this.uxRetireBookButton);
@@ -52,16 +54,26 @@
             this.uxButtonPanel.Controls.Add(this.uxRenewBooksButton);
             this.uxButtonPanel.Controls.Add(this.uxCheckOutButton);
             this.uxButtonPanel.Controls.Add(this.uxViewBooksButton);
-            this.uxButtonPanel.Location = new System.Drawing.Point(36, 79);
+            this.uxButtonPanel.Location = new System.Drawing.Point(26, 79);
             this.uxButtonPanel.Name = "uxButtonPanel";
-            this.uxButtonPanel.Size = new System.Drawing.Size(372, 198);
+            this.uxButtonPanel.Size = new System.Drawing.Size(390, 198);
             this.uxButtonPanel.TabIndex = 4;
+            // 
+            // uxReturnBooksButton
+            // 
+            this.uxReturnBooksButton.Location = new System.Drawing.Point(26, 107);
+            this.uxReturnBooksButton.Name = "uxReturnBooksButton";
+            this.uxReturnBooksButton.Size = new System.Drawing.Size(80, 76);
+            this.uxReturnBooksButton.TabIndex = 7;
+            this.uxReturnBooksButton.Text = "Return Books";
+            this.uxReturnBooksButton.UseVisualStyleBackColor = true;
+            this.uxReturnBooksButton.Click += new System.EventHandler(this.uxReturnBooksButton_Click);
             // 
             // uxUpdateBookButton
             // 
-            this.uxUpdateBookButton.Location = new System.Drawing.Point(277, 16);
+            this.uxUpdateBookButton.Location = new System.Drawing.Point(309, 16);
             this.uxUpdateBookButton.Name = "uxUpdateBookButton";
-            this.uxUpdateBookButton.Size = new System.Drawing.Size(80, 76);
+            this.uxUpdateBookButton.Size = new System.Drawing.Size(67, 76);
             this.uxUpdateBookButton.TabIndex = 6;
             this.uxUpdateBookButton.Text = "Update Book Condition";
             this.uxUpdateBookButton.UseVisualStyleBackColor = true;
@@ -69,9 +81,9 @@
             // 
             // uxRetireBookButton
             // 
-            this.uxRetireBookButton.Location = new System.Drawing.Point(191, 16);
+            this.uxRetireBookButton.Location = new System.Drawing.Point(238, 16);
             this.uxRetireBookButton.Name = "uxRetireBookButton";
-            this.uxRetireBookButton.Size = new System.Drawing.Size(80, 76);
+            this.uxRetireBookButton.Size = new System.Drawing.Size(64, 76);
             this.uxRetireBookButton.TabIndex = 5;
             this.uxRetireBookButton.Text = "Retire Book";
             this.uxRetireBookButton.UseVisualStyleBackColor = true;
@@ -79,9 +91,9 @@
             // 
             // uxAddBookButton
             // 
-            this.uxAddBookButton.Location = new System.Drawing.Point(105, 16);
+            this.uxAddBookButton.Location = new System.Drawing.Point(165, 16);
             this.uxAddBookButton.Name = "uxAddBookButton";
-            this.uxAddBookButton.Size = new System.Drawing.Size(80, 76);
+            this.uxAddBookButton.Size = new System.Drawing.Size(65, 76);
             this.uxAddBookButton.TabIndex = 4;
             this.uxAddBookButton.Text = "Add Book";
             this.uxAddBookButton.UseVisualStyleBackColor = true;
@@ -89,9 +101,9 @@
             // 
             // uxResetPasswordButton
             // 
-            this.uxResetPasswordButton.Location = new System.Drawing.Point(19, 16);
+            this.uxResetPasswordButton.Location = new System.Drawing.Point(91, 16);
             this.uxResetPasswordButton.Name = "uxResetPasswordButton";
-            this.uxResetPasswordButton.Size = new System.Drawing.Size(80, 76);
+            this.uxResetPasswordButton.Size = new System.Drawing.Size(66, 76);
             this.uxResetPasswordButton.TabIndex = 3;
             this.uxResetPasswordButton.Text = "Reset User\'s Password";
             this.uxResetPasswordButton.UseVisualStyleBackColor = true;
@@ -99,7 +111,7 @@
             // 
             // uxRenewBooksButton
             // 
-            this.uxRenewBooksButton.Location = new System.Drawing.Point(277, 107);
+            this.uxRenewBooksButton.Location = new System.Drawing.Point(284, 107);
             this.uxRenewBooksButton.Name = "uxRenewBooksButton";
             this.uxRenewBooksButton.Size = new System.Drawing.Size(80, 76);
             this.uxRenewBooksButton.TabIndex = 2;
@@ -109,7 +121,7 @@
             // 
             // uxCheckOutButton
             // 
-            this.uxCheckOutButton.Location = new System.Drawing.Point(191, 107);
+            this.uxCheckOutButton.Location = new System.Drawing.Point(198, 107);
             this.uxCheckOutButton.Name = "uxCheckOutButton";
             this.uxCheckOutButton.Size = new System.Drawing.Size(80, 76);
             this.uxCheckOutButton.TabIndex = 1;
@@ -119,7 +131,7 @@
             // 
             // uxViewBooksButton
             // 
-            this.uxViewBooksButton.Location = new System.Drawing.Point(105, 107);
+            this.uxViewBooksButton.Location = new System.Drawing.Point(112, 107);
             this.uxViewBooksButton.Name = "uxViewBooksButton";
             this.uxViewBooksButton.Size = new System.Drawing.Size(80, 76);
             this.uxViewBooksButton.TabIndex = 0;
@@ -147,21 +159,21 @@
             this.uxLogOutButton.UseVisualStyleBackColor = true;
             this.uxLogOutButton.Click += new System.EventHandler(this.uxLogOutButton_Click);
             // 
-            // uxReturnBooksButton
+            // uxCreatePatronButton
             // 
-            this.uxReturnBooksButton.Location = new System.Drawing.Point(19, 107);
-            this.uxReturnBooksButton.Name = "uxReturnBooksButton";
-            this.uxReturnBooksButton.Size = new System.Drawing.Size(80, 76);
-            this.uxReturnBooksButton.TabIndex = 7;
-            this.uxReturnBooksButton.Text = "Return Books";
-            this.uxReturnBooksButton.UseVisualStyleBackColor = true;
-            this.uxReturnBooksButton.Click += new System.EventHandler(this.uxReturnBooksButton_Click);
+            this.uxCreatePatronButton.Location = new System.Drawing.Point(17, 16);
+            this.uxCreatePatronButton.Name = "uxCreatePatronButton";
+            this.uxCreatePatronButton.Size = new System.Drawing.Size(66, 76);
+            this.uxCreatePatronButton.TabIndex = 8;
+            this.uxCreatePatronButton.Text = "Create User Account";
+            this.uxCreatePatronButton.UseVisualStyleBackColor = true;
+            this.uxCreatePatronButton.Click += new System.EventHandler(this.uxCreatePatronButton_Click);
             // 
             // AdminMainMenuForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(443, 304);
+            this.ClientSize = new System.Drawing.Size(443, 298);
             this.Controls.Add(this.uxButtonPanel);
             this.Controls.Add(this.uxWelcomeLabel);
             this.Controls.Add(this.uxLogOutButton);
@@ -185,5 +197,6 @@
         private System.Windows.Forms.Label uxWelcomeLabel;
         private System.Windows.Forms.Button uxLogOutButton;
         private System.Windows.Forms.Button uxReturnBooksButton;
+        private System.Windows.Forms.Button uxCreatePatronButton;
     }
 }
