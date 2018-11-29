@@ -50,14 +50,17 @@ namespace ClientApplication
                 hashString.Append(hash[i].ToString("x2"));
             }
 
-            bool success = handleResetPassword(uxEmailTextbox.Text, hashString.ToString());
+            handleResetPassword(uxEmailTextbox.Text, hashString.ToString());
+        }
 
+        public void HandleResetPasswordResponse(bool success)
+        {
             if (success)
             {
                 MessageBox.Show("Patron's password was reset successfully.");
                 uxEmailTextbox.Text = "";
                 uxPasswordTextbox.Text = "";
-            } 
+            }
             else
             {
                 MessageBox.Show("Patron's password was not reset successfully. Contact a system administrator for assistance.");

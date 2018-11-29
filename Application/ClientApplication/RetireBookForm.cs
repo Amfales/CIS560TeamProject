@@ -39,21 +39,22 @@ namespace ClientApplication
 
         private void uxRetireButton_Click(object sender, EventArgs e)
         {
-            bool success;
-
             string result = MessageBox.Show(this, "Are you sure you want to retire this book?", "Retire Book", MessageBoxButtons.YesNo).ToString();
             if (result == "No") { return; }
 
             try
             {
-                success = handleRetireBook(Convert.ToInt32(uxBookIDBox.Text));
+                handleRetireBook(Convert.ToInt32(uxBookIDBox.Text));
             }
             catch
             {
                 MessageBox.Show("Invalid BookID.");
                 return;
             }
+        }
 
+        public void HandleRetireBookResponse(bool success)
+        {
             if (success)
             {
                 MessageBox.Show("Book successfully retired.");

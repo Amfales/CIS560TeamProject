@@ -30,9 +30,9 @@ namespace ClientApplication
     public delegate void CreateAccountButton(Form f);
     public delegate void RenewBooks(List<int> BookIDs);
     public delegate void UpdateCondition(int BookID, string condition);
-    public delegate bool RetireBook(int BookID);
-    public delegate bool ResetPassword(string email, string password);
-    public delegate bool AddBook(string title, string authorFirst, string authorLast, string publisher, string genre, string isbn, int copyright);
+    public delegate void RetireBook(int BookID);
+    public delegate void ResetPassword(string email, string password);
+    public delegate void AddBook(string title, string authorFirst, string authorLast, string publisher, string genre, string isbn, int copyright);
     public delegate bool CreateAccount(string email, string firstName, string lastName, string password, string userType);
 
     // enum for the different possible user permission levels
@@ -74,6 +74,7 @@ namespace ClientApplication
             createAccount = new CreateAccountForm(HandleFormClose, HandleReturnToMenu, HandleCreateAccount);
 
             connection = new ServerConnection("Todo");
+            connection.onReceive = OnReceive;
 
             login.Show();
         }
@@ -104,6 +105,22 @@ namespace ClientApplication
 
                 case MessageType.RenewalResponse:
                     HandleRenewBooksResponse(new RenewalResponse(Message<RenewalResponseData>.UpgradeMessage(m)));
+                    break;
+
+                case MessageType.UpdateBookConditionResponse:
+                    HandleUpdateConditionResponse(new UpdateBookConditionResponse(Message<bool>.UpgradeMessage(m)));
+                    break;
+
+                case MessageType.RetireBookResponse:
+                    HandleRetireBookResponse(new RetireBookResponse(Message<bool>.UpgradeMessage(m)));
+                    break;
+
+                case MessageType.ResetPasswordResponse:
+                    HandleResetPasswordResponse(new ResetPasswordResponse(Message<bool>.UpgradeMessage(m)));
+                    break;
+
+                case MessageType.AddBookResponse:
+                    HandleAddBookResponse(new AddBookResponse(Message<bool>.UpgradeMessage(m)));
                     break;
             }
         }
@@ -489,7 +506,7 @@ namespace ClientApplication
 
         void HandleUpdateConditionResponse(UpdateBookConditionResponse response)
         {
-
+            updateCondition.HandleUpdateConditionResponse(response.Payload);
         }
 
         /// <summary>
@@ -497,9 +514,14 @@ namespace ClientApplication
         /// </summary>
         /// <param name="bookID"></param>
         /// <returns></returns>
-        bool HandleRetireBook(int bookID)
+        void HandleRetireBook(int bookID)
         {
-            return true;
+            connection.Send(new RetireBookRequest(bookID, userEmail));
+        }
+
+        void HandleRetireBookResponse(RetireBookResponse response)
+        {
+            retireBook.HandleRetireBookResponse(response.Payload);
         }
 
         /// <summary>
@@ -508,9 +530,14 @@ namespace ClientApplication
         /// <param name="email"></param>
         /// <param name="password"></param>
         /// <returns></returns>
-        bool HandleResetPassword(string email, string password)
+        void HandleResetPassword(string email, string password)
         {
-            return true;
+            connection.Send(new ResetPasswordRequest(email, password, userEmail));
+        }
+
+        void HandleResetPasswordResponse(ResetPasswordResponse response)
+        {
+            resetPassword.HandleResetPasswordResponse(response.Payload);
         }
 
         /// <summary>
@@ -518,9 +545,14 @@ namespace ClientApplication
         /// </summary>
         /// <param name="todoArgs"></param>
         /// <returns></returns>
-        bool HandleAddBook(string title, string authorFirst, string authorLast, string publisher, string genre, string isbn, int copyright)
+        void HandleAddBook(string title, string authorFirst, string authorLast, string publisher, string genre, string isbn, int copyright)
         {
-            return true;
+            connection.Send(new AddBookRequest(userEmail, new BookInfo(title, new Author(authorFirst, authorLast), isbn, genre, publisher, copyright)));
+        }
+
+        void HandleAddBookResponse(AddBookResponse response)
+        {
+            addBook.HandleAddBookResponse(response.Payload);
         }
 
         /// <summary>
@@ -534,7 +566,7 @@ namespace ClientApplication
         /// <returns></returns>
         bool HandleCreateAccount(string email, string firstName, string lastName, string password, string userType)
         {
-            return true;
+            return true;    // TODO
         }
     }
 }

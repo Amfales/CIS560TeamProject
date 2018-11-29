@@ -40,18 +40,19 @@ namespace ClientApplication
 
         private void uxUpdateButton_Click(object sender, EventArgs e)
         {
-            bool success;
-
             try
             {
-                success = handleUpdateCondition(Convert.ToInt32(uxBookIDBox.Text), uxConditionBox.Text);
+                handleUpdateCondition(Convert.ToInt32(uxBookIDBox.Text), uxConditionBox.Text);
             }
             catch
             {
                 MessageBox.Show("Invalid BookID.");
                 return;
             }
+        }
 
+        public void HandleUpdateConditionResponse(bool success)
+        {
             if (success)
             {
                 MessageBox.Show("Condition successfully updated to " + uxConditionBox.Text + ".");
