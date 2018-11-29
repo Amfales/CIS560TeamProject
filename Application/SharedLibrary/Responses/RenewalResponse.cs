@@ -6,20 +6,31 @@ using System.Threading.Tasks;
 
 namespace SharedLibrary.Responses
 {
-    public class RenewalResponse : Message<List<DueDateAssociation>>
+    public class RenewalResponse : Message<RenewalResponseData>
     {
-        public RenewalResponse(List<DueDateAssociation> l)
+        public RenewalResponse(bool succ, List<DueDateAssociation> l)
         {
-            Payload = l;
+            Payload = new RenewalResponseData(succ, l);
         }
-        public RenewalResponse() : this(new List<DueDateAssociation>()) { }
-        public RenewalResponse(Message<List<DueDateAssociation>> m)
+        public RenewalResponse() : this(false, new List<DueDateAssociation>()) { }
+        public RenewalResponse(Message<RenewalResponseData> m)
         {
-            Payload = new List<DueDateAssociation>(m.Payload);
+            Payload = new RenewalResponseData(m.Payload.Success, m.Payload.DueDates);
         }
 
 
         public static new MessageType Type => MessageType.RenewalResponse;
+    }
+
+    public class RenewalResponseData
+    {
+        public bool Success { get; }
+        public List<DueDateAssociation> DueDates { get; }
+        public RenewalResponseData(bool succ, List<DueDateAssociation> dates)
+        {
+            Success = succ;
+            DueDates = dates;
+        }
     }
 
     public class DueDateAssociation

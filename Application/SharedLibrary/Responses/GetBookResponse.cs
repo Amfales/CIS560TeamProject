@@ -16,6 +16,8 @@ namespace SharedLibrary.Responses
 
         public GetBookResponse() : this(new Book()) { }
 
+        public GetBookResponse(Message<Book> m) { Payload = m.Payload; }
+
         public static new MessageType Type => MessageType.GetBookResponse;
     }
 }

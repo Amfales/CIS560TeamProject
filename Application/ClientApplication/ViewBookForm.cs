@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using SharedLibrary;
 
 namespace ClientApplication
 {
@@ -65,11 +66,14 @@ namespace ClientApplication
 
             uxBookList.Items.Clear();
 
-            List<Object> queryResults = handleSearchBooks(title, authorFirst, authorLast, genre, isbn);
+            handleSearchBooks(title, authorFirst, authorLast, genre, isbn);
+        }
 
-            foreach (Object book in queryResults)
+        public void ParseResults(List<BookInfo> books)
+        {
+            foreach (BookInfo book in books)
             {
-                uxBookList.Items.Add(new ListViewItem(new string[] { title, authorFirst, authorLast, genre, isbn }));
+                uxBookList.Items.Add(new ListViewItem(new string[] { book.Name, book.Author.FirstName, book.Author.LastName, book.Genre, book.ISBN }));
             }
         }
     }

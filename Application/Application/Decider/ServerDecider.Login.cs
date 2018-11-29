@@ -27,7 +27,7 @@ namespace ServerApplication.Decider
             if (_loggedIn.ContainsKey(m.Payload.Email) && _loggedIn[m.Payload.Email])
             {
                 _logger("User is alreadly logged in.");
-                send(new LoginResponse(false, default(UserType), ""));
+                send(new LoginResponse(false, -1, ""));
                 return;
             }
             using (SqlConnection conn = new SqlConnection(_connection))
@@ -48,12 +48,12 @@ namespace ServerApplication.Decider
                     string name = Convert.ToString(comm.Parameters["@FirstNAME"]);
                     if (perm == "Admin")
                     {
-                        send(new LoginResponse(true, UserType.Admin,name));
+                        send(new LoginResponse(true, 1,name));
                         _userPermissions[m.Payload.Email] = UserType.Admin;
                     }
                     else
                     {
-                        send(new LoginResponse(true, UserType.Standard, name));
+                        send(new LoginResponse(true, 0, name));
                         _userPermissions[m.Payload.Email] = UserType.Standard;
                     }
                     _loggedIn[m.Payload.Email] = true;

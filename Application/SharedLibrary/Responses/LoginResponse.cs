@@ -8,11 +8,11 @@ namespace SharedLibrary.Responses
 {
     public class LoginResponse : Message<LoginResponseData>
     {
-        public LoginResponse(bool succ, UserType p, string f)
+        public LoginResponse(bool succ, int p, string f)
         {
             Payload = new LoginResponseData(succ, p, f);
         }
-        public LoginResponse() : this(false, default(UserType), "") { }
+        public LoginResponse() : this(false, default(int), "") { }
         public LoginResponse(Message<LoginResponseData> m)
         {
             Payload = new LoginResponseData(m.Payload.UserLoggedIn, m.Payload.PermissionLevel, m.Payload.FirstName);
@@ -23,10 +23,10 @@ namespace SharedLibrary.Responses
     public class LoginResponseData
     {
         public bool UserLoggedIn { get; }
-        public UserType PermissionLevel { get; }
+        public int PermissionLevel { get; }
         public string FirstName { get; }
 
-        public LoginResponseData(bool log, UserType p, string f)
+        public LoginResponseData(bool log, int p, string f)
         {
             UserLoggedIn = log;
             PermissionLevel = p;
