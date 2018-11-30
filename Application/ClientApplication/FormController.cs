@@ -33,7 +33,7 @@ namespace ClientApplication
     public delegate void RetireBook(int BookID);
     public delegate void ResetPassword(string email, string password);
     public delegate void AddBook(string title, string authorFirst, string authorLast, string publisher, string genre, string isbn, int copyright);
-    public delegate bool CreateAccount(string email, string firstName, string lastName, string password, string userType);
+    public delegate void CreateAccount(string email, string firstName, string lastName, string password, string userType);
 
     // enum for the different possible user permission levels
     enum PermissionLevel {Invalid, Patron, Admin}
@@ -125,6 +125,10 @@ namespace ClientApplication
                 case MessageType.AddBookResponse:
                     HandleAddBookResponse(Newtonsoft.Json.JsonConvert.DeserializeObject<AddBookResponse>(data));
                     break;
+
+                case MessageType.CreateUserResponse:
+                    HandleCreateAccountResponse(Newtonsoft.Json.JsonConvert.DeserializeObject<CreateUserResponse>(data));
+                    break;
             }
         }
 
@@ -197,14 +201,17 @@ namespace ClientApplication
                     // If the user is a patron, show the patron main menu form
                     case PermissionLevel.Patron:
                         // Clear and hide the login form
-                        login.Hide();
-                        foreach (Control control in login.Controls)
+                        login.Invoke(new Action(() =>
                         {
-                            if (control is TextBox)
+                            login.Hide();
+                            foreach (Control control in login.Controls)
                             {
-                                ((TextBox)control).Text = null;
+                                if (control is TextBox)
+                                {
+                                    ((TextBox)control).Text = null;
+                                }
                             }
-                        }
+                        }));
 
                         // Show and set the patron main menu
                         login.Invoke(new Action(() =>
@@ -614,9 +621,17 @@ namespace ClientApplication
         /// <param name="password"></param>
         /// <param name="userType"></param>
         /// <returns></returns>
-        bool HandleCreateAccount(string email, string firstName, string lastName, string password, string userType)
+        void HandleCreateAccount(string email, string firstName, string lastName, string password, string userType)
         {
-            return true;    // TODO
+            connection.Send(new CreateUserRequest(email, password, firstName, lastName, userType));
+        }
+
+        void HandleCreateAccountResponse(CreateUserResponse response)
+        {
+            createAccount.Invoke(new Action(() =>
+            {
+                createAccount.HandleCreateAccountResponse(response.Payload);
+            }));
         }
     }
 }

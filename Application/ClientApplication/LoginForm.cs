@@ -34,10 +34,8 @@ namespace ClientApplication
             {
                 hashString.Append(hash[i].ToString("x2"));
             }
-            //hashString.ToString()
 
-            MessageBox.Show(uxPasswordTextbox.Text + " " + uxEmailTextbox.Text);
-            handleLoginButton(uxEmailTextbox.Text, uxPasswordTextbox.Text, this);
+            handleLoginButton(uxEmailTextbox.Text, hashString.ToString(), this);
 
             uxPasswordTextbox.Text = "";
         }

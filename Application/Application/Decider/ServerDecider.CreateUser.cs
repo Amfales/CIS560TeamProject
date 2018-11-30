@@ -15,12 +15,12 @@ namespace ServerApplication.Decider
     {
         private void HandleCreateUserRequest(SendMessage send, CreateUserRequest m)
         {
-            if (!IsAdmin(m.Payload.Email))
+            /*if (!IsAdmin(m.Payload.Email))
             {
                 _logger("Did not create new user.");
                 send(new CreateUserResponse(false));
                 return;
-            }
+            }*/
             using (SqlConnection conn = new SqlConnection(_connection))
             {
                 conn.Open();
@@ -75,11 +75,15 @@ namespace ServerApplication.Decider
             permissionLevel.Direction = System.Data.ParameterDirection.Input;
             permissionLevel.Value = m.Payload.UserType;
 
+            SqlParameter userID = new SqlParameter("@UserID", System.Data.SqlDbType.Int);
+            userID.Direction = System.Data.ParameterDirection.Output;
+
             c.Parameters.Add(firstName);
             c.Parameters.Add(lastName);
             c.Parameters.Add(email);
             c.Parameters.Add(hashedPassword);
             c.Parameters.Add(permissionLevel);
+            c.Parameters.Add(userID);
         }
     }
 }

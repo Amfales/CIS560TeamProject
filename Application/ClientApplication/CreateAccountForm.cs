@@ -47,8 +47,11 @@ namespace ClientApplication
                 hashString.Append(hash[i].ToString("x2"));
             }
 
-            bool success = handleCreateAccount(uxEmailTextbox.Text, uxFirstNameBox.Text, uxLastNameBox.Text, hashString.ToString(), uxUserTypeBox.Text);
+            handleCreateAccount(uxEmailTextbox.Text, uxFirstNameBox.Text, uxLastNameBox.Text, hashString.ToString(), uxUserTypeBox.Text);
+        }
 
+        public void HandleCreateAccountResponse(bool success)
+        {
             if (success)
             {
                 MessageBox.Show("User account was created successfully.");
