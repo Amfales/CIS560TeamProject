@@ -29,7 +29,7 @@ namespace ServerApplication
 
             server.Start();
             
-            ws.OnMessage += (sender, e) => { Console.WriteLine(e.Data); };
+            //ws.OnMessage += (sender, e) => { Console.WriteLine(e.Data); };
             ws.Connect();
 
             JsonConverter[] c = new JsonConverter[1];
@@ -38,6 +38,16 @@ namespace ServerApplication
 
             ws.Send(Newtonsoft.Json.JsonConvert.SerializeObject(
                 new LoginRequest("nehelgeson@ksu.edu", "31415926712345")
+                , c));
+            /*
+            string data = JsonConvert.SerializeObject(new SearchBookRequest("%", new Author("%", "%"), "%", "%", false), c);
+            Console.WriteLine(data);
+            */
+
+
+
+            ws.Send(Newtonsoft.Json.JsonConvert.SerializeObject(
+                new SearchBookRequest("%", new Author("%", "%"), "%", "%", false)
                 , c));
                 
 

@@ -16,6 +16,6 @@ namespace SharedLibrary.Responses
         }
         public UpdateBookConditionResponse() : this(false) { }
         public UpdateBookConditionResponse(Message<bool> m) : this(m.Payload) { }
-        public static new MessageType Type => MessageType.UpdateBookConditionResponse;
+        public new MessageType Type => MessageType.UpdateBookConditionResponse;
     }
 }

@@ -16,6 +16,6 @@ namespace SharedLibrary.Responses
         }
         public AddBookResponse() : this(false) { }
         public AddBookResponse(Message<bool> m) : this(m.Payload) { }
-        public static new MessageType Type => MessageType.AddBookResponse;
+        public new MessageType Type => MessageType.AddBookResponse;
     }
 }

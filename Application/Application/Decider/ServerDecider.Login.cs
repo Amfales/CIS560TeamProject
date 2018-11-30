@@ -38,7 +38,7 @@ namespace ServerApplication.Decider
 
                     _logger("Successfully logged in.");
                     string perm = Convert.ToString(comm.Parameters["@PermissionLevel"].Value);
-                    string name = Convert.ToString(comm.Parameters["@FirstNAME"]);
+                    string name = Convert.ToString(comm.Parameters["@FirstNAME"].Value);
                     if (perm == "Admin")
                     {
                         send(new LoginResponse(true, 1,name));

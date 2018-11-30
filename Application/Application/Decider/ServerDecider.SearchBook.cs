@@ -82,7 +82,7 @@ namespace ServerApplication.Decider
         private void InitializeSearchBookCommand(ref SqlCommand c, SearchBookRequest m)
         {
             c.CommandType = System.Data.CommandType.StoredProcedure;
-            c.CommandText = "Book.SearchWithAll";
+            c.CommandText = "Book.SearchBookWithAll";
             c.Parameters.AddWithValue("@Title", m.Payload.Name);
             c.Parameters.AddWithValue("@FirstName", m.Payload.Author.FirstName);
             c.Parameters.AddWithValue("@LastName", m.Payload.Author.LastName);
@@ -96,14 +96,14 @@ namespace ServerApplication.Decider
             {
                 while (data.Read())
                 {
-                    bool isCheckedOut = data.GetInt32(data.GetOrdinal("CheckedOut")) == 0;
+                    bool isCheckedOut = data.GetInt32(data.GetOrdinal("CheckedOut")) != 0;
                     if (!isCheckedOut)
                     {
                         string title = data.GetString(data.GetOrdinal("Title"));
                         string aFirst = data.GetString(data.GetOrdinal("AuthorFirstName"));
                         string aLast = data.GetString(data.GetOrdinal("AuthorLastName"));
                         string isbn = data.GetString(data.GetOrdinal("ISBN"));
-                        int copyYear = data.GetSqlDateTime(data.GetOrdinal("Copyrightyear")).Value.Year;
+                        int copyYear = data.GetInt16(data.GetOrdinal("Copyrightyear"));
                         string pub = data.GetString(data.GetOrdinal("PublisherName"));
                         string gen = data.GetString(data.GetOrdinal("Genre"));
                         int id = data.GetInt32(data.GetOrdinal("BookID"));

@@ -15,9 +15,6 @@ namespace SharedLibrary
         SearchBookInfoResponse,
         SearchBookResponse,
 
-        CreateNewUserRequest,
-        CreateNewUserResponse,
-
         GetBookRequest,
         GetBookResponse,
 
@@ -44,6 +41,9 @@ namespace SharedLibrary
 
         UpdateBookConditionRequest,
         UpdateBookConditionResponse,
+
+        CreateUserRequest,
+        CreateUserResponse,
 
 
         Error

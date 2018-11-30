@@ -22,7 +22,7 @@ namespace SharedLibrary.Requests
             Payload = new Checkout(m.Payload.Email, m.Payload.IDs);
         }
 
-        public static new MessageType Type => MessageType.CheckoutRequest;
+        public new MessageType Type => MessageType.CheckoutRequest;
     }
 
     public class Checkout
@@ -30,9 +30,9 @@ namespace SharedLibrary.Requests
         public List<int> IDs { get; }
         public string Email { get; }
 
-        public Checkout(string e, List<int> ids)
+        public Checkout(string email, List<int> ids)
         {
-            Email = e;
+            Email = email;
             IDs = ids;
         }
         public Checkout() : this("",new List<int>()) { }

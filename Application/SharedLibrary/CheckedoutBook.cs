@@ -10,11 +10,12 @@ namespace SharedLibrary
     public class CheckedoutBook : Book
     {
         public DateTime DueDate { get; }
+
         [JsonConstructor]
 
-        public CheckedoutBook(Book b, DateTime d) : base(b)
+        public CheckedoutBook(Book book, DateTime duedate) : base(book)
         {
-            DueDate = d;
+            DueDate = duedate;
         }
 
     }

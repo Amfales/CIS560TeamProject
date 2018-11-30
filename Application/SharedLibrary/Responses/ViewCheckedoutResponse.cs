@@ -22,7 +22,7 @@ namespace SharedLibrary.Responses
         }
 
 
-        public static new MessageType Type => MessageType.ViewCheckedoutResponse;
+        public new MessageType Type => MessageType.ViewCheckedoutResponse;
     }
 
 

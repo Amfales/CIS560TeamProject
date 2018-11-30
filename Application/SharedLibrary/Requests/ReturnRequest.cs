@@ -17,6 +17,6 @@ namespace SharedLibrary.Requests
         public ReturnRequest() : this(new List<int>()) { }
         public ReturnRequest(Message<List<int>> m) : this(m.Payload) { }
 
-        public static new MessageType Type => MessageType.ReturnRequest;
+        public new MessageType Type => MessageType.ReturnRequest;
     }
 }

@@ -20,7 +20,7 @@ namespace SharedLibrary.Requests
             Payload = new UpdateCondition(m.Payload.BookID, m.Payload.Condition,
                 m.Payload.Email);
         }
-        public static new MessageType Type => MessageType.UpdateBookConditionRequest;
+        public new MessageType Type => MessageType.UpdateBookConditionRequest;
 
     }
 
@@ -29,11 +29,11 @@ namespace SharedLibrary.Requests
         public int BookID { get; }
         public string Condition { get; }
         public string Email { get; }
-        public UpdateCondition(int b, string c, string e)
+        public UpdateCondition(int bookid, string condition, string email)
         {
-            BookID = b;
-            Condition = c;
-            Email = e;
+            BookID = bookid;
+            Condition = condition;
+            Email = email;
         }
     }
 }

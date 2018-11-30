@@ -19,7 +19,7 @@ namespace SharedLibrary.Responses
         {
             Payload = new LoginResponseData(m.Payload.UserLoggedIn, m.Payload.PermissionLevel, m.Payload.FirstName);
         }
-        public static new MessageType Type => MessageType.LoginResponse;
+        public new MessageType Type => MessageType.LoginResponse;
     }
 
     public class LoginResponseData
@@ -28,11 +28,11 @@ namespace SharedLibrary.Responses
         public int PermissionLevel { get; }
         public string FirstName { get; }
 
-        public LoginResponseData(bool log, int p, string f)
+        public LoginResponseData(bool userloggedin, int permissionlevel, string firstname)
         {
-            UserLoggedIn = log;
-            PermissionLevel = p;
-            FirstName = f;
+            UserLoggedIn = userloggedin;
+            PermissionLevel = permissionlevel;
+            FirstName = firstname;
         }
     }
 }

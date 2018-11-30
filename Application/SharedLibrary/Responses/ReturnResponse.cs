@@ -16,6 +16,6 @@ namespace SharedLibrary.Responses
         }
         public ReturnResponse() : this(false) { }
         public ReturnResponse(Message<bool> m) : this(m.Payload) { }
-        public static new MessageType Type => MessageType.ReturnResponse;
+        public new MessageType Type => MessageType.ReturnResponse;
     }
 }

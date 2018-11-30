@@ -21,17 +21,17 @@ namespace SharedLibrary.Responses
         }
 
 
-        public static new MessageType Type => MessageType.RenewalResponse;
+        public new MessageType Type => MessageType.RenewalResponse;
     }
 
     public class RenewalResponseData
     {
         public bool Success { get; }
         public List<DueDateAssociation> DueDates { get; }
-        public RenewalResponseData(bool succ, List<DueDateAssociation> dates)
+        public RenewalResponseData(bool success, List<DueDateAssociation> duedates)
         {
-            Success = succ;
-            DueDates = dates;
+            Success = success;
+            DueDates = duedates;
         }
     }
 

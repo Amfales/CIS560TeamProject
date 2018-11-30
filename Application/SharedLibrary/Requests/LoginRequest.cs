@@ -20,17 +20,17 @@ namespace SharedLibrary.Requests
         {
             Payload = new Login(m.Payload.Email, m.Payload.HashPassword);
         }
-        public static new MessageType Type => MessageType.LoginRequest;
+        public new MessageType Type => MessageType.LoginRequest;
     }
 
     public class Login
     {
         public string Email { get; }
         public string HashPassword { get; }
-        public Login(string email, string hp)
+        public Login(string email, string hashpassword)
         {
             Email = email;
-            HashPassword = hp;
+            HashPassword = hashpassword;
         }
         
     }

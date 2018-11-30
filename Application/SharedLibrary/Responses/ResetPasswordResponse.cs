@@ -16,6 +16,6 @@ namespace SharedLibrary.Responses
         }
         public ResetPasswordResponse() : this(false) { }
         public ResetPasswordResponse(Message<bool> m): this(m.Payload) { }
-        public static new MessageType Type => MessageType.ResetPasswordResponse;
+        public new MessageType Type => MessageType.ResetPasswordResponse;
     }
 }

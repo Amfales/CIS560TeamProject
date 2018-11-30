@@ -17,7 +17,7 @@ namespace SharedLibrary.Requests
         public ViewCheckedoutRequest() : this("") { }
         public ViewCheckedoutRequest(Message<User> m) : this(m.Payload.Email) { }
 
-        public static new MessageType Type => MessageType.ViewCheckedoutRequest;
+        public new MessageType Type => MessageType.ViewCheckedoutRequest;
     }
 
 
@@ -25,9 +25,9 @@ namespace SharedLibrary.Requests
     {
         public string Email { get; }
 
-        public User(string e)
+        public User(string email)
         {
-            Email = e;
+            Email = email;
         }
     }
 }

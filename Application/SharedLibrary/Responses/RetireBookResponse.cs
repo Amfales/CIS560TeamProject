@@ -16,6 +16,6 @@ namespace SharedLibrary.Responses
         }
         public RetireBookResponse() : this(false) { }
         public RetireBookResponse(Message<bool> m) : this(m.Payload) { }
-        public static new MessageType Type => MessageType.RetireBookResponse;
+        public new MessageType Type => MessageType.RetireBookResponse;
     }
 }

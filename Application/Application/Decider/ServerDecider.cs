@@ -23,7 +23,7 @@ namespace ServerApplication.Decider
         private Dictionary<string, bool> _loggedIn = new Dictionary<string, bool>();
         private Dictionary<string, UserType> _userPermissions = new Dictionary<string, UserType>();
         private string _connection =
-            "server=tcp:" + Dns.GetHostEntry("fullmilkpig.ddns.net").AddressList[0].ToString() + "\\LIBRARYKIOSK, 1733;" +
+            "server=tcp:" + Dns.GetHostEntry("fullmilkpig.ddns.net").AddressList[0].ToString() + ", 1733;" +
             "Database=librarykiosk;" +
             "User id=NHelgeson;" +
             "Password=buttz560";
@@ -42,28 +42,55 @@ namespace ServerApplication.Decider
             JsonConverter[] c = new JsonConverter[1];
             c[0] = new Newtonsoft.Json.Converters.StringEnumConverter();
             string data = e.Data;
-            IMessage m = Newtonsoft.Json.JsonConvert.DeserializeObject<IMessage>(data, c);
+            IMessage m = Deserialize<IMessage>(data, c);
             switch (m.Type)
             {
-                case MessageType.LoginRequest:
-                    HandleLoginRequest(send, Newtonsoft.Json.JsonConvert.DeserializeObject<LoginRequest>(data, c));
-                    break;
-                case MessageType.SearchBookRequest:
-                    DecideSearchBookRequest(send, Newtonsoft.Json.JsonConvert.DeserializeObject<SearchBookRequest>(data));
+                case MessageType.AddBookRequest:
+                    HandleAddBookRequest(send, Deserialize<AddBookRequest>(data, c));
                     break;
                 case MessageType.CheckoutRequest:
-                    HandleCheckoutRequest(send, Newtonsoft.Json.JsonConvert.DeserializeObject<CheckoutRequest>(data));
+                    HandleCheckoutRequest(send, Deserialize<CheckoutRequest>(data, c));
                     break;
-                case MessageType.ViewCheckedoutRequest:
-                    HandleViewCheckedoutRequest(send, Newtonsoft.Json.JsonConvert.DeserializeObject<ViewCheckedoutRequest>(data));
+                case MessageType.CreateUserRequest:
+                    HandleCreateUserRequest(send, Deserialize<CreateUserRequest>(data, c));
+                    break;
+                case MessageType.GetBookRequest:
+                    HandleGetBookRequest(send, Deserialize<GetBookRequest>(data, c));
+                    break;
+                case MessageType.LoginRequest:
+                    HandleLoginRequest(send, Deserialize<LoginRequest>(data, c));
                     break;
                 case MessageType.RenewalRequest:
-                    HandleRenewalRequest(send, Newtonsoft.Json.JsonConvert.DeserializeObject<RenewalRequest>(data));
+                    HandleRenewalRequest(send, Deserialize<RenewalRequest>(data, c));
+                    break;
+                case MessageType.ResetPasswordRequest:
+                    HandleResetPasswordRequest(send, Deserialize<ResetPasswordRequest>(data, c));
+                    break;
+                case MessageType.RetireBookRequest:
+                    HandleRetireBookRequest(send, Deserialize<RetireBookRequest>(data, c));
+                    break;
+                case MessageType.ReturnRequest:
+                    HandleReturnRequest(send, Deserialize<ReturnRequest>(data, c));
+                    break;
+                case MessageType.SearchBookRequest:
+                    DecideSearchBookRequest(send, Deserialize<SearchBookRequest>(data, c));
+                    break;
+                case MessageType.UpdateBookConditionRequest:
+                    HandleUpdateBookConditionRequest(send, Deserialize<UpdateBookConditionRequest>(data, c));
+                    break;
+                case MessageType.ViewCheckedoutRequest:
+                    HandleViewCheckedoutRequest(send, Deserialize<ViewCheckedoutRequest>(data, c));
                     break;
                 default:
                     break;
             }
         }
+
+        private T Deserialize<T>(string data, JsonConverter[] c)
+        {
+            return Newtonsoft.Json.JsonConvert.DeserializeObject<T>(data, c);
+        }
+
 
         private bool IsAdmin(string adminEmail)
         {
@@ -73,12 +100,5 @@ namespace ServerApplication.Decider
                    _userPermissions[adminEmail] == UserType.Admin;
 
         }
-
-        /*
-        private void CreateNewUser(SendMessage send)
-        {
-            send(new LoginResponse());
-        }
-        */
     }
 }

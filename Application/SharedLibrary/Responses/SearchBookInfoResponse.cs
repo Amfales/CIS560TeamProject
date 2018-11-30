@@ -22,7 +22,7 @@ namespace SharedLibrary.Responses
             Payload = new CompositeBookInfo(new SortedSet<BookInfo>(m.Payload));
         }
 
-        public static new MessageType Type => MessageType.SearchBookInfoResponse;
+        public new MessageType Type => MessageType.SearchBookInfoResponse;
     }
 
 

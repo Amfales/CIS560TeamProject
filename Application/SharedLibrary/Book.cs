@@ -14,18 +14,19 @@ namespace SharedLibrary
         private BookInfo _bookInfo;
 
         public Book() : this(-1, "") { }
+
         [JsonConstructor]
-        public Book(int b, string q) : base()
+        public Book(int bookid, string bookquality) : base()
         {
-            BookID = b;
-            BookQuality = q;
+            BookID = bookid;
+            BookQuality = bookquality;
             _bookInfo = new BookInfo();
         }
 
-        public Book(int b, string q, BookInfo bi) : base(bi)
+        public Book(int bookid, string bookquality, BookInfo bi) : base(bi)
         {
-            BookID = b;
-            BookQuality = q;
+            BookID = bookid;
+            BookQuality = bookquality;
             _bookInfo = bi;
         }
 

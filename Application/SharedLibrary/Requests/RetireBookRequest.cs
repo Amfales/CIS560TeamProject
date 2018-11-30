@@ -19,17 +19,17 @@ namespace SharedLibrary.Requests
         {
             Payload = new Retire(m.Payload.BookId, m.Payload.Email);
         }
-        public static new MessageType Type => MessageType.RetireBookRequest;
+        public new MessageType Type => MessageType.RetireBookRequest;
     }
 
     public class Retire
     {
         public int BookId { get; }
         public string Email { get; }
-        public Retire(int b, string e)
+        public Retire(int bookid, string email)
         {
-            BookId = b;
-            Email = e;
+            BookId = bookid;
+            Email = email;
         }
     }
 }

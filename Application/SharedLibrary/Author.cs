@@ -10,10 +10,10 @@ namespace SharedLibrary
     public class Author
     {
         [JsonConstructor]
-        public Author(string f, string l)
+        public Author(string firstname, string lastname)
         {
-            FirstName = f;
-            LastName = l;
+            FirstName = firstname;
+            LastName = lastname;
         }
         public Author() : this("", "") { }
         public string FirstName { get; }

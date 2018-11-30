@@ -17,7 +17,7 @@ namespace SharedLibrary.Requests
         public RenewalRequest() : this("",new List<int>()) { }
         public RenewalRequest(Message<Renewal> m) : this(m.Payload.Email, m.Payload.IDs) { }
 
-        public static new MessageType Type => MessageType.RenewalRequest;
+        public new MessageType Type => MessageType.RenewalRequest;
     }
 
 
@@ -25,9 +25,9 @@ namespace SharedLibrary.Requests
     {
         public string Email { get; }
         public List<int> IDs { get; }
-        public Renewal(string e, List<int> ids)
+        public Renewal(string email, List<int> ids)
         {
-            Email = e;
+            Email = email;
             IDs = ids;
         }
     }

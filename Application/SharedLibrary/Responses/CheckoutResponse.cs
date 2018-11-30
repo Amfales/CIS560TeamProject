@@ -22,7 +22,7 @@ namespace SharedLibrary.Responses
 
         public CheckoutResponse() : this(false, null) { }
 
-        public static new MessageType Type => MessageType.CheckoutResponse;
+        public new MessageType Type => MessageType.CheckoutResponse;
     }
 
     public class Checkout
@@ -30,10 +30,10 @@ namespace SharedLibrary.Responses
         public bool Success { get; }
         public List<DueDateAssociation> DueDate { get; }
 
-        public Checkout(bool succ, List<DueDateAssociation> date)
+        public Checkout(bool success, List<DueDateAssociation> duedate)
         {
-            Success = succ;
-            DueDate = date;
+            Success = success;
+            DueDate = duedate;
         }
     }
 }

@@ -20,7 +20,7 @@ namespace SharedLibrary.Requests
             Payload = new Reset(m.Payload.ResetEmail, m.Payload.ResetPassword,
                 m.Payload.UserEmail);
         }
-        public static new MessageType Type => MessageType.ResetPasswordRequest;
+        public new MessageType Type => MessageType.ResetPasswordRequest;
 
     }
 
@@ -29,11 +29,11 @@ namespace SharedLibrary.Requests
         public string ResetEmail { get; }
         public string ResetPassword { get; }
         public string UserEmail { get; }
-        public Reset(string re, string rp, string ue)
+        public Reset(string resetemail, string resetpassword, string useremail)
         {
-            ResetEmail = re;
-            ResetPassword = rp;
-            UserEmail = ue;
+            ResetEmail = resetemail;
+            ResetPassword = resetpassword;
+            UserEmail = useremail;
         }
     }
 }

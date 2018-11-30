@@ -17,14 +17,14 @@ namespace SharedLibrary
         public int CopyrightYear { get; }
 
         [JsonConstructor]
-        public BookInfo(string n, Author a, string i, string g, string p, int c)
+        public BookInfo(string name, Author author, string isbn, string genre, string publisher, int copyrightyear)
         {
-            Name = n;
-            Author = a;
-            ISBN = i;
-            Genre = g;
-            Publisher = p;
-            CopyrightYear = c;
+            Name = name;
+            Author = author;
+            ISBN = isbn;
+            Genre = genre;
+            Publisher = publisher;
+            CopyrightYear = copyrightyear;
         }
 
         public BookInfo() : this("",new Author(),"","","",0) { }

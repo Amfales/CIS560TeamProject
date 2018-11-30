@@ -17,6 +17,6 @@ namespace SharedLibrary.Requests
 
         public GetBookRequest() : this(-1) { }
 
-        public static new MessageType Type => MessageType.GetBookRequest;
+        public new MessageType Type => MessageType.GetBookRequest;
     }
 }

@@ -19,7 +19,7 @@ namespace SharedLibrary.Requests
         {
             Payload = new AddBook(m.Payload.Email, m.Payload.Book);
         }
-        public static new MessageType Type => MessageType.AddBookRequest;
+        public new MessageType Type => MessageType.AddBookRequest;
     }
 
     public class AddBook
@@ -27,10 +27,10 @@ namespace SharedLibrary.Requests
         public string Email { get; }
         public BookInfo Book { get; }
         
-        public AddBook(string e, BookInfo b)
+        public AddBook(string email, BookInfo book)
         {
-            Email = e;
-            Book = b;
+            Email = email;
+            Book = book;
         }
     }
 }

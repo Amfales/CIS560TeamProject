@@ -21,7 +21,7 @@ namespace SharedLibrary.Requests
             Payload = new SearchInfo(m.Payload.Name, m.Payload.Author, m.Payload.ISBN, m.Payload.Genre, m.Payload.BookInfoOnly);
         }
 
-        public static new MessageType Type => MessageType.SearchBookRequest;
+        public new MessageType Type => MessageType.SearchBookRequest;
 
     }
 
@@ -34,13 +34,13 @@ namespace SharedLibrary.Requests
         public string Genre { get; }
         public bool BookInfoOnly { get; }
 
-        public SearchInfo(string n, Author a, string i, string g, bool b)
+        public SearchInfo(string name, Author author, string isbn, string genre, bool bookinfoonly)
         {
-            Name = n;
-            Author = a;
-            ISBN = i;
-            Genre = g;
-            BookInfoOnly = b;
+            Name = name;
+            Author = author;
+            ISBN = isbn;
+            Genre = genre;
+            BookInfoOnly = bookinfoonly;
         }
     }
 }
