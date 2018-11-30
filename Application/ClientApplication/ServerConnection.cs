@@ -21,7 +21,7 @@ namespace ClientApplication
         public ServerConnection(string url)
         {
             connection = new WebSocket(url);
-            connection.OnMessage += (s, e) => { onReceive(e.Data); };
+            connection.OnMessage += (s, e) => { onReceive.Invoke(e.Data); };
             connection.Connect();
         }
 

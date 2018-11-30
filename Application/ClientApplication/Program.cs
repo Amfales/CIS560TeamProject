@@ -16,7 +16,7 @@ namespace ClientApplication
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-
+            
             FormController formController = new FormController();
 
             Application.Run();

@@ -57,6 +57,7 @@ namespace ClientApplication
         string getBookSource;
         string userEmail;
         PermissionLevel userPermissionLevel;
+        Dictionary<string, bool> flags;
 
         public FormController()
         {
@@ -73,7 +74,7 @@ namespace ClientApplication
             addBook = new AddBookForm(HandleFormClose, HandleReturnToMenu, HandleGenreRequest, HandleAddBook);
             createAccount = new CreateAccountForm(HandleFormClose, HandleReturnToMenu, HandleCreateAccount);
 
-            connection = new ServerConnection("ws://192.168.0.12:8001/library");
+            connection = new ServerConnection("ws://localhost:12345/library");
             connection.onReceive = OnReceive;
 
             login.Show();
@@ -167,7 +168,7 @@ namespace ClientApplication
         {
             if (!response.Payload.UserLoggedIn)
             {
-                MessageBox.Show(login, "Invalid username or password");
+                MessageBox.Show("Invalid username or password");
                 return;
             }
 
@@ -186,9 +187,6 @@ namespace ClientApplication
                     userPermissionLevel = PermissionLevel.Admin;
                     break;
             }
-
-            // Clear the password textbox
-            login.Controls.Find("uxPasswordTextbox", false)[0].Text = "";
 
             // If the username and password pair match a user account
             if (userPermissionLevel != PermissionLevel.Invalid)
@@ -209,25 +207,33 @@ namespace ClientApplication
                         }
 
                         // Show and set the patron main menu
-                        patronMainMenu.Show();
-                        patronMainMenu.Controls.Find("uxWelcomeLabel", false)[0].Text = "Welcome, " + firstName;
+                        patronMainMenu.Invoke(new Action(() =>
+                        {
+                           patronMainMenu.Show();
+                           patronMainMenu.Controls.Find("uxWelcomeLabel", false)[0].Text = "Welcome, " + firstName;
+                       }));
                         break;
 
                     // If the user is an employee, show the employee main menu form
                     case PermissionLevel.Admin:
                         // Clear and hide the login form
-                        login.Hide();
-                        foreach (Control control in login.Controls)
+                        login.Invoke(new Action(() =>
                         {
-                            if (control is TextBox)
+                            login.Hide();
+                        
+                            foreach (Control control in login.Controls)
                             {
-                                ((TextBox)control).Text = null;
+                                if (control is TextBox)
+                                {
+                                    ((TextBox)control).Text = "";
+                                }
                             }
-                        }
-
+                        }));
                         // Show and set the admin main menu
+                        
                         adminMainMenu.Show();
                         adminMainMenu.Controls.Find("uxWelcomeLabel", false)[0].Text = "Welcome, " + firstName;
+                        
                         break;
                 }
             }

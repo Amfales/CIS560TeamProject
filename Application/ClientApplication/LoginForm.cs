@@ -34,8 +34,12 @@ namespace ClientApplication
             {
                 hashString.Append(hash[i].ToString("x2"));
             }
-            
-            handleLoginButton(uxEmailTextbox.Text, hashString.ToString(), this);
+            //hashString.ToString()
+
+            MessageBox.Show(uxPasswordTextbox.Text + " " + uxEmailTextbox.Text);
+            handleLoginButton(uxEmailTextbox.Text, uxPasswordTextbox.Text, this);
+
+            uxPasswordTextbox.Text = "";
         }
 
         protected override void OnFormClosing(FormClosingEventArgs e)
