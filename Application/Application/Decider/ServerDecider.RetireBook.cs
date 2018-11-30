@@ -34,6 +34,7 @@ namespace ServerApplication.Decider
                     InitializeRetireBookCommand(ref comm, m);
 
                     comm.ExecuteNonQuery();
+                    trans.Commit();
 
                     _logger("Successfully retired a book.");
                     send(new RetireBookResponse(true));

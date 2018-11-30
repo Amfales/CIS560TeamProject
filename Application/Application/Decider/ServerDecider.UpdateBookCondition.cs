@@ -35,6 +35,8 @@ namespace ServerApplication.Decider
 
                     comm.ExecuteNonQuery();
 
+                    trans.Commit();
+
                     _logger("Successfully updated description.");
                     send(new UpdateBookConditionResponse(true));
                 }

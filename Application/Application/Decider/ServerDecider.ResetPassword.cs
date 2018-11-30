@@ -35,6 +35,8 @@ namespace ServerApplication.Decider
 
                     comm.ExecuteNonQuery();
 
+                    trans.Commit();
+
                     _logger("Successfully updated " + m.Payload.ResetEmail + "'s password.");
                     send(new ResetPasswordResponse(true));
                 }

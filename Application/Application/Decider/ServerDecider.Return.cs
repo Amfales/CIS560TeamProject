@@ -29,6 +29,8 @@ namespace ServerApplication.Decider
                     
                     GrabReturn(comm, m);
 
+                    trans.Commit();
+
                     _logger("Successfully returned " + m.Payload.Count + " checked out books.");
                     send(new ReturnResponse(true));
                 }
