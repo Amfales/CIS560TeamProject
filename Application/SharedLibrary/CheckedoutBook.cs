@@ -13,7 +13,8 @@ namespace SharedLibrary
 
         [JsonConstructor]
 
-        public CheckedoutBook(Book book, DateTime duedate) : base(book)
+        public CheckedoutBook(int bookid, string bookquality, string name, Author author, string isbn, string genre, string publisher, int copyrightyear, DateTime duedate)
+            : base(bookid,bookquality,name,author,isbn,genre,publisher,copyrightyear)
         {
             DueDate = duedate;
         }

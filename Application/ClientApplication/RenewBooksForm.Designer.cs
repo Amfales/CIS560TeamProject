@@ -56,7 +56,7 @@
             // ID
             // 
             this.ID.Text = "ID";
-            this.ID.Width = 70;
+            this.ID.Width = 50;
             // 
             // Title
             // 
@@ -71,7 +71,7 @@
             // DueDate
             // 
             this.DueDate.Text = "Due Date";
-            this.DueDate.Width = 70;
+            this.DueDate.Width = 90;
             // 
             // uxReturnButton
             // 

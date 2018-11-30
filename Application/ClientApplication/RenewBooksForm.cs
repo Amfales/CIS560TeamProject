@@ -63,10 +63,10 @@ namespace ClientApplication
             if (success)
             {
                 StringBuilder sb = new StringBuilder();
-                sb.Append("Renewal successful! The new due date for your books is: ");
+                sb.Append("Renewal successful! The new due date for your books is:\n");
                 foreach (DueDateAssociation date in returnDates)
                 {
-                    sb.Append("\n" + date.BookID + ": " + date.Date.ToShortDateString());
+                    sb.Append("\nBook #" + date.BookID + ": " + date.Date.ToShortDateString());
                 }
 
                 MessageBox.Show(sb.ToString());

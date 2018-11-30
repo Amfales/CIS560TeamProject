@@ -128,6 +128,9 @@ namespace ClientApplication
                 case MessageType.CreateUserResponse:
                     HandleCreateAccountResponse(Newtonsoft.Json.JsonConvert.DeserializeObject<CreateUserResponse>(data));
                     break;
+                case MessageType.ViewCheckedoutResponse:
+                    HandleViewCheckedOutResponse(Newtonsoft.Json.JsonConvert.DeserializeObject<ViewCheckedoutResponse>(data));
+                    break;
             }
         }
 
@@ -504,6 +507,11 @@ namespace ClientApplication
 
         void HandleViewCheckedOutResponse(ViewCheckedoutResponse response)
         {
+            login.Invoke(new Action(() =>
+            {
+                renewBooks.Show();
+            }));
+
             renewBooks.Invoke(new Action(() =>
             {
                 ListView bookList = (ListView)renewBooks.Controls.Find("uxBookList", false)[0];
@@ -514,8 +522,6 @@ namespace ClientApplication
                 {
                     bookList.Items.Add(new ListViewItem(new string[] { book.BookID.ToString(), book.Name, book.Author.FirstName + " " + book.Author.LastName, book.DueDate.ToShortDateString() }));
                 }
-
-                renewBooks.Show();
             }));
         }
 

@@ -11,26 +11,18 @@ namespace SharedLibrary
     {
         public int BookID { get; }
         public string BookQuality { get; }
-        private BookInfo _bookInfo;
+        
 
-        public Book() : this(-1, "") { }
+        
+        
 
         [JsonConstructor]
-        public Book(int bookid, string bookquality) : base()
+        public Book(int bookid, string bookquality, string name, Author author, string isbn, string genre, string publisher, int copyrightyear) : base(name,author,isbn,genre,publisher,copyrightyear)
         {
             BookID = bookid;
             BookQuality = bookquality;
-            _bookInfo = new BookInfo();
         }
-
-        public Book(int bookid, string bookquality, BookInfo bi) : base(bi)
-        {
-            BookID = bookid;
-            BookQuality = bookquality;
-            _bookInfo = bi;
-        }
-
-        public Book(Book b) : this(b.BookID, b.BookQuality, b._bookInfo) { }
+        
 
     }
 }

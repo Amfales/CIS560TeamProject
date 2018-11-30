@@ -8,40 +8,17 @@ using Newtonsoft.Json;
 
 namespace SharedLibrary.Responses
 {
-    public class ViewCheckedoutResponse : Message<CheckedoutBooks>
+    public class ViewCheckedoutResponse : Message<List<CheckedoutBook>>
     {
         [JsonConstructor]
         public ViewCheckedoutResponse(List<CheckedoutBook> l)
         {
-            Payload = new CheckedoutBooks(l);
+            Payload = l;
         }
         public ViewCheckedoutResponse() : this(new List<CheckedoutBook>()) { }
-        public ViewCheckedoutResponse(Message<CheckedoutBooks> m)
-        {
-            Payload = new CheckedoutBooks(new List<CheckedoutBook>(m.Payload));
-        }
 
 
         public new MessageType Type => MessageType.ViewCheckedoutResponse;
     }
-
-
-    public class CheckedoutBooks : IEnumerable<CheckedoutBook>
-    {
-        private List<CheckedoutBook> _books;
-        public CheckedoutBooks(List<CheckedoutBook> l)
-        {
-            _books = l;
-        }
-
-        public IEnumerator<CheckedoutBook> GetEnumerator()
-        {
-            return _books.GetEnumerator();
-        }
-
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return GetEnumerator();
-        }
-    }
+    
 }

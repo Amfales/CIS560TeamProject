@@ -109,10 +109,9 @@ namespace ServerApplication.Decider
                         int id = data.GetInt32(data.GetOrdinal("BookID"));
 
                         // TODO Add in the book quality and call the correct Book constructor
-
-                        BookInfo bi = new BookInfo(title, new Author(aFirst, aLast),
+                        
+                        Book b = new Book(id, "", title, new Author(aFirst, aLast),
                             isbn, gen, pub, copyYear);
-                        Book b = new Book(id, "", bi);
                         ss.Add(b);
                     }
                 }

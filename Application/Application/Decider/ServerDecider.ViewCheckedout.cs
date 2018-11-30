@@ -67,10 +67,8 @@ namespace ServerApplication.Decider
 
                     // TODO Add in the book quality and call the correct Book constructor
 
-                    BookInfo bi = new BookInfo(title, new Author(aFirst, aLast),
-                        isbn, gen, pub, copyYear);
-                    Book b = new Book(id, "", bi);
-                    CheckedoutBook cb = new CheckedoutBook(b, dt);
+                   
+                    CheckedoutBook cb = new CheckedoutBook(id, "", title, new Author(aFirst, aLast), isbn, gen, pub, copyYear, dt);
                     l.Add(cb);
                 }
             }
