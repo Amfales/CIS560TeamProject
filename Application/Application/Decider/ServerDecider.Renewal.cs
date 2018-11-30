@@ -72,7 +72,7 @@ namespace ServerApplication.Decider
                 UpdateRenewalCommand(ref c, m, index);
                 c.ExecuteNonQuery();
                 int checkID = Convert.ToInt32(c.Parameters["@BookID"].Value);
-                DateTime dueDate = Convert.ToDateTime(c.Parameters["@NewDueDate"].Value);
+                DateTime dueDate = (DateTime)c.Parameters["@NewDueDate"].Value;
                 l.Add(new DueDateAssociation(checkID, dueDate));
                 index++;
             }   while (index < goal);

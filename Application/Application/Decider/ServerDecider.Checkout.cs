@@ -22,7 +22,6 @@ namespace ServerApplication.Decider
                 return;
             }
             int paySize = m.Payload.IDs.Count;
-            DateTime dt;
             List<DueDateAssociation> l;
             using (SqlConnection conn = new SqlConnection(_connection))
             {

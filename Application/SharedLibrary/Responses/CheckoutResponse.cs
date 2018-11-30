@@ -10,24 +10,18 @@ namespace SharedLibrary.Responses
     public class CheckoutResponse : Message<Checkout>
     {
         [JsonConstructor]
-        public CheckoutResponse(bool succ, List<DueDateAssociation> date)
+        public CheckoutResponse(bool success, List<DueDateAssociation> date)
         {
-            Payload = new Checkout(succ, date);
+            Payload = new Checkout(success, date);
         }
-
-        public CheckoutResponse(Message<Checkout> m)
-        {
-            Payload = new Checkout(m.Payload.Success, m.Payload.DueDate);
-        }
-        
 
         public new MessageType Type => MessageType.CheckoutResponse;
     }
 
     public class Checkout
     {
-        public bool Success { get; }
-        public List<DueDateAssociation> DueDate { get; }
+        public bool Success { get; private set; }
+        public List<DueDateAssociation> DueDate { get; private set; }
 
         public Checkout(bool success, List<DueDateAssociation> duedate)
         {
