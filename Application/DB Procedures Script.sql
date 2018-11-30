@@ -687,11 +687,13 @@ AS
 	DECLARE @UserID INT;
 	EXEC Proj.GetIDFromEmail @Email, @UserID OUTPUT;
 	
-	SELECT CO.BookID,BI.Title, A.FirstName AS AuthorFirstName, A.LastName AS AuthorLastName, BI.ISBN, BI.CopyrightYear, CO.CheckOutDate,CO.DueDate, CO.ReturnDate AS DateReturned
+	SELECT CO.BookID,BI.Title, A.FirstName AS AuthorFirstName, A.LastName AS AuthorLastName, BI.ISBN, BI.CopyrightYear, G.Descriptor AS Genre, CO.CheckOutDate,CO.DueDate, CO.ReturnDate AS DateReturned
 	FROM Book.CheckOut CO
 		INNER JOIN Book.Book B ON CO.BookID=B.BookID
 		INNER JOIN Book.BookInfo BI ON B.BookInfoID=BI.BookInfoID
 		INNER JOIN Book.Author A ON A.AuthorID=BI.AuthorID
+		INNER JOIN Book.BookGenre BG ON BG.BookInfoID=BI.BookInfoID
+		INNER JOIN Book.Genre G ON G.GenreID=BG.GenreID
 	WHERE CO.UserID=@UserID
 	ORDER BY CO.CheckOutDate ASC
 GO
