@@ -36,9 +36,11 @@ namespace ServerApplication
             c[0] = new Newtonsoft.Json.Converters.StringEnumConverter();
 
 
+            /*
             ws.Send(Newtonsoft.Json.JsonConvert.SerializeObject(
                 new LoginRequest("nehelgeson@ksu.edu", "31415926712345")
                 , c));
+                */
             /*
             string data = JsonConvert.SerializeObject(new SearchBookRequest("%", new Author("%", "%"), "%", "%", false), c);
             Console.WriteLine(data);
