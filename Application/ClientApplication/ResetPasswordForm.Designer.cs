@@ -102,8 +102,11 @@
             this.Controls.Add(this.uxEmailLabel);
             this.Controls.Add(this.uxPasswordTextbox);
             this.Controls.Add(this.uxEmailTextbox);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.MaximizeBox = false;
             this.Name = "ResetPasswordForm";
-            this.Text = "ResetPasswordForm";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+            this.Text = "Reset User Password";
             this.ResumeLayout(false);
             this.PerformLayout();
 

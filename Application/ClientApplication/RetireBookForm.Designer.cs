@@ -79,8 +79,11 @@
             this.Controls.Add(this.uxReturnButton);
             this.Controls.Add(this.uxBookIDBox);
             this.Controls.Add(this.uxBookIDLabel);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.MaximizeBox = false;
             this.Name = "RetireBookForm";
-            this.Text = "RetireBookForm";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+            this.Text = "Retire Book";
             this.ResumeLayout(false);
             this.PerformLayout();
 

@@ -46,7 +46,7 @@
             this.uxBookIDLabel.Location = new System.Drawing.Point(23, 28);
             this.uxBookIDLabel.Name = "uxBookIDLabel";
             this.uxBookIDLabel.Size = new System.Drawing.Size(49, 13);
-            this.uxBookIDLabel.TabIndex = 0;
+            this.uxBookIDLabel.TabIndex = 5;
             this.uxBookIDLabel.Text = "Book ID:";
             // 
             // uxBookIDBox
@@ -54,14 +54,15 @@
             this.uxBookIDBox.Location = new System.Drawing.Point(73, 24);
             this.uxBookIDBox.Name = "uxBookIDBox";
             this.uxBookIDBox.Size = new System.Drawing.Size(172, 20);
-            this.uxBookIDBox.TabIndex = 1;
+            this.uxBookIDBox.TabIndex = 0;
+            this.uxBookIDBox.KeyDown += new System.Windows.Forms.KeyEventHandler(this.uxBookIDBox_KeyDown);
             // 
             // uxAddButton
             // 
             this.uxAddButton.Location = new System.Drawing.Point(251, 23);
             this.uxAddButton.Name = "uxAddButton";
             this.uxAddButton.Size = new System.Drawing.Size(89, 23);
-            this.uxAddButton.TabIndex = 2;
+            this.uxAddButton.TabIndex = 1;
             this.uxAddButton.Text = "Add to Cart";
             this.uxAddButton.UseVisualStyleBackColor = true;
             this.uxAddButton.Click += new System.EventHandler(this.uxAddButton_Click);
@@ -71,7 +72,7 @@
             this.uxReturnButton.Location = new System.Drawing.Point(26, 253);
             this.uxReturnButton.Name = "uxReturnButton";
             this.uxReturnButton.Size = new System.Drawing.Size(68, 34);
-            this.uxReturnButton.TabIndex = 4;
+            this.uxReturnButton.TabIndex = 2;
             this.uxReturnButton.Text = "Return to Menu";
             this.uxReturnButton.UseVisualStyleBackColor = true;
             this.uxReturnButton.Click += new System.EventHandler(this.uxReturnButton_Click);
@@ -81,7 +82,7 @@
             this.uxCheckOutButton.Location = new System.Drawing.Point(221, 253);
             this.uxCheckOutButton.Name = "uxCheckOutButton";
             this.uxCheckOutButton.Size = new System.Drawing.Size(119, 34);
-            this.uxCheckOutButton.TabIndex = 5;
+            this.uxCheckOutButton.TabIndex = 4;
             this.uxCheckOutButton.Text = "Check Out";
             this.uxCheckOutButton.UseVisualStyleBackColor = true;
             this.uxCheckOutButton.Click += new System.EventHandler(this.uxCheckOutButton_Click);
@@ -121,7 +122,7 @@
             this.uxRemoveButton.Location = new System.Drawing.Point(100, 253);
             this.uxRemoveButton.Name = "uxRemoveButton";
             this.uxRemoveButton.Size = new System.Drawing.Size(115, 34);
-            this.uxRemoveButton.TabIndex = 7;
+            this.uxRemoveButton.TabIndex = 3;
             this.uxRemoveButton.Text = "Remove Selected Book";
             this.uxRemoveButton.UseVisualStyleBackColor = true;
             this.uxRemoveButton.Click += new System.EventHandler(this.uxRemoveButton_Click);
@@ -138,8 +139,11 @@
             this.Controls.Add(this.uxAddButton);
             this.Controls.Add(this.uxBookIDBox);
             this.Controls.Add(this.uxBookIDLabel);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.MaximizeBox = false;
             this.Name = "CheckOutForm";
-            this.Text = "CheckOutForm";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+            this.Text = "Check Out Books";
             this.ResumeLayout(false);
             this.PerformLayout();
 

@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             this.uxButtonPanel = new System.Windows.Forms.Panel();
+            this.uxCreatePatronButton = new System.Windows.Forms.Button();
             this.uxReturnBooksButton = new System.Windows.Forms.Button();
             this.uxUpdateBookButton = new System.Windows.Forms.Button();
             this.uxRetireBookButton = new System.Windows.Forms.Button();
@@ -39,7 +40,6 @@
             this.uxViewBooksButton = new System.Windows.Forms.Button();
             this.uxWelcomeLabel = new System.Windows.Forms.Label();
             this.uxLogOutButton = new System.Windows.Forms.Button();
-            this.uxCreatePatronButton = new System.Windows.Forms.Button();
             this.uxButtonPanel.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -58,6 +58,16 @@
             this.uxButtonPanel.Name = "uxButtonPanel";
             this.uxButtonPanel.Size = new System.Drawing.Size(390, 198);
             this.uxButtonPanel.TabIndex = 4;
+            // 
+            // uxCreatePatronButton
+            // 
+            this.uxCreatePatronButton.Location = new System.Drawing.Point(17, 16);
+            this.uxCreatePatronButton.Name = "uxCreatePatronButton";
+            this.uxCreatePatronButton.Size = new System.Drawing.Size(66, 76);
+            this.uxCreatePatronButton.TabIndex = 8;
+            this.uxCreatePatronButton.Text = "Create User Account";
+            this.uxCreatePatronButton.UseVisualStyleBackColor = true;
+            this.uxCreatePatronButton.Click += new System.EventHandler(this.uxCreatePatronButton_Click);
             // 
             // uxReturnBooksButton
             // 
@@ -159,16 +169,6 @@
             this.uxLogOutButton.UseVisualStyleBackColor = true;
             this.uxLogOutButton.Click += new System.EventHandler(this.uxLogOutButton_Click);
             // 
-            // uxCreatePatronButton
-            // 
-            this.uxCreatePatronButton.Location = new System.Drawing.Point(17, 16);
-            this.uxCreatePatronButton.Name = "uxCreatePatronButton";
-            this.uxCreatePatronButton.Size = new System.Drawing.Size(66, 76);
-            this.uxCreatePatronButton.TabIndex = 8;
-            this.uxCreatePatronButton.Text = "Create User Account";
-            this.uxCreatePatronButton.UseVisualStyleBackColor = true;
-            this.uxCreatePatronButton.Click += new System.EventHandler(this.uxCreatePatronButton_Click);
-            // 
             // AdminMainMenuForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -177,8 +177,9 @@
             this.Controls.Add(this.uxButtonPanel);
             this.Controls.Add(this.uxWelcomeLabel);
             this.Controls.Add(this.uxLogOutButton);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Name = "AdminMainMenuForm";
-            this.Text = "AdminMainMenuForm";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.uxButtonPanel.ResumeLayout(false);
             this.ResumeLayout(false);
 

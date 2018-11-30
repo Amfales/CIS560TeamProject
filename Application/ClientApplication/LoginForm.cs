@@ -23,6 +23,7 @@ namespace ClientApplication
             BackColor = Color.SteelBlue;
             uxEmailTextbox.BackColor = Color.LightSteelBlue;
             uxPasswordTextbox.BackColor = Color.LightSteelBlue;
+            uxEmailTextbox.Focus();
         }
 
         private void uxLoginButton_Click(object sender, EventArgs e)
@@ -43,6 +44,14 @@ namespace ClientApplication
         protected override void OnFormClosing(FormClosingEventArgs e)
         {
             Application.Exit();
+        }
+
+        private void uxPasswordTextbox_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                uxLoginButton_Click(this, e);
+            }
         }
     }
 }

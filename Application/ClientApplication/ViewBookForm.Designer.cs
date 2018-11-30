@@ -29,6 +29,8 @@
         private void InitializeComponent()
         {
             this.uxQueryPanel = new System.Windows.Forms.Panel();
+            this.uxAuthorLastBox = new System.Windows.Forms.TextBox();
+            this.uxAuthorFirstBox = new System.Windows.Forms.TextBox();
             this.uxGenreBox = new System.Windows.Forms.ComboBox();
             this.uxISBNBox = new System.Windows.Forms.TextBox();
             this.uxTitleBox = new System.Windows.Forms.TextBox();
@@ -43,8 +45,6 @@
             this.Author = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.Genre = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.ISBN = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.uxAuthorLastBox = new System.Windows.Forms.TextBox();
-            this.uxAuthorFirstBox = new System.Windows.Forms.TextBox();
             this.uxQueryPanel.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -62,7 +62,25 @@
             this.uxQueryPanel.Location = new System.Drawing.Point(12, 12);
             this.uxQueryPanel.Name = "uxQueryPanel";
             this.uxQueryPanel.Size = new System.Drawing.Size(435, 101);
-            this.uxQueryPanel.TabIndex = 2;
+            this.uxQueryPanel.TabIndex = 0;
+            // 
+            // uxAuthorLastBox
+            // 
+            this.uxAuthorLastBox.Location = new System.Drawing.Point(323, 16);
+            this.uxAuthorLastBox.Name = "uxAuthorLastBox";
+            this.uxAuthorLastBox.Size = new System.Drawing.Size(87, 20);
+            this.uxAuthorLastBox.TabIndex = 2;
+            this.uxAuthorLastBox.Text = "Last";
+            this.uxAuthorLastBox.Enter += new System.EventHandler(this.uxAuthorLastBox_Enter);
+            // 
+            // uxAuthorFirstBox
+            // 
+            this.uxAuthorFirstBox.Location = new System.Drawing.Point(259, 16);
+            this.uxAuthorFirstBox.Name = "uxAuthorFirstBox";
+            this.uxAuthorFirstBox.Size = new System.Drawing.Size(58, 20);
+            this.uxAuthorFirstBox.TabIndex = 1;
+            this.uxAuthorFirstBox.Text = "First";
+            this.uxAuthorFirstBox.Enter += new System.EventHandler(this.uxAuthorFirstBox_Enter);
             // 
             // uxGenreBox
             // 
@@ -70,21 +88,21 @@
             this.uxGenreBox.Location = new System.Drawing.Point(55, 62);
             this.uxGenreBox.Name = "uxGenreBox";
             this.uxGenreBox.Size = new System.Drawing.Size(141, 21);
-            this.uxGenreBox.TabIndex = 7;
+            this.uxGenreBox.TabIndex = 3;
             // 
             // uxISBNBox
             // 
             this.uxISBNBox.Location = new System.Drawing.Point(259, 63);
             this.uxISBNBox.Name = "uxISBNBox";
             this.uxISBNBox.Size = new System.Drawing.Size(151, 20);
-            this.uxISBNBox.TabIndex = 6;
+            this.uxISBNBox.TabIndex = 4;
             // 
             // uxTitleBox
             // 
             this.uxTitleBox.Location = new System.Drawing.Point(55, 16);
             this.uxTitleBox.Name = "uxTitleBox";
             this.uxTitleBox.Size = new System.Drawing.Size(141, 20);
-            this.uxTitleBox.TabIndex = 4;
+            this.uxTitleBox.TabIndex = 0;
             // 
             // uxISBNLabel
             // 
@@ -119,7 +137,7 @@
             this.uxTitleLabel.Location = new System.Drawing.Point(23, 19);
             this.uxTitleLabel.Name = "uxTitleLabel";
             this.uxTitleLabel.Size = new System.Drawing.Size(30, 13);
-            this.uxTitleLabel.TabIndex = 0;
+            this.uxTitleLabel.TabIndex = 8;
             this.uxTitleLabel.Text = "Title:";
             // 
             // uxReturnButton
@@ -127,7 +145,7 @@
             this.uxReturnButton.Location = new System.Drawing.Point(12, 349);
             this.uxReturnButton.Name = "uxReturnButton";
             this.uxReturnButton.Size = new System.Drawing.Size(92, 23);
-            this.uxReturnButton.TabIndex = 4;
+            this.uxReturnButton.TabIndex = 2;
             this.uxReturnButton.Text = "Return to Menu";
             this.uxReturnButton.UseVisualStyleBackColor = true;
             this.uxReturnButton.Click += new System.EventHandler(this.uxReturnButton_Click);
@@ -137,7 +155,7 @@
             this.uxSearchButton.Location = new System.Drawing.Point(190, 119);
             this.uxSearchButton.Name = "uxSearchButton";
             this.uxSearchButton.Size = new System.Drawing.Size(75, 32);
-            this.uxSearchButton.TabIndex = 8;
+            this.uxSearchButton.TabIndex = 1;
             this.uxSearchButton.Text = "Search";
             this.uxSearchButton.UseVisualStyleBackColor = true;
             this.uxSearchButton.Click += new System.EventHandler(this.uxSearchButton_Click);
@@ -160,38 +178,22 @@
             // Title
             // 
             this.Title.Text = "Title";
-            this.Title.Width = 140;
+            this.Title.Width = 180;
             // 
             // Author
             // 
             this.Author.Text = "Author";
-            this.Author.Width = 100;
+            this.Author.Width = 80;
             // 
             // Genre
             // 
             this.Genre.Text = "Genre";
-            this.Genre.Width = 100;
+            this.Genre.Width = 80;
             // 
             // ISBN
             // 
             this.ISBN.Text = "ISBN";
             this.ISBN.Width = 90;
-            // 
-            // uxAuthorLastBox
-            // 
-            this.uxAuthorLastBox.Location = new System.Drawing.Point(323, 16);
-            this.uxAuthorLastBox.Name = "uxAuthorLastBox";
-            this.uxAuthorLastBox.Size = new System.Drawing.Size(87, 20);
-            this.uxAuthorLastBox.TabIndex = 15;
-            this.uxAuthorLastBox.Text = "Last";
-            // 
-            // uxAuthorFirstBox
-            // 
-            this.uxAuthorFirstBox.Location = new System.Drawing.Point(259, 16);
-            this.uxAuthorFirstBox.Name = "uxAuthorFirstBox";
-            this.uxAuthorFirstBox.Size = new System.Drawing.Size(58, 20);
-            this.uxAuthorFirstBox.TabIndex = 14;
-            this.uxAuthorFirstBox.Text = "First";
             // 
             // ViewBookForm
             // 
@@ -202,8 +204,11 @@
             this.Controls.Add(this.uxSearchButton);
             this.Controls.Add(this.uxReturnButton);
             this.Controls.Add(this.uxQueryPanel);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.MaximizeBox = false;
             this.Name = "ViewBookForm";
-            this.Text = "ViewBookForm";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+            this.Text = "View Books";
             this.uxQueryPanel.ResumeLayout(false);
             this.uxQueryPanel.PerformLayout();
             this.ResumeLayout(false);

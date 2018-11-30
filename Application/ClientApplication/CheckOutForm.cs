@@ -103,5 +103,13 @@ namespace ClientApplication
                 uxBookList.Items.Remove(uxBookList.SelectedItems[0]);
             }
         }
+
+        private void uxBookIDBox_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                uxAddButton_Click(this, e);
+            }
+        }
     }
 }

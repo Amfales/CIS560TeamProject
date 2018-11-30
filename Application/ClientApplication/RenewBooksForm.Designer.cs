@@ -101,8 +101,11 @@
             this.Controls.Add(this.uxRenewButton);
             this.Controls.Add(this.uxReturnButton);
             this.Controls.Add(this.uxBookList);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.MaximizeBox = false;
             this.Name = "RenewBooksForm";
-            this.Text = "RenewBooksForm";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+            this.Text = "Renew Books";
             this.ResumeLayout(false);
 
         }

@@ -44,7 +44,7 @@
             this.uxTitleLabel.Name = "uxTitleLabel";
             this.uxTitleLabel.Size = new System.Drawing.Size(274, 58);
             this.uxTitleLabel.TabIndex = 0;
-            this.uxTitleLabel.Text = "Egg-Laying Full-Milk\r\n   Pig Libraries LLC.";
+            this.uxTitleLabel.Text = "Egg-Laying Full-Milk\r\n        Pig Libraries\r\n";
             // 
             // uxEmailTextbox
             // 
@@ -60,6 +60,7 @@
             this.uxPasswordTextbox.PasswordChar = '•';
             this.uxPasswordTextbox.Size = new System.Drawing.Size(162, 20);
             this.uxPasswordTextbox.TabIndex = 2;
+            this.uxPasswordTextbox.KeyDown += new System.Windows.Forms.KeyEventHandler(this.uxPasswordTextbox_KeyDown);
             // 
             // uxEmailLabel
             // 
@@ -105,6 +106,7 @@
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.MaximizeBox = false;
             this.Name = "LoginForm";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Login";
             this.ResumeLayout(false);
             this.PerformLayout();

@@ -138,8 +138,11 @@
             this.Controls.Add(this.uxBookIDBox);
             this.Controls.Add(this.uxBookIDLabel);
             this.Controls.Add(this.uxRemoveButton);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.MaximizeBox = false;
             this.Name = "ReturnBooksForm";
-            this.Text = "ReturnBooksForm";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+            this.Text = "Return Books";
             this.ResumeLayout(false);
             this.PerformLayout();
 

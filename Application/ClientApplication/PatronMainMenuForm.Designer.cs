@@ -108,6 +108,7 @@
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.MaximizeBox = false;
             this.Name = "PatronMainMenuForm";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.uxButtonPanel.ResumeLayout(false);
             this.ResumeLayout(false);
 

@@ -47,7 +47,7 @@
             this.uxCreateButton.Location = new System.Drawing.Point(116, 171);
             this.uxCreateButton.Name = "uxCreateButton";
             this.uxCreateButton.Size = new System.Drawing.Size(205, 34);
-            this.uxCreateButton.TabIndex = 24;
+            this.uxCreateButton.TabIndex = 5;
             this.uxCreateButton.Text = "Create User Account";
             this.uxCreateButton.UseVisualStyleBackColor = true;
             this.uxCreateButton.Click += new System.EventHandler(this.uxUpdateButton_Click);
@@ -57,7 +57,7 @@
             this.uxReturnButton.Location = new System.Drawing.Point(36, 171);
             this.uxReturnButton.Name = "uxReturnButton";
             this.uxReturnButton.Size = new System.Drawing.Size(74, 34);
-            this.uxReturnButton.TabIndex = 23;
+            this.uxReturnButton.TabIndex = 6;
             this.uxReturnButton.Text = "Return to Menu";
             this.uxReturnButton.UseVisualStyleBackColor = true;
             this.uxReturnButton.Click += new System.EventHandler(this.uxReturnButton_Click);
@@ -88,14 +88,14 @@
             this.uxPasswordTextbox.Name = "uxPasswordTextbox";
             this.uxPasswordTextbox.PasswordChar = '•';
             this.uxPasswordTextbox.Size = new System.Drawing.Size(204, 20);
-            this.uxPasswordTextbox.TabIndex = 20;
+            this.uxPasswordTextbox.TabIndex = 3;
             // 
             // uxEmailTextbox
             // 
             this.uxEmailTextbox.Location = new System.Drawing.Point(117, 72);
             this.uxEmailTextbox.Name = "uxEmailTextbox";
             this.uxEmailTextbox.Size = new System.Drawing.Size(204, 20);
-            this.uxEmailTextbox.TabIndex = 19;
+            this.uxEmailTextbox.TabIndex = 2;
             // 
             // uxLastNameLabel
             // 
@@ -121,16 +121,15 @@
             // 
             this.uxLastNameBox.Location = new System.Drawing.Point(117, 43);
             this.uxLastNameBox.Name = "uxLastNameBox";
-            this.uxLastNameBox.PasswordChar = '•';
             this.uxLastNameBox.Size = new System.Drawing.Size(204, 20);
-            this.uxLastNameBox.TabIndex = 26;
+            this.uxLastNameBox.TabIndex = 1;
             // 
             // uxFirstNameBox
             // 
             this.uxFirstNameBox.Location = new System.Drawing.Point(117, 12);
             this.uxFirstNameBox.Name = "uxFirstNameBox";
             this.uxFirstNameBox.Size = new System.Drawing.Size(204, 20);
-            this.uxFirstNameBox.TabIndex = 25;
+            this.uxFirstNameBox.TabIndex = 0;
             // 
             // uxTypeLabel
             // 
@@ -151,7 +150,8 @@
             this.uxUserTypeBox.Location = new System.Drawing.Point(116, 132);
             this.uxUserTypeBox.Name = "uxUserTypeBox";
             this.uxUserTypeBox.Size = new System.Drawing.Size(205, 21);
-            this.uxUserTypeBox.TabIndex = 31;
+            this.uxUserTypeBox.TabIndex = 4;
+            this.uxUserTypeBox.KeyDown += new System.Windows.Forms.KeyEventHandler(this.uxUserTypeBox_KeyDown);
             // 
             // CreateAccountForm
             // 
@@ -170,8 +170,11 @@
             this.Controls.Add(this.uxEmailLabel);
             this.Controls.Add(this.uxPasswordTextbox);
             this.Controls.Add(this.uxEmailTextbox);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.MaximizeBox = false;
             this.Name = "CreateAccountForm";
-            this.Text = "CreateAccountForm";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+            this.Text = "Create User Account";
             this.ResumeLayout(false);
             this.PerformLayout();
 

@@ -38,11 +38,11 @@ namespace SharedLibrary.Responses
     public class DueDateAssociation
     {
         public int BookID { get; }
-        public DateTime DueDate { get; }
+        public DateTime Date { get; }
         public DueDateAssociation(int id, DateTime d)
         {
             BookID = id;
-            DueDate = d;
+            Date = d;
         }
     }
 

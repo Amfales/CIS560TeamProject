@@ -57,7 +57,6 @@ namespace ClientApplication
         string getBookSource;
         string userEmail;
         PermissionLevel userPermissionLevel;
-        Dictionary<string, bool> flags;
 
         public FormController()
         {
@@ -468,7 +467,7 @@ namespace ClientApplication
         {
             checkOut.Invoke(new Action(() =>
             {
-                checkOut.HandleCheckOutResponse(response.Payload.Success, response.Payload.DueDate[0].DueDate);
+                checkOut.HandleCheckOutResponse(response.Payload.Success, response.Payload.DueDate[0].Date);
             }));
         }
 

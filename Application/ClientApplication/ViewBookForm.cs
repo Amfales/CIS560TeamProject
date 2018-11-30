@@ -73,8 +73,18 @@ namespace ClientApplication
         {
             foreach (BookInfo book in books)
             {
-                uxBookList.Items.Add(new ListViewItem(new string[] { book.Name, book.Author.FirstName, book.Author.LastName, book.Genre, book.ISBN }));
+                uxBookList.Items.Add(new ListViewItem(new string[] { book.Name, book.Author.LastName, book.Genre, book.ISBN }));
             }
+        }
+
+        private void uxAuthorFirstBox_Enter(object sender, EventArgs e)
+        {
+            if (uxAuthorFirstBox.Text == "First") { uxAuthorFirstBox.Text = ""; }
+        }
+
+        private void uxAuthorLastBox_Enter(object sender, EventArgs e)
+        {
+            if (uxAuthorLastBox.Text == "Last") { uxAuthorLastBox.Text = ""; }
         }
     }
 }

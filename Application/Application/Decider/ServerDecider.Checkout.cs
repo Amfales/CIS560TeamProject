@@ -78,8 +78,7 @@ namespace ServerApplication.Decider
             }
             c.ExecuteNonQuery(); //On the last one, grab the return date.
             _logger(c.Parameters["@DueDate"].Value.ToString());
-            DateTime returnDate = DateTime.Parse(
-                c.Parameters["@DueDate"].Value.ToString()); //?????????????????
+            DateTime returnDate = (DateTime)c.Parameters["@DueDate"].Value; //?????????????????
             for(int i = 0; i < paySize; i++)
             {
                 l.Add(new DueDateAssociation(m.Payload.IDs[i], returnDate));

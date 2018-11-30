@@ -76,5 +76,13 @@ namespace ClientApplication
             uxUserTypeBox.Text = "";
             handleReturnToMenu(this);
         }
+
+        private void uxUserTypeBox_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                uxUpdateButton_Click(this, e);
+            }
+        }
     }
 }

@@ -29,6 +29,11 @@
         private void InitializeComponent()
         {
             this.uxInfoPanel = new System.Windows.Forms.Panel();
+            this.uxAuthorLastBox = new System.Windows.Forms.TextBox();
+            this.uxISBNBox = new System.Windows.Forms.TextBox();
+            this.uxPublisherBox = new System.Windows.Forms.TextBox();
+            this.uxISBNLabel = new System.Windows.Forms.Label();
+            this.uxPublisherLabel = new System.Windows.Forms.Label();
             this.uxGenreBox = new System.Windows.Forms.ComboBox();
             this.uxCopyrightBox = new System.Windows.Forms.TextBox();
             this.uxAuthorFirstBox = new System.Windows.Forms.TextBox();
@@ -39,11 +44,6 @@
             this.uxTitleLabel = new System.Windows.Forms.Label();
             this.uxAddBook = new System.Windows.Forms.Button();
             this.uxReturnButton = new System.Windows.Forms.Button();
-            this.uxISBNBox = new System.Windows.Forms.TextBox();
-            this.uxPublisherBox = new System.Windows.Forms.TextBox();
-            this.uxISBNLabel = new System.Windows.Forms.Label();
-            this.uxPublisherLabel = new System.Windows.Forms.Label();
-            this.uxAuthorLastBox = new System.Windows.Forms.TextBox();
             this.uxClearButton = new System.Windows.Forms.Button();
             this.uxInfoPanel.SuspendLayout();
             this.SuspendLayout();
@@ -68,35 +68,73 @@
             this.uxInfoPanel.Size = new System.Drawing.Size(697, 101);
             this.uxInfoPanel.TabIndex = 3;
             // 
+            // uxAuthorLastBox
+            // 
+            this.uxAuthorLastBox.Location = new System.Drawing.Point(355, 16);
+            this.uxAuthorLastBox.Name = "uxAuthorLastBox";
+            this.uxAuthorLastBox.Size = new System.Drawing.Size(87, 20);
+            this.uxAuthorLastBox.TabIndex = 2;
+            // 
+            // uxISBNBox
+            // 
+            this.uxISBNBox.Location = new System.Drawing.Point(515, 62);
+            this.uxISBNBox.Name = "uxISBNBox";
+            this.uxISBNBox.Size = new System.Drawing.Size(151, 20);
+            this.uxISBNBox.TabIndex = 6;
+            // 
+            // uxPublisherBox
+            // 
+            this.uxPublisherBox.Location = new System.Drawing.Point(515, 16);
+            this.uxPublisherBox.Name = "uxPublisherBox";
+            this.uxPublisherBox.Size = new System.Drawing.Size(151, 20);
+            this.uxPublisherBox.TabIndex = 3;
+            // 
+            // uxISBNLabel
+            // 
+            this.uxISBNLabel.AutoSize = true;
+            this.uxISBNLabel.Location = new System.Drawing.Point(478, 66);
+            this.uxISBNLabel.Name = "uxISBNLabel";
+            this.uxISBNLabel.Size = new System.Drawing.Size(35, 13);
+            this.uxISBNLabel.TabIndex = 9;
+            this.uxISBNLabel.Text = "ISBN:";
+            // 
+            // uxPublisherLabel
+            // 
+            this.uxPublisherLabel.AutoSize = true;
+            this.uxPublisherLabel.Location = new System.Drawing.Point(460, 19);
+            this.uxPublisherLabel.Name = "uxPublisherLabel";
+            this.uxPublisherLabel.Size = new System.Drawing.Size(56, 13);
+            this.uxPublisherLabel.TabIndex = 8;
+            this.uxPublisherLabel.Text = "Publisher: ";
+            // 
             // uxGenreBox
             // 
             this.uxGenreBox.FormattingEnabled = true;
             this.uxGenreBox.Location = new System.Drawing.Point(55, 62);
             this.uxGenreBox.Name = "uxGenreBox";
             this.uxGenreBox.Size = new System.Drawing.Size(141, 21);
-            this.uxGenreBox.TabIndex = 7;
+            this.uxGenreBox.TabIndex = 4;
             // 
             // uxCopyrightBox
             // 
             this.uxCopyrightBox.Location = new System.Drawing.Point(291, 62);
             this.uxCopyrightBox.Name = "uxCopyrightBox";
             this.uxCopyrightBox.Size = new System.Drawing.Size(151, 20);
-            this.uxCopyrightBox.TabIndex = 6;
+            this.uxCopyrightBox.TabIndex = 5;
             // 
             // uxAuthorFirstBox
             // 
             this.uxAuthorFirstBox.Location = new System.Drawing.Point(291, 16);
             this.uxAuthorFirstBox.Name = "uxAuthorFirstBox";
             this.uxAuthorFirstBox.Size = new System.Drawing.Size(58, 20);
-            this.uxAuthorFirstBox.TabIndex = 5;
-            this.uxAuthorFirstBox.Text = "First";
+            this.uxAuthorFirstBox.TabIndex = 1;
             // 
             // uxTitleBox
             // 
             this.uxTitleBox.Location = new System.Drawing.Point(55, 16);
             this.uxTitleBox.Name = "uxTitleBox";
             this.uxTitleBox.Size = new System.Drawing.Size(141, 20);
-            this.uxTitleBox.TabIndex = 4;
+            this.uxTitleBox.TabIndex = 0;
             // 
             // uxCopyrightLabel
             // 
@@ -154,46 +192,6 @@
             this.uxReturnButton.UseVisualStyleBackColor = true;
             this.uxReturnButton.Click += new System.EventHandler(this.uxReturnButton_Click);
             // 
-            // uxISBNBox
-            // 
-            this.uxISBNBox.Location = new System.Drawing.Point(515, 62);
-            this.uxISBNBox.Name = "uxISBNBox";
-            this.uxISBNBox.Size = new System.Drawing.Size(151, 20);
-            this.uxISBNBox.TabIndex = 11;
-            // 
-            // uxPublisherBox
-            // 
-            this.uxPublisherBox.Location = new System.Drawing.Point(515, 16);
-            this.uxPublisherBox.Name = "uxPublisherBox";
-            this.uxPublisherBox.Size = new System.Drawing.Size(151, 20);
-            this.uxPublisherBox.TabIndex = 10;
-            // 
-            // uxISBNLabel
-            // 
-            this.uxISBNLabel.AutoSize = true;
-            this.uxISBNLabel.Location = new System.Drawing.Point(478, 66);
-            this.uxISBNLabel.Name = "uxISBNLabel";
-            this.uxISBNLabel.Size = new System.Drawing.Size(35, 13);
-            this.uxISBNLabel.TabIndex = 9;
-            this.uxISBNLabel.Text = "ISBN:";
-            // 
-            // uxPublisherLabel
-            // 
-            this.uxPublisherLabel.AutoSize = true;
-            this.uxPublisherLabel.Location = new System.Drawing.Point(460, 19);
-            this.uxPublisherLabel.Name = "uxPublisherLabel";
-            this.uxPublisherLabel.Size = new System.Drawing.Size(56, 13);
-            this.uxPublisherLabel.TabIndex = 8;
-            this.uxPublisherLabel.Text = "Publisher: ";
-            // 
-            // uxAuthorLastBox
-            // 
-            this.uxAuthorLastBox.Location = new System.Drawing.Point(355, 16);
-            this.uxAuthorLastBox.Name = "uxAuthorLastBox";
-            this.uxAuthorLastBox.Size = new System.Drawing.Size(87, 20);
-            this.uxAuthorLastBox.TabIndex = 12;
-            this.uxAuthorLastBox.Text = "Last";
-            // 
             // uxClearButton
             // 
             this.uxClearButton.Location = new System.Drawing.Point(178, 119);
@@ -213,8 +211,10 @@
             this.Controls.Add(this.uxAddBook);
             this.Controls.Add(this.uxReturnButton);
             this.Controls.Add(this.uxInfoPanel);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Name = "AddBookForm";
-            this.Text = "AddBookForm";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+            this.Text = "Add Book";
             this.uxInfoPanel.ResumeLayout(false);
             this.uxInfoPanel.PerformLayout();
             this.ResumeLayout(false);

@@ -105,8 +105,11 @@
             this.Controls.Add(this.uxReturnButton);
             this.Controls.Add(this.uxBookIDBox);
             this.Controls.Add(this.uxBookIDLabel);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.MaximizeBox = false;
             this.Name = "UpdateConditionForm";
-            this.Text = "UpdateConditionForm";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+            this.Text = "Update Book Condition";
             this.ResumeLayout(false);
             this.PerformLayout();
 

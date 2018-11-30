@@ -19,8 +19,7 @@ namespace SharedLibrary.Responses
         {
             Payload = new Checkout(m.Payload.Success, m.Payload.DueDate);
         }
-
-        public CheckoutResponse() : this(false, null) { }
+        
 
         public new MessageType Type => MessageType.CheckoutResponse;
     }
