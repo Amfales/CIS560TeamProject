@@ -777,6 +777,9 @@ AS
 		OFFSET ((@SearchPage-1)*@RowsPerPage) ROWS FETCH NEXT @RowsPerPage ROWS ONLY;
 GO
 
+--Report type query
+--This procedure gets all users paired with the number of times they've checked a book out.
+--It also gives them a ranking based on how many times they've checked something out.
 CREATE OR ALTER PROCEDURE Proj.AllUsersNumTimesCheckedOut
 
 AS
@@ -787,9 +790,9 @@ AS
 				WHERE CO.UserID=U.UserID
 		   ) AS NumberBooksCheckedOut,
 		   RANK() OVER(ORDER BY (
-									SELECT COUNT(CO.CheckOutID)
-									FROM Book.CheckOut CO
-									WHERE CO.UserID=U.UserID) DESC
+								SELECT COUNT(CO.CheckOutID)
+								FROM Book.CheckOut CO
+								WHERE CO.UserID=U.UserID) DESC
 			) AS CheckOutRanking
 	FROM Proj."User" U
 	ORDER BY CheckOutRanking
@@ -800,17 +803,19 @@ GO
 CREATE OR ALTER PROCEDURE Book.GetAllBookInfosWithCheckOutCount
 
 AS
-	SELECT BI.Title, A.FirstName AS AuthorFirstName, A.LastName AS AuthorLastName, BI.ISBN, BI.Copyrightyear, P."Name" AS PublisherName, G.Descriptor AS Genre,
-			(
+	SELECT BI.Title, A.FirstName AS AuthorFirstName, A.LastName AS AuthorLastName, BI.ISBN,
+			COALESCE((
 				SELECT COUNT(CO.CheckOutID)
 				FROM Book.CheckOut CO
-				GROUP BY CO.BookID
-			) AS NumTimesCheckedOut,
+				INNER JOIN Book.Book BB ON CO.BookID=BB.BookID
+				WHERE BB.BookInfoID=BI.BookInfoID
+			),0) AS NumTimesCheckedOut,
 			RANK() OVER(ORDER BY (
 									SELECT COUNT(CO.CheckOutID)
 									FROM Book.CheckOut CO
-									INNER JOIN Book.Book B ON CO.BookID=B.BookID
-									WHERE B.BookInfoID=BI.BookInfoID) DESC
+									INNER JOIN Book.Book BB ON CO.BookID=BB.BookID
+									WHERE BB.BookInfoID=BI.BookInfoID
+									) DESC
 			) AS Ranking
 			
 		FROM (Book.BookInfo BI

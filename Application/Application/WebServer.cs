@@ -25,7 +25,8 @@ namespace ServerApplication
         {
             _serv = new WebSocketServer(add, port);
             _servDecider = new ServerDecider(Console.WriteLine);
-            _serv.AddWebSocketService<ServerBehavior>("/library", InitializeService);
+            //_serv.AddWebSocketService<ServerBehavior>("/library", InitializeService);
+            _serv.AddWebSocketService<TestBehavior>("/library", () => new TestBehavior(Console.WriteLine));
         }
         public WebServer(int port) : this(localHost, port) { }
 
