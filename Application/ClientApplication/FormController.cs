@@ -385,7 +385,7 @@ namespace ClientApplication
         /// <returns></returns>
         List<string> HandleGenreRequest()
         {
-            return new List<string> { "Mystery", "Fantasy", "Nonfiction" };
+            return new List<string> { "Action and Adventure", "Anthology", "Art", "Autobiographies", "Biographies", "Children's", "Comics", "Cookbooks", "Diaries", "Dictionaries", "Drama", "Encyclopedias", "Fantasy", "Guide", "Health", "History", "Horror", "Journals", "Math", "Mystery", "Poetry", "Prayer books", "Romance", "Science", "Self help", "Series", "Travel", "Trilogy" };
         }
 
         /// <summary>
