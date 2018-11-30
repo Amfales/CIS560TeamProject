@@ -35,6 +35,8 @@ namespace ServerApplication.Decider
 
                     comm.ExecuteNonQuery();
 
+                    trans.Commit();
+
                     _logger("Successfully added book.");
                     send(new AddBookResponse(true));
                 }
@@ -79,6 +81,10 @@ namespace ServerApplication.Decider
             copyrightYear.Direction = System.Data.ParameterDirection.Input;
             copyrightYear.Value = m.Payload.Book.CopyrightYear;
 
+            SqlParameter bookID = new SqlParameter("@BookID", System.Data.SqlDbType.Int);
+            bookID.Direction = System.Data.ParameterDirection.Output;
+
+
             c.Parameters.Add(title);
             c.Parameters.Add(firstName);
             c.Parameters.Add(lastName);
@@ -86,6 +92,7 @@ namespace ServerApplication.Decider
             c.Parameters.Add(genre);
             c.Parameters.Add(ISBN);
             c.Parameters.Add(copyrightYear);
+            c.Parameters.Add(bookID);
         }
     }
 }

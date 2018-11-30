@@ -30,7 +30,7 @@ namespace ServerApplication
             server.Start();
             
             //ws.OnMessage += (sender, e) => { Console.WriteLine(e.Data); };
-            ws.Connect();
+            //ws.Connect();
 
             JsonConverter[] c = new JsonConverter[1];
             c[0] = new Newtonsoft.Json.Converters.StringEnumConverter();
@@ -47,10 +47,11 @@ namespace ServerApplication
             */
 
 
-
+            /*
             ws.Send(Newtonsoft.Json.JsonConvert.SerializeObject(
                 new SearchBookRequest("%", new Author("%", "%"), "%", "%", false)
                 , c));
+                */
                 
 
             while (true)

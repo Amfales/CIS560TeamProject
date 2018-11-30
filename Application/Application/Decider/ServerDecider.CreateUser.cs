@@ -34,6 +34,8 @@ namespace ServerApplication.Decider
 
                     comm.ExecuteNonQuery();
 
+                    trans.Commit();
+
                     _logger("Successfully created " + m.Payload.FirstName + " " + m.Payload.LastName + "'s user.");
                     send(new CreateUserResponse(true));
                 }

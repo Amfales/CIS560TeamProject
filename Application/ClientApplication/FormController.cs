@@ -207,7 +207,7 @@ namespace ClientApplication
                         }
 
                         // Show and set the patron main menu
-                        patronMainMenu.Invoke(new Action(() =>
+                        login.Invoke(new Action(() =>
                         {
                            patronMainMenu.Show();
                            patronMainMenu.Controls.Find("uxWelcomeLabel", false)[0].Text = "Welcome, " + firstName;
@@ -230,9 +230,12 @@ namespace ClientApplication
                             }
                         }));
                         // Show and set the admin main menu
-                        
-                        adminMainMenu.Show();
-                        adminMainMenu.Controls.Find("uxWelcomeLabel", false)[0].Text = "Welcome, " + firstName;
+
+                        login.Invoke(new Action(() =>
+                       {
+                           adminMainMenu.Show();
+                           adminMainMenu.Controls.Find("uxWelcomeLabel", false)[0].Text = "Welcome, " + firstName;
+                       }));
                         
                         break;
                 }
@@ -409,7 +412,10 @@ namespace ClientApplication
 
         void HandleSearchBooksResponse(SearchBookInfoResponse response)
         {
-            viewBooks.ParseResults(new List<BookInfo>(response.Payload));
+            viewBooks.Invoke(new Action(() =>
+           {
+               viewBooks.ParseResults(new List<BookInfo>(response.Payload));
+           }));
         }
 
         /// <summary>
@@ -425,8 +431,20 @@ namespace ClientApplication
 
         void HandleAddToBookListResponse(GetBookResponse response)
         {
-            if (getBookSource == "return") { returnBooks.HandleAddToBookListResponse(response.Payload); }
-            if (getBookSource == "checkout") { checkOut.HandleAddToCartResponse(response.Payload); }
+            if (getBookSource == "return")
+            {
+                returnBooks.Invoke(new Action(() =>
+               {
+                   returnBooks.HandleAddToBookListResponse(response.Payload);
+               }));
+            }
+            if (getBookSource == "checkout")
+            {
+                checkOut.Invoke(new Action(() =>
+                {
+                    checkOut.HandleAddToCartResponse(response.Payload);
+                }));
+            }
         }
 
         /// <summary>
@@ -441,7 +459,10 @@ namespace ClientApplication
 
         void HandleCheckOutResponse(CheckoutResponse response)
         {
-            checkOut.HandleCheckOutResponse(response.Payload.Success, response.Payload.DueDate[0].DueDate);
+            checkOut.Invoke(new Action(() =>
+            {
+                checkOut.HandleCheckOutResponse(response.Payload.Success, response.Payload.DueDate[0].DueDate);
+            }));
         }
 
         /// <summary>
@@ -456,7 +477,10 @@ namespace ClientApplication
 
         void HandleReturnResponse(ReturnResponse response)
         {
-            returnBooks.HandleReturnBooksResponse(response.Payload);
+            returnBooks.Invoke(new Action(() =>
+            {
+                returnBooks.HandleReturnBooksResponse(response.Payload);
+            }));
         }
 
         /// <summary>
@@ -474,16 +498,19 @@ namespace ClientApplication
 
         void HandleViewCheckedOutResponse(ViewCheckedoutResponse response)
         {
-            ListView bookList = (ListView)renewBooks.Controls.Find("uxBookList", false)[0];
-            bookList.Items.Clear();
-
-            List<CheckedoutBook> books = new List<CheckedoutBook>(response.Payload);
-            foreach (CheckedoutBook book in books)
+            renewBooks.Invoke(new Action(() =>
             {
-                bookList.Items.Add(new ListViewItem(new string[] { book.BookID.ToString(), book.Name, book.Author.FirstName + " " + book.Author.LastName, book.DueDate.ToShortDateString()}));
-            }
+                ListView bookList = (ListView)renewBooks.Controls.Find("uxBookList", false)[0];
+                bookList.Items.Clear();
 
-            renewBooks.Show();
+                List<CheckedoutBook> books = new List<CheckedoutBook>(response.Payload);
+                foreach (CheckedoutBook book in books)
+                {
+                    bookList.Items.Add(new ListViewItem(new string[] { book.BookID.ToString(), book.Name, book.Author.FirstName + " " + book.Author.LastName, book.DueDate.ToShortDateString() }));
+                }
+
+                renewBooks.Show();
+            }));
         }
 
         /// <summary>
@@ -498,7 +525,10 @@ namespace ClientApplication
 
         void HandleRenewBooksResponse(RenewalResponse response)
         {
-            renewBooks.HandleRenewBooksResponse(response.Payload.Success, response.Payload.DueDates);
+            renewBooks.Invoke(new Action(() =>
+            {
+                renewBooks.HandleRenewBooksResponse(response.Payload.Success, response.Payload.DueDates);
+            }));
         }
 
         /// <summary>
@@ -514,7 +544,10 @@ namespace ClientApplication
 
         void HandleUpdateConditionResponse(UpdateBookConditionResponse response)
         {
-            updateCondition.HandleUpdateConditionResponse(response.Payload);
+            updateCondition.Invoke(new Action(() =>
+            {
+                updateCondition.HandleUpdateConditionResponse(response.Payload);
+            }));
         }
 
         /// <summary>
@@ -529,7 +562,10 @@ namespace ClientApplication
 
         void HandleRetireBookResponse(RetireBookResponse response)
         {
-            retireBook.HandleRetireBookResponse(response.Payload);
+            retireBook.Invoke(new Action(() =>
+            {
+                retireBook.HandleRetireBookResponse(response.Payload);
+            }));
         }
 
         /// <summary>
@@ -545,7 +581,10 @@ namespace ClientApplication
 
         void HandleResetPasswordResponse(ResetPasswordResponse response)
         {
-            resetPassword.HandleResetPasswordResponse(response.Payload);
+            resetPassword.Invoke(new Action(() =>
+            {
+                resetPassword.HandleResetPasswordResponse(response.Payload);
+            }));
         }
 
         /// <summary>
@@ -560,7 +599,10 @@ namespace ClientApplication
 
         void HandleAddBookResponse(AddBookResponse response)
         {
-            addBook.HandleAddBookResponse(response.Payload);
+            addBook.Invoke(new Action(() =>
+            {
+                addBook.HandleAddBookResponse(response.Payload);
+            }));
         }
 
         /// <summary>

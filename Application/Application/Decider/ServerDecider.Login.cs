@@ -16,13 +16,14 @@ namespace ServerApplication.Decider
     public partial class ServerDecider
     {
         private void HandleLoginRequest(SendMessage send, LoginRequest m)
-        {
+        { /*
             if (_loggedIn.ContainsKey(m.Payload.Email) && _loggedIn[m.Payload.Email])
             {
                 _logger("User is alreadly logged in.");
                 send(new LoginResponse(false, -1, ""));
                 return;
             }
+            */
             using (SqlConnection conn = new SqlConnection(_connection))
             {
                 conn.Open();

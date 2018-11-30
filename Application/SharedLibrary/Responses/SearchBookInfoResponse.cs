@@ -8,18 +8,18 @@ using Newtonsoft.Json;
 
 namespace SharedLibrary.Responses
 {
-    public class SearchBookInfoResponse : Message<CompositeBookInfo>
+    public class SearchBookInfoResponse : Message<List<BookInfo>>
     {
         [JsonConstructor]
-        public SearchBookInfoResponse(SortedSet<BookInfo> s)
+        public SearchBookInfoResponse(List<BookInfo> s)
         {
-            Payload = new CompositeBookInfo(s);
+            Payload = s;
         }
-        public SearchBookInfoResponse() : this(new SortedSet<BookInfo>()) { }
-        public SearchBookInfoResponse(Message<CompositeBookInfo> m)
+        public SearchBookInfoResponse() : this(new List<BookInfo>()) { }
+        public SearchBookInfoResponse(Message<List<BookInfo>> m)
         {
             // Might need to find a better way to do this.
-            Payload = new CompositeBookInfo(new SortedSet<BookInfo>(m.Payload));
+            Payload = m.Payload;
         }
 
         public new MessageType Type => MessageType.SearchBookInfoResponse;
