@@ -72,8 +72,8 @@ namespace ServerApplication.Decider
             while (currInd < paySize - 1)
             {
                 c.ExecuteNonQuery();
-                UpdateCheckoutCommand(ref c, m, currInd);
                 currInd++;
+                UpdateCheckoutCommand(ref c, m, currInd);
             }
             c.ExecuteNonQuery(); //On the last one, grab the return date.
             _logger(c.Parameters["@DueDate"].Value.ToString());
