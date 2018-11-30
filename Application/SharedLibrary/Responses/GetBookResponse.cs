@@ -8,17 +8,15 @@ using Newtonsoft.Json;
 
 namespace SharedLibrary.Responses
 {
-    public class GetBookResponse : Message<Book>
+    public class GetBookResponse : Message<BookInfo>
     {
         [JsonConstructor]
-        public GetBookResponse(Book b)
+        public GetBookResponse(BookInfo b)
         {
             Payload = b;
         }
 
-        public GetBookResponse() : this(new Book()) { }
-
-        public GetBookResponse(Message<Book> m) { Payload = m.Payload; }
+        public GetBookResponse() : this(new BookInfo()) { }
 
         public new MessageType Type => MessageType.GetBookResponse;
     }

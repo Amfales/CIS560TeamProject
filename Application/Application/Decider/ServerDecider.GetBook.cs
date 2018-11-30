@@ -27,7 +27,7 @@ namespace ServerApplication.Decider
                 {
                     InitializeGetBookCommand(ref comm, m);
 
-                    Book b;
+                    BookInfo b;
                     GrabGetBookInfo(comm, out b);
 
                     _logger("Successfully found book with book id: " + m.Payload);
@@ -47,7 +47,7 @@ namespace ServerApplication.Decider
             c.Parameters.AddWithValue("@BookID", m.Payload);
         }
 
-        private void GrabGetBookInfo(SqlCommand c, out Book b)
+        private void GrabGetBookInfo(SqlCommand c, out BookInfo b)
         {
             using (SqlDataReader data = c.ExecuteReader())
             {
@@ -56,21 +56,18 @@ namespace ServerApplication.Decider
                     throw new Exception("No book with the given ID");
                 }
                 data.Read();
-                bool isCheckedOut = data.GetInt32(data.GetOrdinal("CheckedOut")) == 0;
                 string title = data.GetString(data.GetOrdinal("Title"));
                 string aFirst = data.GetString(data.GetOrdinal("AuthorFirstName"));
                 string aLast = data.GetString(data.GetOrdinal("AuthorLastName"));
                 string isbn = data.GetString(data.GetOrdinal("ISBN"));
-                int copyYear = data.GetSqlDateTime(data.GetOrdinal("Copyrightyear")).Value.Year;
+                int copyYear = data.GetInt16(data.GetOrdinal("Copyrightyear"));
                 string pub = data.GetString(data.GetOrdinal("PublisherName"));
                 string gen = data.GetString(data.GetOrdinal("Genre"));
-                int id = data.GetInt32(data.GetOrdinal("BookID"));
 
                 // TODO Add in the book quality and call the correct Book constructor
 
-                BookInfo bi = new BookInfo(title, new Author(aFirst, aLast),
+                b = new BookInfo(title, new Author(aFirst, aLast),
                     isbn, gen, pub, copyYear);
-                b = new Book(id, "", bi);
             }
         }
     }

@@ -15,6 +15,7 @@ namespace ServerApplication.Decider
     {
         private void HandleCheckoutRequest(SendMessage send, CheckoutRequest m)
         {
+            _logger(m.Payload.Email);
             if (m.Payload.IDs.Count == 0)
             {
                 _logger("Did not process checkout for empty request.");
@@ -36,6 +37,7 @@ namespace ServerApplication.Decider
                     InitializeCheckoutCommand(ref comm, m);
                     GrabCheckoutInfo(comm, m, paySize, out l);
 
+                    trans.Commit();
                     _logger("Successfully checked out " + paySize + " books to " + m.Payload.Email + ".");
                     send(new CheckoutResponse(true, l));
                 }
@@ -53,8 +55,11 @@ namespace ServerApplication.Decider
             c.Parameters.AddWithValue("@Email", m.Payload.Email);
             c.Parameters.AddWithValue("@BookID", m.Payload.IDs[0]);
             SqlParameter p = new SqlParameter("@DueDate", System.Data.SqlDbType.DateTime2);
+            SqlParameter cID = new SqlParameter("@CheckOutID", System.Data.SqlDbType.Int);
             p.Direction = System.Data.ParameterDirection.Output;
+            cID.Direction = System.Data.ParameterDirection.Output;  
             c.Parameters.Add(p);
+            c.Parameters.Add(cID);
         }
         private void UpdateCheckoutCommand(ref SqlCommand c, CheckoutRequest m, int ind)
         {
@@ -72,6 +77,7 @@ namespace ServerApplication.Decider
                 currInd++;
             }
             c.ExecuteNonQuery(); //On the last one, grab the return date.
+            _logger(c.Parameters["@DueDate"].Value.ToString());
             DateTime returnDate = DateTime.Parse(
                 c.Parameters["@DueDate"].Value.ToString()); //?????????????????
             for(int i = 0; i < paySize; i++)

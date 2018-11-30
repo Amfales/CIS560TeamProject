@@ -48,11 +48,11 @@ namespace ClientApplication
             catch { }
         }
 
-        public void HandleAddToCartResponse(Book book)
+        public void HandleAddToCartResponse(BookInfo book)
         {
             if (book != null)
             {
-                uxBookList.Items.Add(new ListViewItem(new string[] { book.BookID.ToString(), book.Name, book.Author.FirstName + " " + book.Author.LastName }));
+                uxBookList.Items.Add(new ListViewItem(new string[] { uxBookIDBox.Text, book.Name, book.Author.FirstName + " " + book.Author.LastName }));
                 uxBookIDBox.Text = "";
             }
             else

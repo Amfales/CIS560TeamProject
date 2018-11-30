@@ -43,12 +43,11 @@ namespace ClientApplication
             catch { }
         }
 
-        public void HandleAddToBookListResponse(Book book)
+        public void HandleAddToBookListResponse(BookInfo book)
         {
             if (book != null)
             {
-                uxBookList.Items.Add(new ListViewItem(new string[] { book.BookID.ToString(), book.Name, book.Author.FirstName + " " + book.Author.LastName }));
-                uxBookIDBox.Text = "";
+                uxBookList.Items.Add(new ListViewItem(new string[] { uxBookIDBox.Text, book.Name, book.Author.FirstName + " " + book.Author.LastName }));
             }
             else
             {

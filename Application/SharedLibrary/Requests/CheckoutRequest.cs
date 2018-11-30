@@ -35,6 +35,5 @@ namespace SharedLibrary.Requests
             Email = email;
             IDs = ids;
         }
-        public Checkout() : this("",new List<int>()) { }
     }
 }
