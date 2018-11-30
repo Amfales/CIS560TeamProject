@@ -59,7 +59,7 @@ namespace ServerApplication.Decider
                     string aFirst = data.GetString(data.GetOrdinal("AuthorFirstName"));
                     string aLast = data.GetString(data.GetOrdinal("AuthorLastName"));
                     string isbn = data.GetString(data.GetOrdinal("ISBN"));
-                    int copyYear = data.GetSqlDateTime(data.GetOrdinal("Copyrightyear")).Value.Year;
+                    int copyYear = data.GetInt16(data.GetOrdinal("Copyrightyear"));
                     string pub = data.GetString(data.GetOrdinal("PublisherName"));
                     string gen = data.GetString(data.GetOrdinal("Genre"));
                     int id = data.GetInt32(data.GetOrdinal("BookID"));

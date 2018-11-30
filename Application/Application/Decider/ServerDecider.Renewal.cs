@@ -30,6 +30,8 @@ namespace ServerApplication.Decider
                     List<DueDateAssociation> l = new List<DueDateAssociation>();
                     GrabRenewal(comm, m, ref l);
 
+                    trans.Commit();
+
                     _logger("Successfully renewed " + l.Count + " checked out books for user " + m.Payload.Email);
                     send(new RenewalResponse(true, l));
                 }
