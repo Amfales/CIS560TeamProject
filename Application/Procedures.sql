@@ -1,4 +1,4 @@
---Group project procedures rough file
+--Group project procedures
 --Group 19
 
 --Create User procedure
@@ -423,6 +423,9 @@ AS
 		OFFSET ((@SearchPage-1)*@RowsPerPage) ROWS FETCH NEXT @RowsPerPage ROWS ONLY;
 GO
 
+--Question type
+--Used to get the actual IDs of the Books that are of certain BookInfos.
+--Essentially, this gives us the IDs of the actual books of each BookInfo "type", as well as if they are checked out.
 --Gets all BookIDs that haven't been removed corresponding to the given BookInfoID
 CREATE OR ALTER PROCEDURE Book.GetAllBookIDOfBookInfo
 	@BookInfoID INT
@@ -432,7 +435,7 @@ AS
 					SELECT CO.BookID
 					FROM Book.CheckOut CO
 					WHERE CO.BookID=B.BookID AND ReturnDate IS NULL
-				),0) AS CheckedOut--returns non-zero value if book checked out, 
+				),0) AS CheckedOut--returns non-zero value if book checked out. 
 	FROM Book.Book B
 	WHERE B.BookInfoID=@BookInfoID AND B.Removed=0
 	ORDER BY CheckedOut ASC
@@ -619,6 +622,9 @@ AS
 	END;
 GO
 
+--Question type query
+--Does the reverse of the previous operation, getting all BookInfo for the given BookID.
+--Useful for figuring out the actual specifics of a book, for telling users what they have checked out, or other similar uses.
 --Given a BookID, get all the corresponding BookInfo
 --Throws error for invalid BookID
 --Is a select statement if all is good.
@@ -661,11 +667,13 @@ AS
 	WHERE UserID=@UserID
 GO
 
---Get all books checked out by a user currently
+--Question type query
+--Get all books checked out by a user currently, complete with info on the book and information for when they checked it out and have it due.
 --Throws an error if email is invalid.
 CREATE OR ALTER PROCEDURE Book.GetUserCheckedOutBooks
 	@Email NVARCHAR(128)
 AS
+	--The function below gets the UserID corresponding to the email, and throws an error if the email is not in the database.
 	DECLARE @UserID INT;
 	EXEC Proj.GetIDFromEmail @Email, @UserID OUTPUT;
 	
@@ -718,7 +726,9 @@ AS
 	ORDER BY CO.CheckOutDate ASC
 GO
 
+--Question type query
 --Gets the corresponding ID for a user with a given email.
+--This procedure is used as a helper in many other procedures.
 --Throws error if email is not valid.
 --Otherwise returns UserID
 CREATE OR ALTER PROCEDURE Proj.GetIDFromEmail
@@ -786,7 +796,6 @@ GO
 --This procedure gets all users paired with the number of times they've checked a book out.
 --It also gives them a ranking based on how many times they've checked something out.
 CREATE OR ALTER PROCEDURE Proj.AllUsersNumTimesCheckedOut
-
 AS
 	SELECT U.UserID, U.Email, 
 		   (
@@ -803,10 +812,11 @@ AS
 	ORDER BY CheckOutRanking
 GO
 
+--Report type query
 --Gets all books with no filter, simply ordered on how often they've been checked out.
+--Includes the number of times they've been checked out and a ranking of how popular it is based on this.
 --Also uses a form of pagination. Either given by caller or assumed first page with 25 books per page.
 CREATE OR ALTER PROCEDURE Book.GetAllBookInfosWithCheckOutCount
-
 AS
 	SELECT BI.Title, A.FirstName AS AuthorFirstName, A.LastName AS AuthorLastName, BI.ISBN,
 			COALESCE((
@@ -829,5 +839,86 @@ AS
 			INNER JOIN Book.BookGenre BG ON BG.BookInfoID=BI.BookInfoID
 			INNER JOIN Book.Genre G ON G.GenreID=BG.GenreID)
 			
-		ORDER BY NumTimesCheckedOut DESC, Title ASC
+		ORDER BY Ranking, Title ASC
+GO
+
+--Question type
+--Gets which user has the specific book checked out.
+--If book isn't checked out, throws an error.
+CREATE OR ALTER PROCEDURE Book.GetCheckOutsUser
+	@BookID INT,
+	@UserID INT OUTPUT
+AS
+	SET @UserID=
+	(
+		SELECT CO.UserID
+		FROM CheckOut CO
+		WHERE (CO.BookID=@BookID) AND CO.ReturnDate IS NULL
+	);
+
+	IF @UserID IS NULL
+	BEGIN
+		DECLARE @Message NVARCHAR(256) = N'Book not checked out!';
+		THROW 50000, @Message, 1;
+	END;
+GO
+
+--Question type query
+--Gets all BookInfoIDs and titles that correspond to a given Genre Descriptor.
+--Will return 0 rows if descriptor is invalid (as genres are added when a book of that genre is added)
+CREATE OR ALTER PROCEDURE Book.GetAllBookInfosOfGenreDescriptor
+	@Descriptor NVARCHAR(64)
+AS
+	SELECT BI.BookInfoID, BI.Title
+	FROM Book.BookInfo BI 
+		 INNER JOIN Book.BookGenre BG ON BG.BookInfoID=BI.BookInfoID
+		 INNER JOIN Book.Genre G ON G.GenreID=BG.GenreID
+	WHERE G.Descriptor=@Descriptor
+GO
+
+--Report type query
+--Gets each genre, along with the number of books in the library of that genre and how often they've been checked out.
+--Sorts by popularity of how often they've been checked out.
+CREATE OR ALTER PROCEDURE Book.GetInfoOnAllGenres
+AS
+	SELECT G.GenreID, G.Descriptor AS Genre,
+		(
+			SELECT COUNT(DISTINCT B.BookID)
+			FROM Book.Book B
+				INNER JOIN Book.BookGenre BG ON BG.BookInfoID=B.BookInfoID
+				INNER JOIN Book.Genre GE ON BG.GenreID=G.GenreID
+			WHERE GE.GenreID=G.GenreID
+		) AS NumberOfBooks,
+		(
+			SELECT COUNT(DISTINCT CO.CheckOutID)
+			FROM Book.CheckOut CO
+				INNER JOIN Book.Book B ON B.BookID=CO.BookID
+				INNER JOIN Book.BookGenre BG ON BG.BookInfoID=B.BookInfoID
+				INNER JOIN Book.Genre GE ON BG.GenreID=G.GenreID
+			WHERE GE.GenreID=G.GenreID) AS TimesCheckedOut
+	FROM Book.Genre G
+	ORDER BY TimesCheckedOut DESC, NumberOfBooks DESC
+GO
+
+--Report type query
+--Gets all authors, their number of books in the library, and the number of times their books have been checked out.
+--Then sorts based on this information.
+CREATE OR ALTER PROCEDURE Book.GetAllAuthorsInformation
+AS
+	SELECT A.AuthorID, A.LastName, A.FirstName,
+		(
+			SELECT COUNT(DISTINCT B.BookID)
+			FROM Book.Book B
+				INNER JOIN Book.BookInfo BI ON B.BookInfoID=BI.BookInfoID
+			WHERE A.AuthorID=BI.AuthorID
+		) AS NumberOfBooks,
+		(
+			SELECT COUNT(DISTINCT CO.BookID)
+			FROM Book.CheckOut CO
+				INNER JOIN Book.Book B ON B.BookID=CO.CheckOutID
+				INNER JOIN Book.BookInfo BI ON B.BookInfoID=BI.BookInfoID
+			WHERE A.AuthorID=BI.AuthorID
+		) AS NumTimesCheckedOut
+	FROM Book.Author A
+	ORDER BY NumTimesCheckedOut DESC, NumberOfBooks DESC, A.LastName,A.FirstName, A.AuthorID;
 GO
