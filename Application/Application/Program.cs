@@ -23,35 +23,13 @@ namespace ServerApplication
             //WebSocketServer serv = new WebSocketServer(9999);
             WebServer server = new WebServer(12345);
             //serv.AddWebSocketService<TestBehavior>("/test", () => (new TestBehavior(Console.WriteLine)));
-            WebSocket ws = new WebSocket("ws://localhost:12345/library");
+            //WebSocket ws = new WebSocket("ws://localhost:12345/library");
             //WebSocket ws = new WebSocket("ws://localhost:9999/", onMessage: DoPrint, onError: DoError);
             //serv.Start();
 
             server.Start();
             
-            //ws.OnMessage += (sender, e) => { Console.WriteLine(e.Data); };
-            //ws.Connect();
-
-            JsonConverter[] c = new JsonConverter[1];
-            c[0] = new Newtonsoft.Json.Converters.StringEnumConverter();
-
-
-            /*
-            ws.Send(Newtonsoft.Json.JsonConvert.SerializeObject(
-                new LoginRequest("nehelgeson@ksu.edu", "31415926712345")
-                , c));
-                */
-            /*
-            string data = JsonConvert.SerializeObject(new SearchBookRequest("%", new Author("%", "%"), "%", "%", false), c);
-            Console.WriteLine(data);
-            */
-
-
-            /*
-            ws.Send(Newtonsoft.Json.JsonConvert.SerializeObject(
-                new SearchBookRequest("%", new Author("%", "%"), "%", "%", false)
-                , c));
-                */
+            
                 
 
             while (true)
